@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   mns_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/07/30 09:53:29 by trarijam         ###   ########.fr       */
+/*   Created: 2024/07/30 09:51:26 by trarijam          #+#    #+#             */
+/*   Updated: 2024/07/30 09:52:11 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../include/minishell.h"
 
-# include "libft/libft.h"
-# include <readline/readline.h>
-# include <stdio.h>
+int	mns_strcmp(char *s1, char *s2)
+{
+	int	i;
 
-/***built_in**/
-int	mns_cd(char *path);
-
-/******utils********/
-int		mns_strcmp(char *s1, char *s2);
-t_list	*get_env_lst(char **envp);
-
-#endif
+	i = 0;
+	while (s1[i] != '\0' || s2[i] != '\0')
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
+}
