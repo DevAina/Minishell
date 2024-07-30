@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/07/30 09:54:07 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:47:56 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,46 @@ void	sort_env_lst(t_list	**env_lst)
 		else
 			env_tmp = env_tmp->next;
 	}
+}
+
+void	print_env(t_list *env_lst)
+{
+	int		i;
+	char	*tmp;
+	while (env_lst)
+	{
+		i = 0;
+		tmp = (char *)env_lst->content;
+		ft_putstr_fd("declare -x ", 1);
+		while (tmp[i] != '=')
+		{
+			ft_putchar_fd(tmp[i], 1);
+			i++;
+		}
+		ft_putchar_fd(tmp[i], 1);
+		i++;
+		ft_putchar_fd('"', 1);
+		ft_putstr_fd((char *)env_lst->content + i, 1);
+		ft_putchar_fd('"', 1);
+		ft_putstr_fd("\n", 1);
+		env_lst = env_lst->next;
+	}
+}
+
+void	add_to_env_lst(t_list *env_lst, char *content)
+{
+	ft_lstadd_back(&env_lst, ft_lstnew((void *)content));
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	(void)argc;
+	(void)argv;
+	t_list	*env_lst;
+
+	env_lst = get_env_lst(envp);
+	sort_env_lst(&env_lst);
+	add_to_env_lst(env_lst, "var=a b c");
+	print_env(env_lst);
+
 }
