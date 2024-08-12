@@ -6,12 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/07/30 15:04:40 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/01 18:33:14 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
 
 
 int	mns_cd(char *path)
@@ -23,7 +22,6 @@ int	mns_cd(char *path)
 			perror("cd");
 			return (-1);
 		}
-		uptdate_env();
 	}
 	else
 	{

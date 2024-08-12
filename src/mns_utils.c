@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:26 by trarijam          #+#    #+#             */
-/*   Updated: 2024/07/30 15:11:58 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/05 09:32:01 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	mns_strcmp(char *s1, char *s2)
 			return (s1[i] - s2[i]);
 		i++;
 	}
+	if (s1[i] == '\0' && s2[i] == '\0')
+		return (0);
 	return (0);
 }
 

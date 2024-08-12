@@ -1,8 +1,9 @@
 NAME = minishell
 
-FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline
+FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline -g
 
-SRCS = ./built_in/cd.c ./built_in/export.c ./src/mns_utils.c ./src/main.c
+SRCS = ./built_in/cd.c ./built_in/export.c ./src/mns_utils.c ./src/main.c \
+		./src/tokenizer.c ./src/parse_input.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -23,6 +24,6 @@ fclean : clean
 	make fclean -C ./libft
 	rm -rf ${NAME}
 
-re: fclean re
+re: fclean all
 
 .PHONY: re fclean clean all
