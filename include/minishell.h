@@ -13,7 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include <readline/readline.h>
 # include <stdio.h>
 
@@ -47,10 +47,11 @@ typedef struct  s_token
 }   t_token;
 
 /***built_in**/
-int	mns_cd(char *path);
+int		mns_cd(char *path);
 
 /******utils********/
 int		mns_strcmp(char *s1, char *s2);
 t_list	*get_env_lst(char **envp);
+void	free_env_lst(t_list *env_lst);
 
 #endif
