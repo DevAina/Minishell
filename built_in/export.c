@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/07/30 15:17:09 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/08 12:11:51 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,15 +140,4 @@ void	add_to_env_lst(t_list *env_lst, char *content)
 		free(tmp);
 	}
 	ft_lstadd_back(&env_lst, ft_lstnew((void *)content));
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_list	*env_lst;
-
-	(void)argc;
-	(void)argv;
-	env_lst = get_env_lst(envp);
-	add_to_env_lst(env_lst, "var");
-	print_export(env_lst);
 }
