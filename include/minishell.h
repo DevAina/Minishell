@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/09 10:47:22 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/13 14:11:03 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 # define RED "\033[31m"
 # define GREEN "\033[32m"
@@ -96,4 +98,10 @@ void        free_token(t_token *token);
 t_token     *lexer(char *input);
 void        free_ast(t_ast_node **node);
 
+//utils for exec
+char	**find_path_list(char **env);
+char	*find_path(char **path_list, char *cmd);
+void	free_split(char **str);
+void	exec_cmd(char **envp, char **cmd);
+void	executor(char **envp, t_ast_node *ast);
 #endif

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:48:11 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/09 10:21:53 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/13 14:10:19 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,11 +173,13 @@ void print_ast(t_ast_node *root, int depth)
     }
 }
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	t_token	*token;
 	t_ast_node	*ast;
+	(void)argc;
+	(void)argv;
 
 	while (1)
 	{
@@ -191,7 +193,9 @@ int main(void)
 		}
 		token = lexer(line);
 		ast = parse(token);
-		print_ast(ast, 0);
+//		exec_cmd(envp, ast->args, -1, NULL);
+		executor(envp, ast);
+/*		print_ast(ast, 0);*/
 		free_token(token);
 		free_ast(&ast);
 		free(line);
