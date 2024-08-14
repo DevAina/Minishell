@@ -6,7 +6,7 @@
 #    By: trarijam <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 12:37:38 by trarijam          #+#    #+#              #
-#    Updated: 2024/02/27 09:53:24 by trarijam         ###   ########.fr        #
+#    Updated: 2024/08/13 13:21:11 by trarijam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,7 @@ bonus: ${OBJS} ${OBJS_BONUS}
 	ar rc ${NAME} ${OBJS} ${OBJS_BONUS}
 
 clean:
-	rm -f *.o
+	rm -f ${OBJS} ${OBJS_BONUS}
 
 fclean: clean
 	rm -f ${NAME}
