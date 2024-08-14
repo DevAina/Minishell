@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <string.h>
 
 void	exec_cmd(char **envp, char **cmd)
 {
