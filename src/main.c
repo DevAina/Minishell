@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:48:11 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/13 14:10:19 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:26:59 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,8 +194,10 @@ int main(int argc, char **argv, char **envp)
 		token = lexer(line);
 		ast = parse(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
-		executor(envp, ast);
-/*		print_ast(ast, 0);*/
+		if (fork() == 0)
+			executor(envp, ast);
+		//print_ast(ast, 0);
+		wait(NULL);
 		free_token(token);
 		free_ast(&ast);
 		free(line);

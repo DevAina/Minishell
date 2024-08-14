@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/14 09:20:17 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:29:44 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,10 @@ void	exec_cmd(char **envp, char **cmd)
 {
 	char	**path_list;
 	char	*path;
-	pid_t	pid;
 
-	pid = fork();
-	if (pid == 0)
-	{
-		path_list = find_path_list(envp);
-		path = find_path(path_list, cmd[0]);
-		execve(path, cmd, envp);
-	}
-	waitpid(pid, NULL, 0);
+	path_list = find_path_list(envp);
+	path = find_path(path_list, cmd[0]);
+	execve(path, cmd, envp);
 }
 
 void	pipe_cmd(char **envp, t_ast_node *ast)
@@ -54,13 +48,12 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	close(fd[0]);
 	waitpid(pid, NULL, 0);
 	waitpid(pid1, NULL, 0);
+	exit(0);
 }
 
 void	executor(char **envp, t_ast_node *ast)
 {
-	if (ast == NULL)
-		return ;
-	else if (ast->type == 0)
+	if (ast->type == 0)
 		exec_cmd(envp, ast->args);
 	else if (ast->type == 1)
 		pipe_cmd(envp, ast);
