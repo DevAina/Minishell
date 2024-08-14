@@ -6,11 +6,12 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/13 14:25:11 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/14 09:20:17 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <string.h>
 
 void	exec_cmd(char **envp, char **cmd)
 {
@@ -28,10 +29,39 @@ void	exec_cmd(char **envp, char **cmd)
 	waitpid(pid, NULL, 0);
 }
 
+void	pipe_cmd(char **envp, t_ast_node *ast)
+{
+	int		fd[2];
+	pid_t	pid;
+	pid_t	pid1;
+
+	pipe(fd);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(fd[0]);
+		dup2(fd[1], 1);
+		executor(envp, ast->left);
+	}
+	pid1 = fork();
+	if (pid1 == 0)
+	{
+		close(fd[1]);
+		dup2(fd[0], 0);
+		executor(envp, ast->right);
+	}
+	close(fd[1]);
+	close(fd[0]);
+	waitpid(pid, NULL, 0);
+	waitpid(pid1, NULL, 0);
+}
+
 void	executor(char **envp, t_ast_node *ast)
 {
 	if (ast == NULL)
-		return;
-	if (ast->type == 0)
+		return ;
+	else if (ast->type == 0)
 		exec_cmd(envp, ast->args);
+	else if (ast->type == 1)
+		pipe_cmd(envp, ast);
 }
