@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/14 15:29:44 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/15 13:42:48 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ void	exec_cmd(char **envp, char **cmd)
 
 	path_list = find_path_list(envp);
 	path = find_path(path_list, cmd[0]);
+	free_split(path_list);
+	if (path == NULL)
+		return ;
 	execve(path, cmd, envp);
 }
 
@@ -45,6 +48,7 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	}
 	close(fd[1]);
 	close(fd[0]);
+	free_ast(&ast);
 	waitpid(pid, NULL, 0);
 	waitpid(pid1, NULL, 0);
 	exit(0);
