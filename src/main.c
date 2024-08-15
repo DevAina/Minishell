@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:48:11 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/13 14:10:19 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/15 09:03:35 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ void print_ast(t_ast_node *root, int depth)
 
 int main(int argc, char **argv, char **envp)
 {
+    (void)envp;
 	char	*line;
 	t_token	*token;
 	t_ast_node	*ast;
