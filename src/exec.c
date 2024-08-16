@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/15 13:42:48 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/16 09:53:19 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	pid_t	pid;
 	pid_t	pid1;
 
-	pipe(fd);
+	if (pipe(fd) == -1)
+		return ;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -48,10 +49,8 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	}
 	close(fd[1]);
 	close(fd[0]);
-	free_ast(&ast);
 	waitpid(pid, NULL, 0);
 	waitpid(pid1, NULL, 0);
-	exit(0);
 }
 
 void	executor(char **envp, t_ast_node *ast)
