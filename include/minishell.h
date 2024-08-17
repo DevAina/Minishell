@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/16 09:53:10 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/17 16:12:18 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,7 @@ char	*find_path(char **path_list, char *cmd);
 void	free_split(char **str);
 void	exec_cmd(char **envp, char **cmd);
 void	executor(char **envp, t_ast_node *ast);
+
+/*****expander*******/
+void	expand_tokens(t_token *tokens, char **env);
 #endif
