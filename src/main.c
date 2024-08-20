@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/30 10:48:11 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/15 09:16:46 by trarijam         ###   ########.fr       */
+/*   Created: 2024/08/20 14:09:27 by trarijam          #+#    #+#             */
+/*   Updated: 2024/08/20 14:09:29 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/minishell.h"
 
@@ -179,9 +180,9 @@ int main(int argc, char **argv, char **envp)
 	char	*line;
 	t_token	*token;
 	t_ast_node	*ast;
+
 	(void)argc;
 	(void)argv;
-
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -194,12 +195,16 @@ int main(int argc, char **argv, char **envp)
 		}
 		token = lexer(line);
 		ast = parse(token);
+		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
 		if (fork() == 0)
+		{
 			executor(envp, ast);
+			free_ast(&ast);
+			exit(0);
+		}
 		//print_ast(ast, 0);
 		wait(NULL);
-		free_token(token);
 		free_ast(&ast);
 		free(line);
 	}
