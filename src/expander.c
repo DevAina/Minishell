@@ -5,19 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2024/08/15 20:58:23 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/17 16:15:01 by trarijam         ###   ########.fr       */
-=======
-/*   Created: 2024/08/16 09:45:16 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/20 11:04:11 by trarijam         ###   ########.fr       */
->>>>>>> ef128f7 (blabla)
+/*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
+/*   Updated: 2024/08/20 14:32:07 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-<<<<<<< HEAD
 int get_var_name_length(char *str)
 {
 	int i;
@@ -141,5 +135,3 @@ void expand_tokens(t_token *tokens, char **env)
         current = current->next;
     }
 }
-=======
->>>>>>> ef128f7 (blabla)
