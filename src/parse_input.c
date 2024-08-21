@@ -6,34 +6,39 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/16 09:08:25 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:33:26 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+void	free_matrix(char **matrix)
+{
+	int	i;
+
+	i = 0;
+	while (matrix[i] != NULL)
+	{
+		free(matrix[i]);
+		i++;
+	}
+	free(matrix);
+}
+
 void	free_ast(t_ast_node **node)
 {
-	int			i;
-
 	if (node == NULL || *node == NULL)
 		return ;
 	if ((*node)->type != AST_PIPE && (*node)->args != NULL)
-	{
-		i = 0;
-		while ((*node)->args[i] != NULL)
-		{
-			free((*node)->args[i]);
-			i++;
-		}
-		free((*node)->args);
-	}
+		free_matrix((*node)->args);
 	if ((*node)->type != AST_PIPE && (*node)->input_file != NULL)
-		free((*node)->input_file);
+		free_matrix((*node)->input_file);
 	if ((*node)->type != AST_PIPE && (*node)->output_file != NULL)
-		free((*node)->output_file);
+		free_matrix((*node)->output_file);
 	if ((*node)->type != AST_PIPE && (*node)->heredoc_delimiter != NULL)
-		free((*node)->heredoc_delimiter);
+		free_matrix((*node)->heredoc_delimiter);
+	if ((*node)->type != AST_PIPE && (*node)->output_append != NULL)
+		free_matrix((*node)->output_append);
 	if ((*node)->left != NULL)
 		free_ast(&(*node)->left);
 	if ((*node)->right != NULL)
@@ -53,97 +58,145 @@ t_ast_node	*init_node(t_ast_node_type type)
     node->input_file = NULL;
     node->output_file = NULL;
 	node->append_output = -1;
+	node->output_append = NULL;
 	node->heredoc_delimiter = NULL;
     return (node);
 }
 
-void	block_if_for_parse_redirection(t_token **tokens, t_ast_node *cmd,
-	t_ast_node_type type)
+void	count_redirection(t_token **tokens, int *count)
 {
-	cmd->type = type;
-	*tokens = (*tokens)->next;
-	if (type == AST_REDIR_IN)
-		cmd->input_file = ft_strdup((*tokens)->value);
-	else if (type == AST_REDIR_OUT)
+	if ((*tokens)->type == TOKEN_REDIR_IN)
 	{
-		cmd->output_file = ft_strdup((*tokens)->value);
-		cmd->append_output = 0;
-	}
-	else if (type == AST_REDIR_HERDOC)
-		cmd->heredoc_delimiter = ft_strdup((*tokens)->value);
-	else if (type == AST_REDIR_APPEND)
-	{
-		cmd->output_file = ft_strdup((*tokens)->value);
-		cmd->append_output = 1;
-	}
-}
-
-t_ast_node	*parse_redirection(t_token **tokens, t_ast_node *cmd)
-{
-	while (*tokens != NULL && (((*tokens)->type == TOKEN_HEREDOC || 
-		(*tokens)->type == TOKEN_REDIR_APPEND ||
-		(*tokens)->type == TOKEN_REDIR_IN ||
-		(*tokens)->type == TOKEN_REDIR_OUT)))
-	{
-		if ((*tokens)->type == TOKEN_REDIR_IN && (*tokens)->next->type == 1)
-			block_if_for_parse_redirection(tokens, cmd, AST_REDIR_IN);
-		if ((*tokens)->type == TOKEN_REDIR_OUT && (*tokens)->next->type == 1)
-			block_if_for_parse_redirection(tokens, cmd, AST_REDIR_OUT);
-		if ((*tokens)->type == 5 && (*tokens)->next->type == 1)
-			block_if_for_parse_redirection(tokens, cmd, AST_REDIR_APPEND);
-		if ((*tokens)->type == TOKEN_HEREDOC && (*tokens)->next->type == 1)
-			block_if_for_parse_redirection(tokens, cmd, AST_REDIR_HERDOC);
 		*tokens = (*tokens)->next;
+		if ((*tokens)->type == TOKEN_WORD)
+			count[INPUT_COUNT] += 1;
 	}
-	return (cmd);
-}
-
-int	token_is_redir(t_token *token)
-{
-	if (token->type == TOKEN_HEREDOC || token->type == TOKEN_REDIR_APPEND
-		|| token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT)
-		return (1);
-	return (0);
-}
-
-char	**get_args(t_token **tokens)
-{
-	int			i;
-	int			arg_count;
-	char		**args;
-	t_token		*current;
-
-	arg_count = 0;
-	current = *tokens;
-	while (current != NULL && current->type == TOKEN_WORD)
+	if ((*tokens)->type == TOKEN_REDIR_OUT)
 	{
-		arg_count++;
-		current = current->next;
+		*tokens = (*tokens)->next;
+		if ((*tokens)->type == TOKEN_WORD)
+			count[OUTPUT_COUNT] += 1;
 	}
-	args = (char **)malloc(sizeof(char *) * (arg_count + 1));
+	if ((*tokens)->type == TOKEN_REDIR_APPEND)
+	{
+		*tokens = (*tokens)->next;
+		if ((*tokens)->type == TOKEN_WORD)
+			count[APPEND_COUNT] += 1;
+	}
+	if ((*tokens)->type == TOKEN_HEREDOC)
+	{
+		*tokens = (*tokens)->next;
+		if ((*tokens)->type == TOKEN_WORD)
+			count[HEREDOC_COUNT] += 1;
+	}
+}
+
+void	count_type_token(t_token *tokens, int *count)
+{
+	t_token	*tmp;
+	int		i;
+
+	tmp = tokens;
 	i = 0;
-	while (*tokens != NULL && i < arg_count)
+	while (i < 5)
 	{
-		args[i] = ft_strdup((*tokens)->value);
-		(*tokens) = (*tokens)->next;
+		count[i] = 0;
 		i++;
 	}
-	args[arg_count] = NULL;
-	return (args);
+	while (tmp != NULL && tmp->type != TOKEN_PIPE
+		&& tmp->type != TOKEN_EOF)
+	{
+		if (tmp->type == TOKEN_WORD)
+			count[ARG_COUNT] += 1;
+		count_redirection(&tmp, count);
+		tmp = tmp->next;
+	}
 }
 
-t_ast_node	*parse_token(t_token **tokens, t_ast_node *cmd)
+void	init_args_input_output_file(t_ast_node **cmd, int *count)
 {
-	while (*tokens != NULL && ((*tokens)->type == TOKEN_WORD ||
-		token_is_redir(*tokens) == 1))
+	if (count[ARG_COUNT] != 0)
+		(*cmd)->args = (char **)malloc(sizeof(char *) * (count[ARG_COUNT] + 1));
+	if (count[INPUT_COUNT] != 0)
+		(*cmd)->input_file =  (char **)malloc(sizeof(char *)
+			* (count[INPUT_COUNT] + 1));
+	if (count[OUTPUT_COUNT] != 0)
+		(*cmd)->output_file = (char **)malloc(sizeof(char *)
+			* (count[OUTPUT_COUNT] + 1));
+	if (count[HEREDOC_COUNT] != 0)
+		(*cmd)->heredoc_delimiter =  (char **)malloc(sizeof(char *)
+			* (count[HEREDOC_COUNT] + 1));
+	if (count[APPEND_COUNT] != 0)
+		(*cmd)->output_append =  (char **)malloc(sizeof(char *)
+			* (count[APPEND_COUNT] + 1));
+}
+
+void handle_redirection(t_token **tokens, char **file_array, int *file_count, int count)
+{
+	*tokens = (*tokens)->next;
+	if ((*tokens)->type == TOKEN_WORD && count != 0)
 	{
-		if (token_is_redir(*tokens) == 1)
-			cmd = parse_redirection(tokens, cmd);
-		else
-			cmd->args = get_args(tokens);
+		file_array[*file_count] = ft_strdup((*tokens)->value);
+		(*file_count)++;
 	}
+}
+
+void set_null_terminators(t_ast_node *cmd, int count[5], int counts[5])
+{
+	if (count[ARG_COUNT] != 0)
+		cmd->args[counts[ARG_COUNT]] = NULL;
+	if (count[INPUT_COUNT] != 0)
+		cmd->input_file[counts[INPUT_COUNT]] = NULL;
+	if (count[OUTPUT_COUNT] != 0)
+		cmd->output_file[counts[OUTPUT_COUNT]] = NULL;
+	if (count[HEREDOC_COUNT] != 0)
+		cmd->heredoc_delimiter[counts[HEREDOC_COUNT]] = NULL;
+	if (count[APPEND_COUNT] != 0)
+		cmd->output_append[counts[APPEND_COUNT]] = NULL;
+}
+
+void process_token(t_token **tokens, t_ast_node *cmd, int count[5], int counts[5])
+{
+	if ((*tokens)->type == TOKEN_WORD && count[ARG_COUNT] != 0)
+		cmd->args[counts[ARG_COUNT]++] = ft_strdup((*tokens)->value);
+	if ((*tokens)->type == TOKEN_REDIR_IN)
+		handle_redirection(tokens, cmd->input_file,
+			&counts[INPUT_COUNT], count[INPUT_COUNT]);
+	if ((*tokens)->type == TOKEN_REDIR_OUT)
+		handle_redirection(tokens, cmd->output_file,
+			&counts[OUTPUT_COUNT], count[OUTPUT_COUNT]);
+	if ((*tokens)->type == TOKEN_REDIR_APPEND)
+		handle_redirection(tokens, cmd->output_append,
+			&counts[APPEND_COUNT], count[APPEND_COUNT]);
+	if ((*tokens)->type == TOKEN_HEREDOC)
+		handle_redirection(tokens, cmd->heredoc_delimiter,
+			&counts[HEREDOC_COUNT], count[HEREDOC_COUNT]);
+}
+
+t_ast_node *parse_token(t_token **tokens, t_ast_node *cmd)
+{
+	int counts[5];
+	int count[5];
+	int	i;
+
+	i = 0;
+	while (i < 5)
+	{
+		counts[i] = 0;
+		i++;
+	}
+	count_type_token(*tokens, count);
+	init_args_input_output_file(&cmd, count);
+	while (tokens != NULL && (*tokens)->type != TOKEN_PIPE && (*tokens)->type != TOKEN_EOF)
+	{
+		process_token(tokens, cmd, count, counts);
+		*tokens = (*tokens)->next;
+	}
+
+	set_null_terminators(cmd, count, counts);
 	return (cmd);
 }
+
 
 t_ast_node	*parse_command(t_token **tokens)
 {

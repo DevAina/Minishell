@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/19 08:03:46 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:41:44 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
 # define RESET "\033[0m"
+# define INPUT_COUNT 0
+# define OUTPUT_COUNT 1
+# define HEREDOC_COUNT 2
+# define ARG_COUNT 3
+# define APPEND_COUNT 4
 
 /****structure for token**/
 /*
@@ -39,18 +44,17 @@
 */
 typedef enum e_tokentype
 {
-    TOKEN_ENV_VAR,
-    TOKEN_WORD,   
-    TOKEN_PIPE,    
-    TOKEN_REDIR_IN, 
+    TOKEN_WORD,
+    TOKEN_PIPE,
+    TOKEN_REDIR_IN,
     TOKEN_REDIR_OUT,
     TOKEN_REDIR_APPEND,
-    TOKEN_HEREDOC,  
+    TOKEN_HEREDOC,
     TOKEN_AND,
     TOKEN_OR,
     TOKEN_SEMICOLON,
     TOKEN_NEWLINE,
-    TOKEN_EOF      
+    TOKEN_EOF
 }   t_tokentype;
 
 typedef struct	s_token
@@ -64,22 +68,19 @@ typedef struct	s_token
 typedef enum    e_ast_node_type
 {
     AST_COMMAND = 0,
-    AST_PIPE = 1,
-    AST_REDIR_IN = 2,
-    AST_REDIR_OUT = 3,
-    AST_REDIR_APPEND = 4,
-    AST_REDIR_HERDOC = 5
+    AST_PIPE = 1
 } t_ast_node_type;
 
 typedef struct s_ast_node
 {
     t_ast_node_type     type;
     char                **args;
-    char                *input_file;
-    char                *output_file;
+    char                **input_file;
+    char                **output_file;
     //(0 redirection simple > (le fichier sera ecraser), 1 redirection double >> (La sortie sera ajoutée à la fin du fichier))
     int                 append_output;
-    char                *heredoc_delimiter;
+    char                **heredoc_delimiter;
+    char                **output_append;
     struct s_ast_node   *left;
     struct s_ast_node   *right;
 } t_ast_node;
@@ -105,7 +106,6 @@ char	*find_path(char **path_list, char *cmd);
 void	free_split(char **str);
 void	exec_cmd(char **envp, char **cmd);
 void	executor(char **envp, t_ast_node *ast);
-
 /*****expander*******/
 void	expand_tokens(t_token *tokens, char **env);
 #endif

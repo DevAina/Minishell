@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/30 10:48:11 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/16 09:56:41 by traveloa         ###   ########.fr       */
+/*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
+/*   Updated: 2024/08/21 15:27:48 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,101 +57,58 @@ void print_ast_node(t_ast_node *node, int depth)
     if (!node) return;
 
     // Indentation pour la structure arborescente
-    for (int i = 0; i < depth; i++) {
+    for (i = 0; i < depth; i++)
         printf("  ");
-    }
 
     // Affichage selon le type de nœud
     switch (node->type) {
         case AST_COMMAND:
             printf("COMMAND: ");
-            if (node->args) {
-                for (i = 0; node->args[i]; i++) {
+            if (node->args)
+            {
+                for (i = 0; node->args[i]; i++)
                     printf("%s ", node->args[i]);
-                }
             }
             printf("\n");
             if (node->input_file)
-                printf("  Input: %s\n", node->input_file);
+            {
+                for (i = 0; i < depth; i++)
+                    printf("  ");
+                printf("  Input: ");
+                for (i = 0; node->input_file[i]; i++)
+                    printf("%s ", node->input_file[i]);
+                printf("\n");
+            }
             if (node->output_file)
-                printf("  Output: %s (Append: %s)\n", node->output_file, node->append_output ? "Yes" : "No");
+            {
+                for (i = 0; i < depth; i++)
+                    printf("  ");
+                printf("Output file: ");
+                for (i = 0; node->output_file[i]; i++)
+                    printf("%s ", node->output_file[i]);
+                printf("\n");
+            }
             if (node->heredoc_delimiter)
-                printf("  Heredoc: %s\n", node->heredoc_delimiter);
+            {
+                for (i = 0; i < depth; i++)
+                    printf("  ");
+                printf("hredeoc defilimiter: ");
+                for (i = 0; node->heredoc_delimiter[i]; i++)
+                    printf("%s ", node->heredoc_delimiter[i]);
+                printf("\n");
+            }
+            if (node->output_append)
+            {
+                for (i = 0; i < depth; i++)
+                    printf("  ");
+                printf("output append : ");
+                for (i = 0; node->output_append[i]; i++)
+                    printf("%s ", node->output_append[i]);
+                printf("\n");
+            }
             break;
         case AST_PIPE:
             printf("PIPE\n");
-            break;
-        case AST_REDIR_IN:
-            printf("REDIRECTION IN\n");
-			if (node->args) 
-			{
-				for (int i = 0; i < depth + 13; i++)
-        			printf("  ");
-                for (i = 0; node->args[i]; i++) {
-                    printf("%s ", node->args[i]);
-                }
-            }
-            printf("\n");
-            if (node->input_file)
-                printf("  Input: %s\n", node->input_file);
-            if (node->output_file)
-                printf("  Output: %s (Append: %s)\n", node->output_file, node->append_output ? "Yes" : "No");
-            if (node->heredoc_delimiter)
-                printf("  Heredoc: %s\n", node->heredoc_delimiter);
-            break;
-		case AST_REDIR_OUT:
-            printf("REDIRECTION OUT\n");
-			if (node->args) 
-			{
-				for (int i = 0; i < depth + 13; i++)
-        			printf("  ");
-                for (i = 0; node->args[i]; i++) {
-                    printf("%s ", node->args[i]);
-                }
-            }
-            printf("\n");
-            if (node->input_file)
-                printf("  Input: %s\n", node->input_file);
-            if (node->output_file)
-                printf("  Output: %s (Append: %s)\n", node->output_file, node->append_output ? "Yes" : "No");
-            if (node->heredoc_delimiter)
-                printf("  Heredoc: %s\n", node->heredoc_delimiter);
-            break;
-		case AST_REDIR_APPEND:
-            printf("REDIRECTION APPEND\n");
-			if (node->args) 
-			{
-				for (int i = 0; i < depth + 13; i++)
-        			printf("  ");
-                for (i = 0; node->args[i]; i++) {
-                    printf("%s ", node->args[i]);
-                }
-            }
-            printf("\n");
-            if (node->input_file)
-                printf("  Input: %s\n", node->input_file);
-            if (node->output_file)
-                printf("  Output: %s (Append: %s)\n", node->output_file, node->append_output ? "Yes" : "No");
-            if (node->heredoc_delimiter)
-                printf("  Heredoc: %s\n", node->heredoc_delimiter);
-            break;
-		case AST_REDIR_HERDOC:
-            printf("REDIRECTION HEREDOC\n");
-			if (node->args) 
-			{
-				for (int i = 0; i < depth + 13; i++)
-        			printf("  ");
-                for (i = 0; node->args[i]; i++) {
-                    printf("%s ", node->args[i]);
-                }
-            }
-            printf("\n");
-            if (node->input_file)
-                printf("  Input: %s\n", node->input_file);
-            if (node->output_file)
-                printf("  Output: %s (Append: %s)\n", node->output_file, node->append_output ? "Yes" : "No");
-            if (node->heredoc_delimiter)
-                printf("  Heredoc: %s\n", node->heredoc_delimiter);
             break;
         default:
             printf("UNKNOWN NODE TYPE\n");
@@ -175,6 +132,7 @@ void print_ast(t_ast_node *root, int depth)
 
 int main(int argc, char **argv, char **envp)
 {
+    //(void)envp;
 	char	*line;
 	t_token	*token;
 	t_ast_node	*ast;
@@ -192,17 +150,19 @@ int main(int argc, char **argv, char **envp)
 			break ;
 		}
 		token = lexer(line);
+        expand_tokens(token, envp);
 		ast = parse(token);
-		free_token(token);
+		//free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
-		if (fork() == 0)
+		/*if (fork() == 0)
 		{
 			executor(envp, ast);
 			free_ast(&ast);
 			exit(0);
-		}
-		//print_ast(ast, 0);
-		wait(NULL);
+		}*/
+		print_ast(ast, 0);
+        free_token(token);
+		//wait(NULL);
 		free_ast(&ast);
 		free(line);
 	}

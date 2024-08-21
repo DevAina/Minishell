@@ -11,7 +11,7 @@ OBJS = ${SRCS:.c=.o}
 all : ${NAME}
 
 .c.o :
-	cc -c $< -o ${<:.c=.o} ${FLAGS}
+	cc -c -Wall -Werror -Wextra -g $< -o ${<:.c=.o}
 
 ${NAME} : ${OBJS}
 	make bonus -C ./libft
