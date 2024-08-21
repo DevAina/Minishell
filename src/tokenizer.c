@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/14 07:43:53 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/15 08:43:51 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_token(t_token *token)
 
 	while (token != NULL)
 	{
-	//	printf("token : %s\n", token->value);
+		//printf("token_type: %d token value: %s\n", token->type, token->value);
 		tmp = token;
 		token = token->next;
 		free(tmp->value);
@@ -47,6 +47,18 @@ int	mns_is_space(char c)
 	return (0);
 }
 
+static t_token	*create_empty_token(int *index)
+{
+	char	*word;
+	t_token	*token;
+
+	word = ft_strdup("");
+	*index += 1;
+	token = create_token(TOKEN_WORD, word, index);
+	free(word);
+	return (token);
+}
+
 t_token	*handle_quote(char *input, int *index)
 {
 	char	quote;
@@ -56,7 +68,8 @@ t_token	*handle_quote(char *input, int *index)
 	int		end;
 
 	quote = input[*index];
-	*index += 1;
+	if (input[(*index)++] == quote)
+		return (create_empty_token(index));
 	start = *index;
 	end = start;
 	while (input[end] != '\0' && input[end] != quote)

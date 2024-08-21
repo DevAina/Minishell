@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/19 08:03:46 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:41:44 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,17 @@
 typedef enum e_tokentype
 {
     TOKEN_ENV_VAR,
-    TOKEN_WORD,   
-    TOKEN_PIPE,    
-    TOKEN_REDIR_IN, 
+    TOKEN_WORD,
+    TOKEN_PIPE,   
+    TOKEN_REDIR_IN,
     TOKEN_REDIR_OUT,
     TOKEN_REDIR_APPEND,
-    TOKEN_HEREDOC,  
+    TOKEN_HEREDOC,
     TOKEN_AND,
     TOKEN_OR,
     TOKEN_SEMICOLON,
     TOKEN_NEWLINE,
-    TOKEN_EOF      
+    TOKEN_EOF
 }   t_tokentype;
 
 typedef struct	s_token
