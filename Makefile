@@ -4,7 +4,11 @@ FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline -g
 
 SRCS = ./built_in/cd.c ./built_in/export.c ./src/mns_utils.c ./src/main.c \
 		./src/tokenizer.c ./src/parse_input.c ./src/exec.c ./src/exec_utils.c \
+<<<<<<< HEAD
 		./src/expander.c
+=======
+		./src/expander.c 
+>>>>>>> ef128f7 (blabla)
 
 OBJS = ${SRCS:.c=.o}
 

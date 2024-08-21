@@ -39,7 +39,6 @@
 */
 typedef enum e_tokentype
 {
-    TOKEN_ENV_VAR,
     TOKEN_WORD,
     TOKEN_PIPE,   
     TOKEN_REDIR_IN,
@@ -105,7 +104,11 @@ char	*find_path(char **path_list, char *cmd);
 void	free_split(char **str);
 void	exec_cmd(char **envp, char **cmd);
 void	executor(char **envp, t_ast_node *ast);
+<<<<<<< HEAD
 
 /*****expander*******/
 void	expand_tokens(t_token *tokens, char **env);
+=======
+t_token	*expand_token(t_token *tokens, char **env);
+>>>>>>> ef128f7 (blabla)
 #endif

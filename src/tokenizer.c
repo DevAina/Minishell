@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/15 08:43:51 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/16 09:35:40 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_token(t_token *token)
 
 	while (token != NULL)
 	{
-		//printf("token_type: %d token value: %s\n", token->type, token->value);
+		printf("token value: %s\n", token->value);
 		tmp = token;
 		token = token->next;
 		free(tmp->value);
@@ -47,66 +47,59 @@ int	mns_is_space(char c)
 	return (0);
 }
 
-static t_token	*create_empty_token(int *index)
-{
-	char	*word;
-	t_token	*token;
-
-	word = ft_strdup("");
-	*index += 1;
-	token = create_token(TOKEN_WORD, word, index);
-	free(word);
-	return (token);
-}
-
-t_token	*handle_quote(char *input, int *index)
-{
-	char	quote;
-	t_token	*token;
-	char	*word;
-	int		start;
-	int		end;
-
-	quote = input[*index];
-	if (input[(*index)++] == quote)
-		return (create_empty_token(index));
-	start = *index;
-	end = start;
-	while (input[end] != '\0' && input[end] != quote)
-		end++;
-	if (input[end] != quote)
-	{
-		ft_putendl_fd(RED"Minishell: unclosed quote\n"RESET, 2);
-		return (NULL);
-	}
-	word = malloc(sizeof(char) * (end - start + 1));
-	ft_strlcpy(word, input + start, end - start + 1);
-	if (word == NULL)
-		return (NULL);
-	token = create_token(TOKEN_WORD, word, index);
-	free(word);
-	return (token);
-}
-
 int is_special_char(char c)
 {
-	return (c == '|' || c == '<' || c == '>' || c == ' '
-		|| c == '\'' || c == '"');
+	if (c == '|' || c == '<' || c == '>' || c == ' ')
+		return (1);
+	return (0);
+}
+
+static void	block_if_for_get_len_word(char *input, int index, 
+	int	*in_quotes, char *type_quotes)
+{
+	if (!*in_quotes)
+	{
+		*in_quotes = 1;
+		*type_quotes = input[index];
+	}
+	else if (input[index] == *type_quotes)
+	{
+		*in_quotes = 0;
+		*type_quotes = 0;
+	}
+}
+
+int	get_len_word(char *input, int *index)
+{
+	int		start;
+	int		end;
+	int		in_quotes;
+	char	type_quotes;
+
+	in_quotes = 0;
+	type_quotes = 0;
+	start = *index;
+	end = start;
+	while (input[end] != '\0')
+	{
+		if (!in_quotes && is_special_char(input[end]) == 1)
+			break ;
+		if (input[end] == '\'' || input[end] == '"')
+			block_if_for_get_len_word(input, end, &in_quotes, &type_quotes);
+		end++;
+	}
+	return (end - start + 1);
 }
 
 t_token	*get_token_word(char *input, int *index)
 {
 	t_token	*token;
-	int		start;
-	int		end;
 	char	*word;
+	int		len;
 
-	start = *index;
-	end = start;
-	while (input[end] != '\0' && is_special_char(input[end]) == 0)
-		end++;
-	word = malloc(sizeof(char) * (end - start + 1));
-	ft_strlcpy(word, input + start, end - start + 1);
+	len = get_len_word(input, index);
+	word = malloc(sizeof(char) * len);
+	ft_strlcpy(word, input + *index, len);
 	if (word == NULL)
 		return (NULL);
 	token = create_token(TOKEN_WORD, word, index);
@@ -134,8 +127,6 @@ t_token	*get_next_token(char *input, int *index)
 		return (create_token(TOKEN_NEWLINE, "\n", index));
 	else if (input[*index] == '\0')
 		return (create_token(TOKEN_NEWLINE, "\0", index));
-	else if (input[*index] == '"' || input[*index] == '\'')
-		return (handle_quote(input, index));
 	else
 		return (get_token_word(input, index));
 }

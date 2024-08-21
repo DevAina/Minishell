@@ -5,8 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2024/08/20 14:09:27 by trarijam          #+#    #+#             */
 /*   Updated: 2024/08/20 14:09:29 by trarijam         ###   ########.fr       */
+=======
+/*   Created: 2024/07/30 10:48:11 by trarijam          #+#    #+#             */
+/*   Updated: 2024/08/20 11:07:09 by trarijam         ###   ########.fr       */
+>>>>>>> ef128f7 (blabla)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,14 +181,19 @@ void print_ast(t_ast_node *root, int depth)
 
 int main(int argc, char **argv, char **envp)
 {
-    (void)envp;
 	char	*line;
 	t_token	*token;
 	t_ast_node	*ast;
 
 	(void)argc;
 	(void)argv;
+<<<<<<< HEAD
 	while (1)
+=======
+    (void)envp;
+	(void)line;
+    /*while (1)
+>>>>>>> ef128f7 (blabla)
 	{
 		line = readline("minishell$ ");
 		if (line == NULL)
@@ -192,9 +202,11 @@ int main(int argc, char **argv, char **envp)
 		{
 			free(line);
 			break ;
-		}
-		token = lexer(line);
+		}*/
+		token = lexer("ls >file");
+        //token = expand_token(token, envp);
 		ast = parse(token);
+<<<<<<< HEAD
 		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
 		if (fork() == 0)
@@ -208,5 +220,22 @@ int main(int argc, char **argv, char **envp)
 		free_ast(&ast);
 		free(line);
 	}
+=======
+        printf("%d\n", ast->type);
+        if (ast->right != NULL)
+            printf("%d\n", ast->right->type);
+        if (ast->left != NULL)
+            printf("%d\n", ast->left->type);
+//		exec_cmd(envp, ast->args, -1, NULL);
+		//if (fork() == 0)
+		//	executor(envp, ast);
+		//print_ast(ast, 0);
+		//wait(NULL);
+        //printf("expand token\n");
+		//free_token(token);
+		//free_ast(&ast);
+		//free(line);
+	//}
+>>>>>>> ef128f7 (blabla)
 	return (0);
 }
