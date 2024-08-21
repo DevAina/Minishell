@@ -105,4 +105,7 @@ char	*find_path(char **path_list, char *cmd);
 void	free_split(char **str);
 void	exec_cmd(char **envp, char **cmd);
 void	executor(char **envp, t_ast_node *ast);
+
+/*****expander*******/
+void	expand_tokens(t_token *tokens, char **env);
 #endif

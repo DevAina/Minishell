@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/20 09:34:55 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/16 09:53:19 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	close(fd[0]);
 	waitpid(pid, NULL, 0);
 	waitpid(pid1, NULL, 0);
+
 }
 
 void	redir_output(char **envp, t_ast_node *ast)
