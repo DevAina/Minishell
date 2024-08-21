@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/16 09:53:10 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/19 08:03:46 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <stdio.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <fcntl.h>
 
 # define RED "\033[31m"
 # define GREEN "\033[32m"
