@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/22 11:12:28 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:21:31 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,13 @@ int main(int argc, char **argv, char **envp)
 {
     //(void)envp;
 	char	*line;
+    int     exit_status;
 	t_token	*token;
 	t_ast_node	*ast;
 
 	(void)argc;
 	(void)argv;
+    exit_status = 0;
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -150,18 +152,18 @@ int main(int argc, char **argv, char **envp)
 			break ;
 		}
 		token = lexer(line);
-        expand_tokens(token, envp);
+        expand_tokens(token, envp, exit_status);
 		ast = parse(token);
 		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
-		if (fork() == 0)
+		/*if (fork() == 0)
 		{
 			executor(envp, ast);
 			free_ast(&ast);
 			exit(0);
-		}
-		//print_ast(ast, 0);
-		wait(NULL);
+		}*/
+		print_ast(ast, 0);
+		//waitpid(NULL);
 		free_ast(&ast);
 		free(line);
 	}
