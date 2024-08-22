@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/22 11:56:29 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:14:05 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,40 @@ char *expand_env_var(char *var_name, char **env)
     return (value);
 }
 
-char *expand_token(char *str, char **env)
+void    handle_quote(char c, int *in_single_quotes,
+    int *in_double_quotes)
+{
+    if (c == '\'' && !(*in_double_quotes))
+        *in_single_quotes = !in_single_quotes;
+    else if (c == '"' && !(*in_single_quotes))
+        *in_double_quotes = !in_double_quotes;
+}
+
+char    *expand_special_char(char *str, char **env, int *i,
+    int exit_status)
 {
     char    *result;
     char    *var_value;
+
+    result = NULL;
+    if (str[*i + 1] == '?')
+    {
+        result = ft_itoa(exit_status);
+        (*i)++;
+    }
+    else
+    {
+        var_value = expand_env_var(str + *i +1, env);
+        result = var_value;
+        *i += get_var_name_length(str + *i + 1);
+    }
+    return (result);
+}
+
+char    *expand_token(char *str, char **env, int exit_status)
+{
+    char    *result;
+    char    *tmp;
     int     i;
     int     in_single_quotes ;
     int     in_double_quotes;
@@ -104,16 +134,13 @@ char *expand_token(char *str, char **env)
     in_single_quotes = 0;
     while (str[i])
     {
-        if (str[i] == '\'' && !in_double_quotes)
-            in_single_quotes = !in_single_quotes;
-        else if (str[i] == '"' && !in_single_quotes)
-            in_double_quotes = !in_double_quotes;
-        else if (str[i] == '$' && !in_single_quotes)
+        handle_quote(str[i], &in_single_quotes, &in_double_quotes);
+        if (str[i] == '$' && !in_single_quotes)
         {
-            var_value = expand_env_var(str + i + 1, env);
-            result = str_append(result, var_value);
-            free(var_value);
-            i += get_var_name_length(str + i + 1);
+            tmp = expand_special_char(str, env, &i, exit_status);
+            result = str_append(result, tmp);
+           	/*if (tmp)
+                free(tmp);*/
         }
         else
             result = char_append(result, str[i]);
@@ -123,17 +150,27 @@ char *expand_token(char *str, char **env)
 }
 
 
-void expand_tokens(t_token *tokens, char **env)
+void expand_tokens(t_token *tokens, char **env, int exit_status)
 {
     t_token *current;
+    int     skip_next;
     char    *expanded;
 
     current = tokens;
+    skip_next = 0;
     while (current)
     {
-        if (current->type == TOKEN_WORD)
+        if (skip_next == 1)
         {
-            expanded = expand_token(current->value, env);
+            skip_next = 0;
+            current = current->next;
+            continue;
+        }
+        if (current->type == TOKEN_HEREDOC)
+            skip_next = 1;
+        else if (current->type == TOKEN_WORD)
+        {
+            expanded = expand_token(current->value, env, exit_status);
             free(current->value);
             current->value = expanded;
         }

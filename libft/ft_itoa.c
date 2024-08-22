@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trarijam <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 14:06:43 by trarijam          #+#    #+#             */
-/*   Updated: 2024/02/27 10:10:36 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:59:14 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*ft_itoa(int n)
 		tmp /= 10;
 		len++;
 	}
-	str = (char *)malloc(len + 1);
+	str = (char *)ft_calloc(len + 1, sizeof(char));
 	if (str == NULL)
 		return (NULL);
 	n = after_malloc(str, n);
