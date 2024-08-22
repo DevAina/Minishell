@@ -6,14 +6,41 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/22 10:16:15 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/22 11:21:45 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <fcntl.h>
 
-void	exec_cmd(char **envp, char **cmd)
+void	check_redirection(t_ast_node *ast)
+{
+	int	i;
+	int	fd;
+
+	if (ast->input_file)
+	{
+		i = 0;
+		while (ast->input_file[i])
+		{
+			fd = open(ast->input_file[i], O_RDONLY);
+			dup2(fd, 0);
+			i++;
+		}
+	}
+	if (ast->output_file)
+	{
+		i = 0;
+		while (ast->output_file[i])
+		{
+			fd = open(ast->output_file[i], O_RDONLY | O_WRONLY | O_CREAT, 0777);
+			dup2(fd, 1);
+			i++;
+		}
+	}
+}
+
+void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 {
 	char	**path_list;
 	char	*path;
@@ -23,6 +50,7 @@ void	exec_cmd(char **envp, char **cmd)
 	free_split(path_list);
 	if (path == NULL)
 		return ;
+	check_redirection(ast);
 	execve(path, cmd, envp);
 }
 
@@ -55,23 +83,11 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 
 }
 
-void	redir_output(char **envp, t_ast_node *ast)
-{
-	int		outfile_fd;
-
-	outfile_fd = open(ast->output_file, O_RDONLY | O_WRONLY | O_CREAT, 0777);
-	if (outfile_fd < 0)
-		return ;
-	dup2(outfile_fd, 1);
-	executor(envp, ast->left);
-}
 
 void	executor(char **envp, t_ast_node *ast)
 {
 	if (ast->type == 0)
-		exec_cmd(envp, ast->args);
+		exec_cmd(envp, ast->args, ast);
 	else if (ast->type == 1)
 		pipe_cmd(envp, ast);
-	else if (ast->type == 3)
-		redir_output(envp, ast);
 }
