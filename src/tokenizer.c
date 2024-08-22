@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/16 09:35:40 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/22 11:07:05 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_token(t_token *token)
 
 	while (token != NULL)
 	{
-		printf("token value: %s\n", token->value);
+		//printf("token value: %s\n", token->value);
 		tmp = token;
 		token = token->next;
 		free(tmp->value);
