@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/20 14:32:07 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/22 11:56:29 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,22 @@ char *expand_env_var(char *var_name, char **env)
 
 char *expand_token(char *str, char **env)
 {
-    char	*result;
-    int		i;
-    int		in_single_quotes;
-	char	*var_value;
+    char    *result;
+    char    *var_value;
+    int     i;
+    int     in_single_quotes ;
+    int     in_double_quotes;
 
-    i = 0;
-    in_single_quotes = 0;
     result = NULL;
+    i = 0;
+    in_double_quotes = 0;
+    in_single_quotes = 0;
     while (str[i])
     {
-        if (str[i] == '\'')
+        if (str[i] == '\'' && !in_double_quotes)
             in_single_quotes = !in_single_quotes;
+        else if (str[i] == '"' && !in_single_quotes)
+            in_double_quotes = !in_double_quotes;
         else if (str[i] == '$' && !in_single_quotes)
         {
             var_value = expand_env_var(str + i + 1, env);
@@ -115,8 +119,9 @@ char *expand_token(char *str, char **env)
             result = char_append(result, str[i]);
         i++;
     }
-    return (result);
+    return result;
 }
+
 
 void expand_tokens(t_token *tokens, char **env)
 {
