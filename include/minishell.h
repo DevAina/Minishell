@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/22 15:04:56 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/23 09:56:32 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define HEREDOC_COUNT 2
 # define ARG_COUNT 3
 # define APPEND_COUNT 4
+# define INPUT_OUTPUT_COUNT 5
 
 /****structure for token**/
 /*
@@ -48,6 +49,7 @@ typedef enum e_tokentype
     TOKEN_PIPE,
     TOKEN_REDIR_IN,
     TOKEN_REDIR_OUT,
+    TOKEN_REDIT_IN_OUT,
     TOKEN_REDIR_APPEND,
     TOKEN_HEREDOC,
     TOKEN_AND,
@@ -77,6 +79,7 @@ typedef struct s_ast_node
     char                **args;
     char                **input_file;
     char                **output_file;
+    char                **input_output_file;
     //(0 redirection simple > (le fichier sera ecraser), 1 redirection double >> (La sortie sera ajoutée à la fin du fichier))
     int                 append_output;
     char                **heredoc_delimiter;
