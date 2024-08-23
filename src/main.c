@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/22 16:21:31 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:09:44 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,15 @@ void print_ast_node(t_ast_node *node, int depth)
                     printf("%s ", node->args[i]);
             }
             printf("\n");
+            if (node->input_output_file)
+            {
+                for (i = 0; i < depth; i++)
+                    printf("  ");
+                printf("input output file: ");
+                for (i = 0; node->input_output_file[i]; i++)
+                    printf("%s ", node->input_output_file[i]);
+                printf("\n");
+            }
             if (node->input_file)
             {
                 for (i = 0; i < depth; i++)

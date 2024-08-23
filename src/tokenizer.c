@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/22 11:07:05 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/23 09:45:45 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ t_token	*get_next_token(char *input, int *index)
 	}
 	else if (input[*index] == '<')
 	{
+		if (input[*index + 1] == '>')
+			return (create_token(TOKEN_REDIT_IN_OUT, ">", index));
 		if (input[*index + 1] == '<')
 			return (create_token(TOKEN_HEREDOC, "<<", index));
 		return (create_token(TOKEN_REDIR_IN, "<", index));

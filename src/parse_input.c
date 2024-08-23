@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/21 16:33:26 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:04:13 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ t_ast_node	*init_node(t_ast_node_type type)
     node->right = NULL;
     node->input_file = NULL;
     node->output_file = NULL;
+	node->input_output_file = NULL;
 	node->append_output = -1;
 	node->output_append = NULL;
 	node->heredoc_delimiter = NULL;
@@ -98,7 +99,7 @@ void	count_type_token(t_token *tokens, int *count)
 
 	tmp = tokens;
 	i = 0;
-	while (i < 5)
+	while (i < 6)
 	{
 		count[i] = 0;
 		i++;
@@ -108,6 +109,12 @@ void	count_type_token(t_token *tokens, int *count)
 	{
 		if (tmp->type == TOKEN_WORD)
 			count[ARG_COUNT] += 1;
+		if (tmp->type == TOKEN_REDIT_IN_OUT)
+		{
+			tmp = tmp->next;
+			if (tmp->type == TOKEN_WORD)
+				count[INPUT_OUTPUT_COUNT] += 1;
+		}
 		count_redirection(&tmp, count);
 		tmp = tmp->next;
 	}
@@ -126,6 +133,9 @@ void	init_args_input_output_file(t_ast_node **cmd, int *count)
 	if (count[HEREDOC_COUNT] != 0)
 		(*cmd)->heredoc_delimiter =  (char **)malloc(sizeof(char *)
 			* (count[HEREDOC_COUNT] + 1));
+	if (count[INPUT_OUTPUT_COUNT] != 0)
+		(*cmd)->input_output_file = (char **)malloc(sizeof(char *)
+		* (count[INPUT_OUTPUT_COUNT] + 1));
 	if (count[APPEND_COUNT] != 0)
 		(*cmd)->output_append =  (char **)malloc(sizeof(char *)
 			* (count[APPEND_COUNT] + 1));
@@ -145,6 +155,8 @@ void set_null_terminators(t_ast_node *cmd, int count[5], int counts[5])
 {
 	if (count[ARG_COUNT] != 0)
 		cmd->args[counts[ARG_COUNT]] = NULL;
+	if (count[INPUT_OUTPUT_COUNT] != 0)
+		cmd->input_output_file[counts[INPUT_OUTPUT_COUNT]] = NULL;
 	if (count[INPUT_COUNT] != 0)
 		cmd->input_file[counts[INPUT_COUNT]] = NULL;
 	if (count[OUTPUT_COUNT] != 0)
@@ -162,6 +174,9 @@ void process_token(t_token **tokens, t_ast_node *cmd, int count[5], int counts[5
 	if ((*tokens)->type == TOKEN_REDIR_IN)
 		handle_redirection(tokens, cmd->input_file,
 			&counts[INPUT_COUNT], count[INPUT_COUNT]);
+	if ((*tokens)->type == TOKEN_REDIT_IN_OUT)
+		handle_redirection(tokens, cmd->input_output_file,
+		&counts[INPUT_OUTPUT_COUNT], count[INPUT_COUNT]);
 	if ((*tokens)->type == TOKEN_REDIR_OUT)
 		handle_redirection(tokens, cmd->output_file,
 			&counts[OUTPUT_COUNT], count[OUTPUT_COUNT]);
@@ -175,12 +190,12 @@ void process_token(t_token **tokens, t_ast_node *cmd, int count[5], int counts[5
 
 t_ast_node *parse_token(t_token **tokens, t_ast_node *cmd)
 {
-	int counts[5];
-	int count[5];
+	int counts[6];
+	int count[6];
 	int	i;
 
 	i = 0;
-	while (i < 5)
+	while (i < 6)
 	{
 		counts[i] = 0;
 		i++;
