@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/23 10:09:44 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:13:56 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ int main(int argc, char **argv, char **envp)
     exit_status = 0;
 	while (1)
 	{
-		line = readline("minishell$ ");
+		line = readline(YELLOW"minishell$ "RESET);
 		if (line == NULL)
 			break;
 		if (*line == '\0')
@@ -161,6 +161,12 @@ int main(int argc, char **argv, char **envp)
 			break ;
 		}
 		token = lexer(line);
+        if (analyze_tokens(token) == 0)
+        {
+            free_token(token);
+            free(line);
+            continue;
+        }
         expand_tokens(token, envp, exit_status);
 		ast = parse(token);
 		free_token(token);

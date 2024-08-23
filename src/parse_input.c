@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/23 10:04:13 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:40:53 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ t_ast_node	*init_node(t_ast_node_type type)
     node->input_file = NULL;
     node->output_file = NULL;
 	node->input_output_file = NULL;
-	node->append_output = -1;
 	node->output_append = NULL;
 	node->heredoc_delimiter = NULL;
     return (node);
