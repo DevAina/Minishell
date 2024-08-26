@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/26 07:50:04 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/26 08:06:07 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,14 @@ void	output_append(t_ast_node *ast)
 	}
 }
 
-void	check_redirection(t_ast_node *ast)
+void	here_doc(t_ast_node *ast)
 {
-	char	*line;
-
-	if (ast->input_file)
-		redir_input(ast);
-	if (ast->output_file)
-		redir_output(ast);
-	if (ast->output_append)
-		output_append(ast);
-	if (ast->heredoc_delimiter)
-	{
-		int	i = 0;
+		int		i;
+		char	*line;
 		int		fd[2];
-		int		dif = 1;
+		int		dif;
 
+		i = 0;
 		pipe(fd);
 		if (fork() == 0)
 		{
@@ -100,7 +92,18 @@ void	check_redirection(t_ast_node *ast)
 		close(fd[1]);
 		dup2(fd[0], 0);
 		close(fd[0]);
-	}
+}
+
+void	check_redirection(t_ast_node *ast)
+{
+	if (ast->input_file)
+		redir_input(ast);
+	if (ast->output_file)
+		redir_output(ast);
+	if (ast->output_append)
+		output_append(ast);
+	if (ast->heredoc_delimiter)
+		here_doc(ast);
 }
 
 void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
