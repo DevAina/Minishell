@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/23 12:18:00 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/26 07:50:04 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,25 +74,32 @@ void	check_redirection(t_ast_node *ast)
 	if (ast->heredoc_delimiter)
 	{
 		int	i = 0;
-		int		tmp_fd;
+		int		fd[2];
 		int		dif = 1;
 
+		pipe(fd);
 		if (fork() == 0)
 		{
-			tmp_fd = open("tmp", O_WRONLY | O_RDONLY | O_CREAT, 0777);
-			while (dif != 0)
+			close(fd[0]);
+			while (1)
 			{
 				line = readline("heredoc> ");
 				dif = ft_strncmp(line, ast->heredoc_delimiter[i], ft_strlen(ast->heredoc_delimiter[i]) + 1);
-				ft_putendl_fd(line, tmp_fd);
+				if (dif == 0)
+				{
+					free(line);
+					break;
+				}
+				ft_putendl_fd(line, fd[1]);
 				free(line);
 			}
-			close(tmp_fd);
+			close(fd[1]);
 			exit(0);
 		}
-		tmp_fd = open("tmp", O_RDONLY);
 		wait(0);
-		dup2(tmp_fd, 0);
+		close(fd[1]);
+		dup2(fd[0], 0);
+		close(fd[0]);
 	}
 }
 
