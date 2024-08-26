@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 07:27:21 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:35:58 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,15 @@ void print_ast_node(t_ast_node *node, int depth)
                 printf("input output file: ");
                 for (i = 0; node->input_output_file[i]; i++)
                     printf("%s ", node->input_output_file[i]);
+                printf("\n");
+            }
+            if (node->assignement)
+            {
+                for (i = 0; i < depth; i++)
+                    printf("  ");
+                printf("assignement: ");
+                for (i = 0; node->assignement[i]; i++)
+                    printf("%s ", node->assignement[i]);
                 printf("\n");
             }
             if (node->input_file)
@@ -171,12 +180,12 @@ int main(int argc, char **argv, char **envp)
 		ast = parse(token);
 		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
-		if (fork() == 0)
+		 if (fork() == 0)
 		{
 			executor(envp, ast);
 			free_ast(&ast);
 			exit(0);
-		}
+		} 
 		//print_ast(ast, 0);
 		wait(NULL);
 		free_ast(&ast);

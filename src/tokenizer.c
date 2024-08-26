@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/23 09:45:45 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/26 09:22:09 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,27 @@ void	free_token(t_token *token)
 	}
 }
 
+int	is_valid_var_char(char c)
+{
+	if (ft_isalnum(c) || c== '_')
+		return (1);
+	return (0);
+}
+
+int	valid_name_assignement(const char *value)
+{
+	int	i;
+
+	i = 0;
+	while (value[i] != '=')
+	{
+		if (!is_valid_var_char(value[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 t_token	*create_token(t_tokentype type, const char *value, int *index)
 {
 	t_token	*token;
@@ -34,6 +55,11 @@ t_token	*create_token(t_tokentype type, const char *value, int *index)
 	if (token == NULL)
 		return (NULL);
 	token->type = type;
+	if (ft_strchr(value, '=') != NULL)
+	{
+		if (valid_name_assignement(value))
+			token->type = TOKEN_ASSIGNEMENT;
+	}
 	token->value = ft_strdup(value);
 	token->next = NULL;
 	*index += ft_strlen(value);

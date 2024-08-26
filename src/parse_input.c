@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/23 11:40:53 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:35:30 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	free_ast(t_ast_node **node)
 		free_matrix((*node)->heredoc_delimiter);
 	if ((*node)->type != AST_PIPE && (*node)->output_append != NULL)
 		free_matrix((*node)->output_append);
+	if ((*node)->type != AST_PIPE && (*node)->assignement != NULL)
+		free_matrix((*node)->assignement);
 	if ((*node)->left != NULL)
 		free_ast(&(*node)->left);
 	if ((*node)->right != NULL)
@@ -56,6 +58,7 @@ t_ast_node	*init_node(t_ast_node_type type)
     node->left = NULL;
     node->right = NULL;
     node->input_file = NULL;
+	node->assignement = NULL;
     node->output_file = NULL;
 	node->input_output_file = NULL;
 	node->output_append = NULL;
@@ -94,20 +97,15 @@ void	count_redirection(t_token **tokens, int *count)
 void	count_type_token(t_token *tokens, int *count)
 {
 	t_token	*tmp;
-	int		i;
 
 	tmp = tokens;
-	i = 0;
-	while (i < 6)
-	{
-		count[i] = 0;
-		i++;
-	}
 	while (tmp != NULL && tmp->type != TOKEN_PIPE
 		&& tmp->type != TOKEN_EOF)
 	{
 		if (tmp->type == TOKEN_WORD)
 			count[ARG_COUNT] += 1;
+		if (tmp->type == TOKEN_ASSIGNEMENT)
+			count[ASSIGNEMENT_COUNT] += 1;
 		if (tmp->type == TOKEN_REDIT_IN_OUT)
 		{
 			tmp = tmp->next;
@@ -138,6 +136,9 @@ void	init_args_input_output_file(t_ast_node **cmd, int *count)
 	if (count[APPEND_COUNT] != 0)
 		(*cmd)->output_append =  (char **)malloc(sizeof(char *)
 			* (count[APPEND_COUNT] + 1));
+	if (count[ASSIGNEMENT_COUNT] != 0)
+		(*cmd)->assignement = (char **)malloc(sizeof(char *)
+			* (count[ASSIGNEMENT_COUNT] + 1));
 }
 
 void handle_redirection(t_token **tokens, char **file_array, int *file_count, int count)
@@ -164,12 +165,18 @@ void set_null_terminators(t_ast_node *cmd, int count[5], int counts[5])
 		cmd->heredoc_delimiter[counts[HEREDOC_COUNT]] = NULL;
 	if (count[APPEND_COUNT] != 0)
 		cmd->output_append[counts[APPEND_COUNT]] = NULL;
+	if (count[ASSIGNEMENT_COUNT] != 0)
+		cmd->assignement[counts[ASSIGNEMENT_COUNT]] = NULL;
 }
 
-void process_token(t_token **tokens, t_ast_node *cmd, int count[5], int counts[5])
+void process_token(t_token **tokens, t_ast_node *cmd, int count[5],
+	int counts[5])
 {
 	if ((*tokens)->type == TOKEN_WORD && count[ARG_COUNT] != 0)
 		cmd->args[counts[ARG_COUNT]++] = ft_strdup((*tokens)->value);
+	if ((*tokens)->type == TOKEN_ASSIGNEMENT && count[ASSIGNEMENT_COUNT] != 0)
+		cmd->assignement[counts[ASSIGNEMENT_COUNT]++] =
+			ft_strdup((*tokens)->value);
 	if ((*tokens)->type == TOKEN_REDIR_IN)
 		handle_redirection(tokens, cmd->input_file,
 			&counts[INPUT_COUNT], count[INPUT_COUNT]);
@@ -189,14 +196,20 @@ void process_token(t_token **tokens, t_ast_node *cmd, int count[5], int counts[5
 
 t_ast_node *parse_token(t_token **tokens, t_ast_node *cmd)
 {
-	int counts[6];
-	int count[6];
+	int counts[7];
+	int count[7];
 	int	i;
 
 	i = 0;
-	while (i < 6)
+	while (i < 7)
 	{
 		counts[i] = 0;
+		i++;
+	}
+	i = 0;
+	while (i < 7)
+	{
+		count[i] = 0;
 		i++;
 	}
 	count_type_token(*tokens, count);

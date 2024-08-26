@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/23 14:08:35 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:35:15 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define ARG_COUNT 3
 # define APPEND_COUNT 4
 # define INPUT_OUTPUT_COUNT 5
+# define ASSIGNEMENT_COUNT 6
 
 /****structure for token**/
 /*
@@ -46,6 +47,7 @@
 typedef enum e_tokentype
 {
     TOKEN_WORD,
+    TOKEN_ASSIGNEMENT,
     TOKEN_PIPE,
     TOKEN_REDIR_IN,
     TOKEN_REDIR_OUT,
@@ -74,6 +76,7 @@ typedef struct s_ast_node
 {
     t_ast_node_type     type;
     char                **args;
+    char                **assignement;
     char                **input_file;
     char                **output_file;
     char                **input_output_file;
