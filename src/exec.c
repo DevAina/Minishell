@@ -6,36 +6,81 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/26 07:59:22 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:34:16 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <fcntl.h>
+#include <readline/readline.h>
 
-void	check_redirection(t_ast_node *ast)
+void	redir_input(t_ast_node *ast)
 {
 	int	i;
 	int	fd;
 
-	if (ast->input_file)
+	i = 0;
+	while (ast->input_file[i])
 	{
-		i = 0;
-		while (ast->input_file[i])
-		{
-			fd = open(ast->input_file[i], O_RDONLY);
-			dup2(fd, 0);
-			i++;
-		}
+		fd = open(ast->input_file[i], O_RDONLY);
+		dup2(fd, 0);
+		i++;
 	}
-	if (ast->output_file)
+}
+
+void	redir_output(t_ast_node *ast)
+{
+	int	i;
+	int	fd;
+
+	i = 0;
+	while (ast->output_file[i])
 	{
-		i = 0;
-		while (ast->output_file[i])
+		fd = open(ast->output_file[i], O_RDONLY | O_WRONLY | O_CREAT, 0777);
+		dup2(fd, 1);
+		i++;
+	}
+}
+
+void	output_append(t_ast_node *ast)
+{
+	int	i;
+	int	fd;
+
+	i = 0;
+	while (ast->output_append[i])
+	{
+		fd = open(ast->output_append[i], O_RDONLY | O_WRONLY
+				| O_CREAT | O_APPEND, 0777);
+		dup2(fd, 1);
+		i++;
+	}
+}
+
+void	check_redirection(t_ast_node *ast)
+{
+	char	*line;
+
+	if (ast->input_file)
+		redir_input(ast);
+	if (ast->output_file)
+		redir_output(ast);
+	if (ast->output_append)
+		output_append(ast);
+	if (ast->heredoc_delimiter)
+	{
+		int	i = 0;
+		int		fd;
+
+		fd = dup(0);
+		line = readline("heredoc> ");
+		while (ft_strncmp(ast->heredoc_delimiter[i], line, ft_strlen(ast->heredoc_delimiter[i])) != 0)
 		{
-			fd = open(ast->output_file[i], O_RDONLY | O_WRONLY | O_CREAT, 0777);
-			dup2(fd, 1);
-			i++;
+			free(line);
+			line = readline("heredoc> ");
 		}
+		free(line);
+		dup2(fd, 0);
 	}
 }
 
@@ -48,7 +93,10 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	path = find_path(path_list, cmd[0]);
 	free_split(path_list);
 	if (path == NULL)
+	{
+		ft_putendl_fd("command not found", 2);
 		return ;
+	}
 	check_redirection(ast);
 	execve(path, cmd, envp);
 }
@@ -79,7 +127,6 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	close(fd[0]);
 	waitpid(pid, NULL, 0);
 	waitpid(pid1, NULL, 0);
-
 }
 
 void	executor(char **envp, t_ast_node *ast)
