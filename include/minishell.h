@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 07:59:05 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:08:35 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,6 @@ typedef enum e_tokentype
     TOKEN_REDIT_IN_OUT,
     TOKEN_REDIR_APPEND,
     TOKEN_HEREDOC,
-    TOKEN_AND,
-    TOKEN_OR,
-    TOKEN_SEMICOLON,
     TOKEN_NEWLINE,
     TOKEN_EOF
 }   t_tokentype;
@@ -81,7 +78,6 @@ typedef struct s_ast_node
     char                **output_file;
     char                **input_output_file;
     //(0 redirection simple > (le fichier sera ecraser), 1 redirection double >> (La sortie sera ajoutée à la fin du fichier))
-    int                 append_output;
     char                **heredoc_delimiter;
     char                **output_append;
     struct s_ast_node   *left;
@@ -111,4 +107,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast);
 void	executor(char **envp, t_ast_node *ast);
 /*****expander*******/
 void	expand_tokens(t_token *tokens, char **env, int exit_status);
+
+/********Analyze tokens********/
+int		analyze_tokens(t_token *tokens);
 #endif
