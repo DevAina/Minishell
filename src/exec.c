@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/26 08:06:07 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:12:29 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,37 +61,44 @@ void	output_append(t_ast_node *ast)
 	}
 }
 
+void	read_input_heredoc(int fd[2], t_ast_node *ast)
+{
+	char	*line;
+	int		i;
+
+	i = 0;
+	close(fd[0]);
+	while (ast->heredoc_delimiter[i])
+	{
+		while (1)
+		{
+			line = readline("heredoc> ");
+			if (ft_strncmp(line, ast->heredoc_delimiter[i],
+					ft_strlen(ast->heredoc_delimiter[i]) + 1) == 0)
+			{
+				free (line);
+				break ;
+			}
+			ft_putendl_fd(line, fd[1]);
+			free(line);
+		}
+		i++;
+	}
+	close(fd[1]);
+	exit(0);
+}
+
 void	here_doc(t_ast_node *ast)
 {
-		int		i;
-		char	*line;
-		int		fd[2];
-		int		dif;
+	int		fd[2];
 
-		i = 0;
-		pipe(fd);
-		if (fork() == 0)
-		{
-			close(fd[0]);
-			while (1)
-			{
-				line = readline("heredoc> ");
-				dif = ft_strncmp(line, ast->heredoc_delimiter[i], ft_strlen(ast->heredoc_delimiter[i]) + 1);
-				if (dif == 0)
-				{
-					free(line);
-					break;
-				}
-				ft_putendl_fd(line, fd[1]);
-				free(line);
-			}
-			close(fd[1]);
-			exit(0);
-		}
-		wait(0);
-		close(fd[1]);
-		dup2(fd[0], 0);
-		close(fd[0]);
+	pipe(fd);
+	if (fork() == 0)
+		read_input_heredoc(fd, ast);
+	wait(0);
+	close(fd[1]);
+	dup2(fd[0], 0);
+	close(fd[0]);
 }
 
 void	check_redirection(t_ast_node *ast)
