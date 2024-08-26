@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 10:28:51 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:53:34 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,19 +119,25 @@ char	*expand_special_char(char *str, char **env, int *i, int exit_status)
     return (result);
 }
 
+void	init_for_expand_token(int *i, int *in_single_quotes,
+	int	*in_double_quotes, char **result)
+{
+	*result = NULL;
+	*i = 0;
+	*in_single_quotes = 0;
+	*in_double_quotes = 0;	
+}
+
 char *expand_token(char *str, char **env, int exit_status)
 {
     char	*result;
     char	*tmp;
     int		i;
-    int		in_single_quotes;
-    int		in_double_quotes;
+	int		in_single_quotes;
+    int		in_double_quotes; 
 
-	result = NULL;
 	tmp = NULL;
-	i = 0;
-	in_single_quotes = 0;
-	in_double_quotes = 0;
+	init_for_expand_token(&i, &in_single_quotes, &in_double_quotes, &result);	
     while (str[i])
     {
 		if (str[i] == '\'' && !in_double_quotes)
@@ -142,7 +148,6 @@ char *expand_token(char *str, char **env, int exit_status)
         {
             tmp = expand_special_char(str, env, &i, exit_status);
             result = str_append(result, tmp);
-            //free(tmp);
         }
         else
             result = char_append(result, str[i]);
