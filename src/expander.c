@@ -6,7 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/26 07:57:48 by traveloa         ###   ########.fr       */
+=======
+/*   Updated: 2024/08/22 16:14:05 by trarijam         ###   ########.fr       */
+>>>>>>> 060b66c (Modif expander)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +96,18 @@ char *expand_env_var(char *var_name, char **env)
 
 void    handle_quote(char c, int *in_single_quotes,
     int *in_double_quotes)
+<<<<<<< HEAD
+=======
+{
+    if (c == '\'' && !(*in_double_quotes))
+        *in_single_quotes = !in_single_quotes;
+    else if (c == '"' && !(*in_single_quotes))
+        *in_double_quotes = !in_double_quotes;
+}
+
+char    *expand_special_char(char *str, char **env, int *i,
+    int exit_status)
+>>>>>>> 060b66c (Modif expander)
 {
 <<<<<<< HEAD
     if (c == '\'' && !(*in_double_quotes))
@@ -133,6 +149,26 @@ char    *expand_token(char *str, char **env, int exit_status)
 =======
     char    *result;
     char    *var_value;
+
+    result = NULL;
+    if (str[*i + 1] == '?')
+    {
+        result = ft_itoa(exit_status);
+        (*i)++;
+    }
+    else
+    {
+        var_value = expand_env_var(str + *i +1, env);
+        result = var_value;
+        *i += get_var_name_length(str + *i + 1);
+    }
+    return (result);
+}
+
+char    *expand_token(char *str, char **env, int exit_status)
+{
+    char    *result;
+    char    *tmp;
     int     i;
     int     in_single_quotes ;
     int     in_double_quotes;
@@ -145,6 +181,7 @@ char    *expand_token(char *str, char **env, int exit_status)
     while (str[i])
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         handle_quote(str[i], &in_single_quotes, &in_double_quotes);
         if (str[i] == '$' && !in_single_quotes)
 =======
@@ -154,6 +191,10 @@ char    *expand_token(char *str, char **env, int exit_status)
             in_double_quotes = !in_double_quotes;
         else if (str[i] == '$' && !in_single_quotes)
 >>>>>>> 90dcf8e (Resolve confict)
+=======
+        handle_quote(str[i], &in_single_quotes, &in_double_quotes);
+        if (str[i] == '$' && !in_single_quotes)
+>>>>>>> 060b66c (Modif expander)
         {
             tmp = expand_special_char(str, env, &i, exit_status);
             result = str_append(result, tmp);
@@ -169,10 +210,14 @@ char    *expand_token(char *str, char **env, int exit_status)
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void expand_tokens(t_token *tokens, char **env, int exit_status)
 =======
 void expand_tokens(t_token *tokens, char **env)
 >>>>>>> 90dcf8e (Resolve confict)
+=======
+void expand_tokens(t_token *tokens, char **env, int exit_status)
+>>>>>>> 060b66c (Modif expander)
 {
     t_token *current;
     int     skip_next;
