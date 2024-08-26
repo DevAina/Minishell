@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/22 16:34:16 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/23 12:04:07 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ void	redir_input(t_ast_node *ast)
 	while (ast->input_file[i])
 	{
 		fd = open(ast->input_file[i], O_RDONLY);
+		if (fd < 0)
+		{
+			exit(1);
+		}
 		dup2(fd, 0);
 		i++;
 	}
@@ -70,17 +74,25 @@ void	check_redirection(t_ast_node *ast)
 	if (ast->heredoc_delimiter)
 	{
 		int	i = 0;
-		int		fd;
+		int		tmp_fd;
+		int		dif = 1;
 
-		fd = dup(0);
-		line = readline("heredoc> ");
-		while (ft_strncmp(ast->heredoc_delimiter[i], line, ft_strlen(ast->heredoc_delimiter[i])) != 0)
+		if (fork() == 0)
 		{
-			free(line);
-			line = readline("heredoc> ");
+			tmp_fd = open("tmp", O_WRONLY | O_RDONLY | O_CREAT, 0777);
+			while (dif != 0)
+			{
+				line = readline("heredoc> ");
+				dif = ft_strncmp(line, ast->heredoc_delimiter[i], ft_strlen(ast->heredoc_delimiter[i]) + 1);
+				ft_putendl_fd(line, tmp_fd);
+				free(line);
+			}
+			close(tmp_fd);
+			exit(0);
 		}
-		free(line);
-		dup2(fd, 0);
+		tmp_fd = open("tmp", O_RDONLY);
+		wait(0);
+		dup2(tmp_fd, 0);
 	}
 }
 
