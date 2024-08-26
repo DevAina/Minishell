@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/23 14:13:56 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/26 07:27:21 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,14 +171,14 @@ int main(int argc, char **argv, char **envp)
 		ast = parse(token);
 		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
-		/*if (fork() == 0)
+		if (fork() == 0)
 		{
 			executor(envp, ast);
 			free_ast(&ast);
 			exit(0);
-		}*/
-		print_ast(ast, 0);
-		//waitpid(NULL);
+		}
+		//print_ast(ast, 0);
+		wait(NULL);
 		free_ast(&ast);
 		free(line);
 	}
