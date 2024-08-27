@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 10:35:15 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:11:27 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ typedef enum e_tokentype
 
 typedef struct	s_token
 {
-    t_tokentype       type;
-    char            *value;
-    struct s_token    *next;
-} t_token;
+    t_tokentype		type;
+    char			*value;
+    int				fd;
+    struct s_token	*next;
+}	t_token;
 
 /*structure for AST*/
 typedef enum    e_ast_node_type
@@ -72,17 +73,22 @@ typedef enum    e_ast_node_type
     AST_PIPE = 1
 } t_ast_node_type;
 
+typedef struct s_redirection
+{
+	int						fd;
+	char					*target;
+}	t_redirection;
+
 typedef struct s_ast_node
 {
     t_ast_node_type     type;
     char                **args;
     char                **assignement;
-    char                **input_file;
-    char                **output_file;
-    char                **input_output_file;
-    //(0 redirection simple > (le fichier sera ecraser), 1 redirection double >> (La sortie sera ajoutée à la fin du fichier))
-    char                **heredoc_delimiter;
-    char                **output_append;
+	t_redirection		*input;
+	t_redirection		*output;
+	t_redirection		*output_append;
+	t_redirection		*heredoc;
+	t_redirection		*input_output;
     struct s_ast_node   *left;
     struct s_ast_node   *right;
 } t_ast_node;
