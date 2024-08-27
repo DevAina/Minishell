@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 10:35:58 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:42:07 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ void print_ast_node(t_ast_node *node, int depth)
                     printf("%s ", node->args[i]);
             }
             printf("\n");
-            if (node->input_output_file)
+            if (node->input)
             {
                 for (i = 0; i < depth; i++)
                     printf("  ");
-                printf("input output file: ");
-                for (i = 0; node->input_output_file[i]; i++)
-                    printf("%s ", node->input_output_file[i]);
+                printf("input file: ");
+                for (i = 0; node->input[i].target; i++)
+                    printf("%s fd: %d", node->input[i].target, node->input[i].fd);
                 printf("\n");
             }
             if (node->assignement)
@@ -88,31 +88,22 @@ void print_ast_node(t_ast_node *node, int depth)
                     printf("%s ", node->assignement[i]);
                 printf("\n");
             }
-            if (node->input_file)
-            {
-                for (i = 0; i < depth; i++)
-                    printf("  ");
-                printf("  Input: ");
-                for (i = 0; node->input_file[i]; i++)
-                    printf("%s ", node->input_file[i]);
-                printf("\n");
-            }
-            if (node->output_file)
+            if (node->output)
             {
                 for (i = 0; i < depth; i++)
                     printf("  ");
                 printf("Output file: ");
-                for (i = 0; node->output_file[i]; i++)
-                    printf("%s ", node->output_file[i]);
+                for (i = 0; node->output[i].target; i++)
+                    printf("%s fd: %d", node->output[i].target, node->output[i].fd);
                 printf("\n");
             }
-            if (node->heredoc_delimiter)
+            if (node->heredoc)
             {
                 for (i = 0; i < depth; i++)
                     printf("  ");
                 printf("hredeoc defilimiter: ");
-                for (i = 0; node->heredoc_delimiter[i]; i++)
-                    printf("%s ", node->heredoc_delimiter[i]);
+                for (i = 0; node->heredoc[i].target; i++)
+                    printf("%s fd: %d", node->heredoc[i].target, node->heredoc[i].fd);
                 printf("\n");
             }
             if (node->output_append)
@@ -120,8 +111,8 @@ void print_ast_node(t_ast_node *node, int depth)
                 for (i = 0; i < depth; i++)
                     printf("  ");
                 printf("output append : ");
-                for (i = 0; node->output_append[i]; i++)
-                    printf("%s ", node->output_append[i]);
+                for (i = 0; node->output_append[i].target; i++)
+                    printf("%s fd: %d", node->output_append[i].target, node->output_append[i].fd);
                 printf("\n");
             }
             break;
@@ -180,14 +171,14 @@ int main(int argc, char **argv, char **envp)
 		ast = parse(token);
 		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
-		 if (fork() == 0)
+		/*  if (fork() == 0)
 		{
 			executor(envp, ast);
 			free_ast(&ast);
 			exit(0);
-		} 
-		//print_ast(ast, 0);
-		wait(NULL);
+		}  */
+		print_ast(ast, 0);
+		/* wait(NULL); */
 		free_ast(&ast);
 		free(line);
 	}

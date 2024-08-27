@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 09:22:09 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/26 19:20:09 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int	valid_name_assignement(const char *value)
 	return (1);
 }
 
-t_token	*create_token(t_tokentype type, const char *value, int *index)
+t_token	*create_token(t_tokentype type, const char *value, int *index,
+	int fd)
 {
 	t_token	*token;
 
@@ -61,6 +62,10 @@ t_token	*create_token(t_tokentype type, const char *value, int *index)
 			token->type = TOKEN_ASSIGNEMENT;
 	}
 	token->value = ft_strdup(value);
+	if (fd == 1 || fd == 2 || fd == 0)
+		token->fd = fd;
+	else
+		token->fd = 0;
 	token->next = NULL;
 	*index += ft_strlen(value);
 	return (token);
@@ -128,33 +133,50 @@ t_token	*get_token_word(char *input, int *index)
 	ft_strlcpy(word, input + *index, len);
 	if (word == NULL)
 		return (NULL);
-	token = create_token(TOKEN_WORD, word, index);
+	token = create_token(TOKEN_WORD, word, index, -1);
 	free(word);
 	return (token);
 }
 
+int	get_fd(char *input, int *index)
+{
+	int	fd;
+
+	fd = -1;
+	if (ft_isdigit(input[*index]) && (input[*index + 1] == '>' ||
+		input[*index + 1] == '<'))
+	{
+		fd = ft_atoi(input + *index);
+		*index += 1;
+	}
+	return (fd);
+}
+
 t_token	*get_next_token(char *input, int *index)
 {
+	int	fd;
+
+	fd = get_fd(input, index);
 	if (input[*index] == '|')
-		return (create_token(TOKEN_PIPE, "|", index));
+		return (create_token(TOKEN_PIPE, "|", index, fd));
 	else if (input[*index] == '>')
 	{
 		if (input[*index + 1] == '>')
-			return (create_token(TOKEN_REDIR_APPEND, ">>", index));
-		return (create_token(TOKEN_REDIR_OUT, ">", index));
+			return (create_token(TOKEN_REDIR_APPEND, ">>", index, fd));
+		return (create_token(TOKEN_REDIR_OUT, ">", index, fd));
 	}
 	else if (input[*index] == '<')
 	{
 		if (input[*index + 1] == '>')
-			return (create_token(TOKEN_REDIT_IN_OUT, ">", index));
+			return (create_token(TOKEN_REDIT_IN_OUT, ">", index, fd));
 		if (input[*index + 1] == '<')
-			return (create_token(TOKEN_HEREDOC, "<<", index));
-		return (create_token(TOKEN_REDIR_IN, "<", index));
+			return (create_token(TOKEN_HEREDOC, "<<", index, fd));
+		return (create_token(TOKEN_REDIR_IN, "<", index, fd));
 	}
 	else if (input[*index] == '\n')
-		return (create_token(TOKEN_NEWLINE, "\n", index));
+		return (create_token(TOKEN_NEWLINE, "\n", index, fd));
 	else if (input[*index] == '\0')
-		return (create_token(TOKEN_NEWLINE, "\0", index));
+		return (create_token(TOKEN_NEWLINE, "\0", index, fd));
 	else
 		return (get_token_word(input, index));
 }
@@ -200,6 +222,6 @@ t_token	*lexer(char *input)
 	}
 	if (current == NULL)
 		return (head);
-	current->next = create_token(TOKEN_EOF, "\0", &i);
+	current->next = create_token(TOKEN_EOF, "\0", &i, -1);
 	return (head);
 }
