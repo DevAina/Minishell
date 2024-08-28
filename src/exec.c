@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/26 11:12:29 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/28 08:04:24 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	redir_input(t_ast_node *ast)
 	int	fd;
 
 	i = 0;
-	while (ast->input_file[i])
+	while (ast->input[i].target)
 	{
-		fd = open(ast->input_file[i], O_RDONLY);
+		fd = open(ast->input[i].target, O_RDONLY);
 		if (fd < 0)
 		{
 			exit(1);
@@ -38,9 +38,9 @@ void	redir_output(t_ast_node *ast)
 	int	fd;
 
 	i = 0;
-	while (ast->output_file[i])
+	while (ast->output[i].target)
 	{
-		fd = open(ast->output_file[i], O_RDONLY | O_WRONLY | O_CREAT, 0777);
+		fd = open(ast->output[i].target, O_RDONLY | O_WRONLY | O_CREAT, 0777);
 		dup2(fd, 1);
 		i++;
 	}
@@ -52,9 +52,9 @@ void	output_append(t_ast_node *ast)
 	int	fd;
 
 	i = 0;
-	while (ast->output_append[i])
+	while (ast->output_append[i].target)
 	{
-		fd = open(ast->output_append[i], O_RDONLY | O_WRONLY
+		fd = open(ast->output_append[i].target, O_RDONLY | O_WRONLY
 				| O_CREAT | O_APPEND, 0777);
 		dup2(fd, 1);
 		i++;
@@ -68,13 +68,14 @@ void	read_input_heredoc(int fd[2], t_ast_node *ast)
 
 	i = 0;
 	close(fd[0]);
-	while (ast->heredoc_delimiter[i])
+	while (ast->heredoc[i].target)
 	{
 		while (1)
 		{
-			line = readline("heredoc> ");
-			if (ft_strncmp(line, ast->heredoc_delimiter[i],
-					ft_strlen(ast->heredoc_delimiter[i]) + 1) == 0)
+			line = readline("> ");
+			if (ft_strncmp(line, ast->heredoc[i].target,
+					ft_strlen(ast->heredoc[i].target) + 1) == 0)
+
 			{
 				free (line);
 				break ;
@@ -103,13 +104,13 @@ void	here_doc(t_ast_node *ast)
 
 void	check_redirection(t_ast_node *ast)
 {
-	if (ast->input_file)
+	if (ast->input)
 		redir_input(ast);
-	if (ast->output_file)
+	if (ast->output)
 		redir_output(ast);
 	if (ast->output_append)
 		output_append(ast);
-	if (ast->heredoc_delimiter)
+	if (ast->heredoc)
 		here_doc(ast);
 }
 
