@@ -6,18 +6,20 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/01 18:33:14 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:36:55 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 
-int	mns_cd(char *path)
+int	mns_cd(char **cmd)
 {
-	if (ft_strncmp(path, "~", 1) == 0)
+	if (!cmd[1])
 	{
-		if (chdir(getenv("HOME")) == -1)
+		//change path to $HOME in env
+		//need to change oldpwd and pwd
+		if (chdir("/home/traveloa") == -1)
 		{
 			perror("cd");
 			return (-1);
@@ -25,7 +27,7 @@ int	mns_cd(char *path)
 	}
 	else
 	{
-		if (chdir(path) == -1)
+		if (chdir(cmd[1]) == -1)
 		{
 			perror("cd");
 			return (-1);

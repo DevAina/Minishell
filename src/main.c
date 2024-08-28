@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/28 09:40:16 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:15:02 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,9 @@ int main(int argc, char **argv, char **envp)
 		ast = parse(token);
 		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
-		if (fork() == 0)
+		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
+			mns_cd(ast->args);
+		else if (fork() == 0)
 		{
 			executor(envp, ast);
 			free_ast(&ast);
