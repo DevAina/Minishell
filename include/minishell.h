@@ -15,6 +15,7 @@
 
 # include "../libft/libft.h"
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/wait.h>

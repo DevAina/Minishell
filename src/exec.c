@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/26 11:12:29 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:15:16 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	read_input_heredoc(int fd[2], t_ast_node *ast)
 	{
 		while (1)
 		{
-			line = readline("heredoc> ");
+			line = readline("> ");
 			if (ft_strncmp(line, ast->heredoc_delimiter[i],
 					ft_strlen(ast->heredoc_delimiter[i]) + 1) == 0)
 			{
