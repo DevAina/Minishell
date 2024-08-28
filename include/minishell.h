@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/28 10:19:00 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:11:46 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ typedef struct s_ast_node
 } t_ast_node;
 
 /***built_in**/
-int		mns_cd(char *path);
+int		mns_cd(char **cmd);
 
 /******utils********/
 int		mns_strcmp(char *s1, char *s2);
