@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/28 08:04:24 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:20:23 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,33 @@ void	check_redirection(t_ast_node *ast)
 		here_doc(ast);
 }
 
+int		check_n_exec_built_in(char **cmd, char **env)
+{
+	if (ft_strncmp(cmd[0], "pwd", 3) == 0)
+	{
+		ft_pwd(cmd, env);
+		return (1);
+	}
+	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
+	{
+		ft_echo(cmd);
+		return (1);
+	}
+	else if (ft_strncmp(cmd[0], "env", 4) == 0)
+	{
+		ft_env(env);
+		return (1);
+	}
+	return (0);
+}
+
 void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 {
 	char	**path_list;
 	char	*path;
 
+	if (check_n_exec_built_in(cmd, envp) == 1)
+		exit(0) ;
 	path_list = find_path_list(envp);
 	path = find_path(path_list, cmd[0]);
 	free_split(path_list);
