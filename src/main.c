@@ -171,7 +171,7 @@ int main(int argc, char **argv, char **envp)
 		ast = parse(token);
 		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
-		if (fork() == 0)
+		/*  if (fork() == 0)
 		{
 			executor(envp, ast);
 			free_ast(&ast);
@@ -179,6 +179,9 @@ int main(int argc, char **argv, char **envp)
 		}
 		//print_ast(ast, 0);
 		wait(NULL);
+		}  */
+		print_ast(ast, 0);
+		/* wait(NULL); */
 		free_ast(&ast);
 		if (line && *line)
 			add_history(line);

@@ -75,6 +75,7 @@ void	read_input_heredoc(int fd[2], t_ast_node *ast)
 			line = readline("> ");
 			if (ft_strncmp(line, ast->heredoc[i].target,
 					ft_strlen(ast->heredoc[i].target) + 1) == 0)
+
 			{
 				free (line);
 				break ;
