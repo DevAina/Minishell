@@ -130,4 +130,8 @@ char	**cpy_env(char **env);
 t_list	*get_env_lst(char **envp);
 char	**list_to_tab(t_list *env_lst);
 void	ft_unset(char **cmd, char ***env);
+
+/********/
+void    handler_sigint(int sig);
+
 #endif
