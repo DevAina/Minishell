@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/28 14:15:02 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/29 09:53:14 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,16 +139,18 @@ void print_ast(t_ast_node *root, int depth)
     }
 }
 
-int main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **env)
 {
     //(void)envp;
 	char	*line;
+	char	**envp;
     int     exit_status;
 	t_token	*token;
 	t_ast_node	*ast;
 
 	(void)argc;
 	(void)argv;
+	envp = cpy_env(env);
     exit_status = 0;
 	while (1)
 	{
@@ -173,11 +175,16 @@ int main(int argc, char **argv, char **envp)
 //		exec_cmd(envp, ast->args, -1, NULL);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
 			mns_cd(ast->args);
-		else if (fork() == 0)
+		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
+			ft_export(ast->args, &envp);
+		else
 		{
-			executor(envp, ast);
-			free_ast(&ast);
-			exit(0);
+			if (fork() == 0)
+			{
+				executor(envp, ast);
+				free_ast(&ast);
+				exit(0);
+			}
 		}
 		wait(NULL);
 		free_ast(&ast);
