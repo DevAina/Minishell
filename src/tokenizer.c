@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 19:20:09 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:57:35 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ void	free_token(t_token *token)
 	t_token	*tmp;
 
 	while (token != NULL)
-	{
-		//printf("token value: %s\n", token->value);
+	{	
 		tmp = token;
 		token = token->next;
 		free(tmp->value);
@@ -62,9 +61,10 @@ t_token	*create_token(t_tokentype type, const char *value, int *index,
 			token->type = TOKEN_ASSIGNEMENT;
 	}
 	token->value = ft_strdup(value);
-	if (fd == 1 || fd == 2 || fd == 0)
+	token->fd = fd;
+	if (fd == 0 || fd == 1 || fd == 2)
 		token->fd = fd;
-	else
+	else if (fd > 2)
 		token->fd = 0;
 	token->next = NULL;
 	*index += ft_strlen(value);
