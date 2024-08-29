@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/29 09:53:03 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:39:22 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,4 +127,7 @@ void	ft_echo(char **args);
 void	ft_env(char **env);
 void	ft_export(char **cmd, char ***env);
 char	**cpy_env(char **env);
+t_list	*get_env_lst(char **envp);
+char	**list_to_tab(t_list *env_lst);
+void	ft_unset(char **cmd, char ***env);
 #endif

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/29 09:53:14 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:39:08 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,8 +177,9 @@ int main(int argc, char **argv, char **env)
 			mns_cd(ast->args);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
 			ft_export(ast->args, &envp);
+		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "unset", 6) == 0)
+			ft_unset(ast->args, &envp);
 		else
-
 		{
 			if (fork() == 0)
 			{
