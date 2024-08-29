@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/28 14:36:55 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/29 07:31:48 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	mns_cd(char **cmd)
 {
-	if (!cmd[1])
+	if (!cmd[1] || ft_strncmp(cmd[1], "~", 2) == 0)
 	{
 		//change path to $HOME in env
 		//need to change oldpwd and pwd

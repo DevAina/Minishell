@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/28 11:22:15 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/29 09:54:09 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ t_list	*get_env_lst(char **envp)
 	t_list	*env_lst;
 
 	i = 0;
-	env_lst = ft_lstnew((void *)envp[i]);
+	env_lst = ft_lstnew((void *)ft_strdup(envp[i]));
 	i++;
 	while (envp[i])
 	{
-		ft_lstadd_back(&env_lst, ft_lstnew((void *)envp[i]));
+		ft_lstadd_back(&env_lst, ft_lstnew((void *)ft_strdup(envp[i])));
 		i++;
 	}
 	return (env_lst);
@@ -78,57 +78,68 @@ void	print_export(t_list *env_lst)
 	}
 }
 
-char	*alloc_n_cpy(char *src, char *dest, int len)
-{
-	int	i;
-
-	i = 0;
-	dest = malloc(len + 1);
-	while (i < len)
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	return (dest);
-}
-
-char	*search_var_name(t_list *env_lst, char *var_name)
-{
-	int		len;
-
-	len = ft_strlen(var_name);
-	while (env_lst)
-	{
-		if (ft_strncmp(var_name, (char *)env_lst->content, len) == 0)
-			return ((char *)env_lst->content + len + 1);
-		env_lst = env_lst->next;
-	}
-	return (0);
-}
-
 void	add_to_env_lst(t_list *env_lst, char *content)
 {
+	ft_lstadd_back(&env_lst, ft_lstnew((void *)ft_strdup(content)));
+}
+
+char	**list_to_tab(t_list *env_lst)
+{
+	int		size;
+	char	**env;
 	int		i;
-	int		j;
-	char	*tmp;
-	char	*var_name;
 
 	i = 0;
-	tmp = NULL;
-	var_name = NULL;
-	if (ft_strchr(content, '$') != NULL)
+	size = ft_lstsize(env_lst);
+	env = malloc(sizeof(char *) * (size + 1));
+	while (env_lst)
 	{
-		while (content[i] != '$')
-			i++;
-		tmp = alloc_n_cpy(content, tmp, i);
+		env[i] = ft_strdup((char *)env_lst->content);
 		i++;
-		j = i;
-		while (ft_isalnum(content[i]) == 1)
-			i++;
-		var_name = alloc_n_cpy(content + j, var_name, (i - j));
-		var_name = search_var_name(env_lst, var_name);
-		content = ft_strjoin(tmp, var_name);
-		free(tmp);
+		env_lst = env_lst->next;
 	}
-	ft_lstadd_back(&env_lst, ft_lstnew((void *)content));
+	env[i] = NULL;
+	return (env);
+}
+
+char	**cpy_env(char **env)
+{
+	int	i;
+	char	**env_cpy;
+
+	i = 0;
+	while (env[i])
+		i++;
+	env_cpy = malloc(sizeof(char *) *(i + 1));
+	i = 0;
+	while (env[i])
+	{
+		env_cpy[i] = ft_strdup(env[i]);
+		i++;
+	}
+	return (env_cpy);
+}
+
+void	ft_export(char **cmd, char ***env)
+{
+	t_list	*env_lst;
+	int		i;
+	char	**tmp;
+
+	i = 1;
+	tmp = *env;
+	env_lst = get_env_lst(*env);
+	if (!cmd[1])
+		print_export(env_lst);
+	else
+	{
+		while (cmd[i])
+		{
+			add_to_env_lst(env_lst, cmd[i]);
+			i++;
+		}
+		free_split(tmp);
+		*env = list_to_tab(env_lst);
+	}
+	free_env_lst(env_lst);
 }

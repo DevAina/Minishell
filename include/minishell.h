@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/28 14:11:46 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/29 09:53:03 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,4 +125,6 @@ int		analyze_tokens(t_token *tokens);
 void	ft_pwd(char **args, char **env);
 void	ft_echo(char **args);
 void	ft_env(char **env);
+void	ft_export(char **cmd, char ***env);
+char	**cpy_env(char **env);
 #endif
