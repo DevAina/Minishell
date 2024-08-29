@@ -178,6 +178,7 @@ int main(int argc, char **argv, char **env)
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
 			ft_export(ast->args, &envp);
 		else
+
 		{
 			if (fork() == 0)
 			{
