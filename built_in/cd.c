@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/29 07:31:48 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/29 11:03:09 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,16 @@
 
 int	mns_cd(char **cmd)
 {
+	char	*home_path;
+
 	if (!cmd[1] || ft_strncmp(cmd[1], "~", 2) == 0)
 	{
 		//change path to $HOME in env
 		//need to change oldpwd and pwd
-		if (chdir("/home/traveloa") == -1)
+		home_path = getenv("HOME");
+		if (home_path == NULL)
+			return (-1);
+		if (chdir(home_path) == -1)
 		{
 			perror("cd");
 			return (-1);
