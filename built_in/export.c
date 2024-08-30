@@ -117,7 +117,6 @@ char	**cpy_env(char **env)
 		env_cpy[i] = ft_strdup(env[i]);
 		i++;
 	}
-	env_cpy[i] = NULL;
 	return (env_cpy);
 }
 
