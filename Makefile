@@ -5,7 +5,7 @@ FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline -g
 SRCS = ./built_in/cd.c ./built_in/export.c ./src/mns_utils.c ./src/main.c \
 		./src/tokenizer.c ./src/parse_input.c ./src/exec.c ./src/exec_utils.c \
 		./src/expander.c ./src/analyze_tokens.c ./built_in/pwd.c ./built_in/echo.c \
-		./built_in/env.c
+		./built_in/env.c ./built_in/unset.c ./src/handler_sigint.c
 
 OBJS = ${SRCS:.c=.o}
 
