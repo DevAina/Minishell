@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 19:10:16 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:45:23 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,19 @@ void	free_matrix(char **matrix)
 	free(matrix);
 }
 
+void	free_redirection(t_redirection *redirection)
+{
+	int	i;
+
+	i = 0;
+	while (redirection[i].target != NULL)
+	{
+		free(redirection[i].target);
+		i++;
+	}
+	free(redirection);
+}
+
 void	free_ast(t_ast_node **node)
 {
 	if (node == NULL || *node == NULL)
@@ -34,15 +47,15 @@ void	free_ast(t_ast_node **node)
 	if ((*node)->type != AST_PIPE && (*node)->assignement != NULL)
 		free_matrix((*node)->assignement);
 	if ((*node)->type != AST_PIPE && (*node)->input != NULL)
-		free((*node)->input);
+		free_redirection((*node)->input);
 	if ((*node)->type != AST_PIPE && (*node)->output != NULL)
-		free((*node)->output);
+		free_redirection((*node)->output);
 	if ((*node)->type != AST_PIPE && (*node)->heredoc != NULL)
-		free((*node)->heredoc);
+		free_redirection((*node)->heredoc);
 	if ((*node)->type != AST_PIPE && (*node)->output_append != NULL)
-		free((*node)->output_append);
+		free_redirection((*node)->output_append);
 	if ((*node)->type != AST_PIPE && (*node)->input_output != NULL)
-	    free((*node)->input_output);
+	    free_redirection((*node)->input_output);
 	if ((*node)->left != NULL)
 		free_ast(&(*node)->left);
 	if ((*node)->right != NULL)
