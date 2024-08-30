@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/29 09:54:09 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/30 07:39:46 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ char	**cpy_env(char **env)
 		env_cpy[i] = ft_strdup(env[i]);
 		i++;
 	}
+	env_cpy[i] = NULL;
 	return (env_cpy);
 }
 
