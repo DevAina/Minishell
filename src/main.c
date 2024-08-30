@@ -6,53 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2024/08/30 08:46:08 by trarijam         ###   ########.fr       */
-=======
-/*   Updated: 2024/08/29 09:53:14 by traveloa         ###   ########.fr       */
->>>>>>> 7f7acfb (Resolve conflict)
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-/*int	main(int argc, char **argv, char **envp)
-{
-	(void)argc;
-	(void)envp;
-	(void)argv;
-	char	**split;
-	int		i;
-	char	dir[1024];
-	char	*line;
-
-	while (1)
-	{
-		getcwd(dir, sizeof(dir));
-		ft_putstr_fd(getenv("USER"), 1);
-		ft_putstr_fd(dir, 1);
-		line = readline("$ ");
-		if (line == NULL)
-			break ;
-		if (*line == '\0')
-		{
-			free(line);
-			break ;
-		}
-		split = ft_split(line, ' ');
-		if (ft_strncmp(split[0], "cd", 2) == 0)
-			mns_cd(split[1]);
-		i = 0;
-		while (split[i] != NULL)
-		{
-			free(split[i]);
-			i++;
-		}
-		free(split);
-		free(line);
-	}
-	return (0);
-}*/
 
 void print_ast_node(t_ast_node *node, int depth)
 {
@@ -156,6 +114,7 @@ int main(int argc, char **argv, char **env)
 	(void)argv;
 	envp = cpy_env(env);
     exit_status = 0;
+	signal(SIGINT, handler_sigint);
 	while (1)
 	{
 		line = readline(YELLOW"minishell$ "RESET);
@@ -198,5 +157,6 @@ int main(int argc, char **argv, char **env)
 			add_history(line);
 		free(line);
 	}
+	free_split(envp);
 	return (0);
 }

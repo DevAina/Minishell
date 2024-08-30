@@ -7,6 +7,7 @@ SRCS = ./built_in/cd.c ./built_in/export.c ./src/mns_utils.c ./src/main.c \
 		./src/expander.c ./src/analyze_tokens.c ./built_in/pwd.c ./built_in/echo.c \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		./built_in/env.c ./built_in/unset.c ./src/handler_sigint.c
 =======
 		./built_in/env.c ./src/handler_sigint.c
@@ -14,6 +15,9 @@ SRCS = ./built_in/cd.c ./built_in/export.c ./src/mns_utils.c ./src/main.c \
 =======
 		./built_in/env.c
 >>>>>>> 7f7acfb (Resolve conflict)
+=======
+		./built_in/env.c ./built_in/unset.c ./src/handler_sigint.c
+>>>>>>> 4d843aa (Add: gandler_sigint.c)
 
 OBJS = ${SRCS:.c=.o}
 
