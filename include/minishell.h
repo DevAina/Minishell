@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/29 11:39:22 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:30:05 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <signal.h>
 
 # define RED "\033[31m"
 # define GREEN "\033[32m"
@@ -76,15 +77,15 @@ typedef enum    e_ast_node_type
 
 typedef struct s_redirection
 {
-	int						fd;
-	char					*target;
+	int		fd;
+	char	*target;
 }	t_redirection;
 
 typedef struct s_ast_node
 {
-    t_ast_node_type     type;
-    char                **args;
-    char                **assignement;
+    t_ast_node_type		type;
+    char				**args;
+    char				**assignement;
 	t_redirection		*input;
 	t_redirection		*output;
 	t_redirection		*output_append;
@@ -94,32 +95,36 @@ typedef struct s_ast_node
     struct s_ast_node   *right;
 } t_ast_node;
 
+
+/*********/
+void	handler_sigint(int sig);
+
 /***built_in**/
-int		mns_cd(char **cmd);
+int			mns_cd(char **cmd);
 
 /******utils********/
-int		mns_strcmp(char *s1, char *s2);
-t_list	*get_env_lst(char **envp);
-void	free_env_lst(t_list *env_lst);
+int			mns_strcmp(char *s1, char *s2);
+t_list		*get_env_lst(char **envp);
+void		free_env_lst(t_list *env_lst);
 
 /**********AST*******/
 
 t_ast_node	*parse(t_token *tokens);
-void        free_token(t_token *token);
-t_token     *lexer(char *input);
-void        free_ast(t_ast_node **node);
+void		free_token(t_token *token);
+t_token		*lexer(char *input);
+void		free_ast(t_ast_node **node);
 
 //utils for exec
-char	**find_path_list(char **env);
-char	*find_path(char **path_list, char *cmd);
-void	free_split(char **str);
-void	exec_cmd(char **envp, char **cmd, t_ast_node *ast);
-void	executor(char **envp, t_ast_node *ast);
+char		**find_path_list(char **env);
+char		*find_path(char **path_list, char *cmd);
+void		free_split(char **str);
+void		exec_cmd(char **envp, char **cmd, t_ast_node *ast);
+void		executor(char **envp, t_ast_node *ast);
 /*****expander*******/
-void	expand_tokens(t_token *tokens, char **env, int exit_status);
+void		expand_tokens(t_token *tokens, char **env, int exit_status);
 
 /********Analyze tokens********/
-int		analyze_tokens(t_token *tokens);
+int			analyze_tokens(t_token *tokens);
 
 //built in cmd
 void	ft_pwd(char **args, char **env);
@@ -130,4 +135,5 @@ char	**cpy_env(char **env);
 t_list	*get_env_lst(char **envp);
 char	**list_to_tab(t_list *env_lst);
 void	ft_unset(char **cmd, char ***env);
+
 #endif
