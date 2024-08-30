@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/29 10:44:59 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/30 09:47:25 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	check_redirection(t_ast_node *ast)
 		here_doc(ast);
 }
 
-int		check_n_exec_built_in(char **cmd, char **env)
+int		check_n_exec_built_in(char **cmd, char **env, char **assignement)
 {
 	if (ft_strncmp(cmd[0], "pwd", 3) == 0)
 	{
@@ -133,12 +133,12 @@ int		check_n_exec_built_in(char **cmd, char **env)
 	}
 	else if (ft_strncmp(cmd[0], "export", 8) == 0)
 	{
-		ft_export(cmd, &env);
+		ft_export(cmd,assignement, &env);
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "cd", 3) == 0)
 	{
-		mns_cd(cmd);
+		mns_cd(cmd, &env);
 		return (1);
 	}
 	return (0);
@@ -149,7 +149,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	char	**path_list;
 	char	*path;
 
-	if (check_n_exec_built_in(cmd, envp) == 1)
+	if (check_n_exec_built_in(cmd, envp, ast->assignement) == 1)
 		exit(0) ;
 	path_list = find_path_list(envp);
 	path = find_path(path_list, cmd[0]);
