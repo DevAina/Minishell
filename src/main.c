@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/29 11:39:08 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/30 08:14:14 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,5 +194,6 @@ int main(int argc, char **argv, char **env)
 			add_history(line);
 		free(line);
 	}
+		free_split(envp);
 	return (0);
 }
