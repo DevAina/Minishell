@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/30 08:49:56 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:22:35 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	print_export(t_list *env_lst)
 		ft_putstr_fd("\n", 1);
 		env_lst = env_lst->next;
 	}
+	free_env_lst(env_lst);
 }
 
 void	add_to_env_lst(t_list *env_lst, char *content)
@@ -121,23 +122,43 @@ char	**cpy_env(char **env)
 	return (env_cpy);
 }
 
-void	ft_export(char **cmd, char ***env)
+void	check_n_remove(t_list **env_lst, char *content)
+{
+	t_list	*tmp;
+	char	**content_split;
+
+	tmp = *env_lst;
+	content_split = ft_split(content, '=');
+	remove_one(env_lst, content_split[0]);
+	free_split(content_split);
+}
+
+void	ft_export(char **cmd, char **assignement, char ***env)
 {
 	t_list	*env_lst;
 	int		i;
+	int		j;
 	char	**tmp;
 
 	i = 1;
+	j = 0;
 	tmp = *env;
 	env_lst = get_env_lst(*env);
-	if (!cmd[1])
+	if (!cmd[1] && !assignement)
 		print_export(env_lst);
 	else
 	{
 		while (cmd[i])
 		{
+			check_n_remove(&env_lst, cmd[i]);
 			add_to_env_lst(env_lst, cmd[i]);
 			i++;
+		}
+		while (assignement && assignement[j])
+		{
+			check_n_remove(&env_lst, assignement[j]);
+			add_to_env_lst(env_lst, assignement[j]);
+			j++;
 		}
 		free_split(tmp);
 		*env = list_to_tab(env_lst);

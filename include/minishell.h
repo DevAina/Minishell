@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/29 09:53:03 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/08/30 10:00:32 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ typedef struct s_ast_node
 } t_ast_node;
 
 /***built_in**/
-int		mns_cd(char **cmd);
+int		mns_cd(char **cmd, char ***env);
 
 /******utils********/
 int		mns_strcmp(char *s1, char *s2);
@@ -125,7 +125,7 @@ int		analyze_tokens(t_token *tokens);
 void	ft_pwd(char **args, char **env);
 void	ft_echo(char **args);
 void	ft_env(char **env);
-void	ft_export(char **cmd, char ***env);
+void	ft_export(char **cmd, char **assignement, char ***env);
 char	**cpy_env(char **env);
 t_list	*get_env_lst(char **envp);
 char	**list_to_tab(t_list *env_lst);
@@ -133,5 +133,5 @@ void	ft_unset(char **cmd, char ***env);
 
 /********/
 void    handler_sigint(int sig);
-
+void	remove_one(t_list **env_lst, char *to_remove);
 #endif

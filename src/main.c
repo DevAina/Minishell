@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/30 08:49:44 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/30 09:40:25 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,9 +137,9 @@ int main(int argc, char **argv, char **env)
 		free_token(token);
 //		exec_cmd(envp, ast->args, -1, NULL);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
-			mns_cd(ast->args);
+			mns_cd(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
-			ft_export(ast->args, &envp);
+			ft_export(ast->args, ast->assignement, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "unset", 6) == 0)
 			ft_unset(ast->args, &envp);
 		else
