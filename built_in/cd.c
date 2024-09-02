@@ -6,13 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/30 14:32:55 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:27:35 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*get_home_path(char **env)
+char	*get_path(char **env, char *path_name)
 {
 	int		i;
 	char	*path;
@@ -21,7 +21,7 @@ char	*get_home_path(char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp("HOME", env[i], 4) == 0)
+		if (ft_strncmp(path_name, env[i], 4) == 0)
 			break;
 		i++;
 	}
@@ -31,41 +31,37 @@ char	*get_home_path(char **env)
 	return (path);
 }
 
-void	get_old_pwd(t_list *env_lst)
+void	update_old_pwd(t_list *env_lst, char *old_pwd)
 {
-	char	*pwd;
-	char	**tmp;
-
 	while (env_lst)
 	{
-		if (ft_strncmp("PWD", (char *)env_lst->content, 3) == 0)
-			pwd = (char *)ft_strdup(env_lst->content);
 		if (ft_strncmp("OLDPWD", (char *)env_lst->content, 3) == 0)
 		{
 			free(env_lst->content);
-			tmp = ft_split(pwd, '=');
-			env_lst->content = ft_strjoin("OLDPWD=", tmp[1]);
-			free_split(tmp);
+			env_lst->content = ft_strjoin("OLDPWD=", old_pwd);
 			break ;
 		}
 		env_lst = env_lst->next;
 	}
 }
 
-void	get_pwd(char ***env, char *path)
+void	update_pwd(char ***env, char *old_pwd)
 {
 	t_list	*env_lst;
 	t_list	*head;
+	char	*pwd;
 
 	env_lst = get_env_lst(*env);
+	pwd = getcwd(NULL, 0);
 	head = env_lst;
-	get_old_pwd(env_lst);
+	update_old_pwd(env_lst, old_pwd);
 	while (env_lst)
 	{
 		if (ft_strncmp("PWD", (char *)env_lst->content, 3) == 0)
 		{
 			free(env_lst->content);
-			env_lst->content = ft_strjoin("PWD=", path);
+			env_lst->content = ft_strjoin("PWD=", pwd);
+			free(pwd);
 			break ;
 		}
 		env_lst = env_lst->next;
@@ -77,30 +73,47 @@ void	get_pwd(char ***env, char *path)
 
 int	mns_cd(char **cmd, char ***env)
 {
-	char	*home_path;
+	char	*path_name;
+	char	*cwd;
 
+	cwd = getcwd(NULL, 0);
 	if (!cmd[1] || ft_strncmp(cmd[1], "~", 2) == 0)
 	{
-		home_path = get_home_path(*env);
-		if (home_path == NULL)
+		path_name = get_path(*env, "HOME");
+		if (path_name == NULL)
 			return (-1);
-		if (chdir(home_path) == -1)
+		if (chdir(path_name) == -1)
 		{
 			perror("cd");
-			free(home_path);
+			free(path_name);
+			free(cwd);
 			return (-1);
 		}
-		get_pwd(env, home_path);
+		update_pwd(env, cwd);
+	}
+	else if (ft_strncmp(cmd[1], "-", 2) == 0)
+	{
+		path_name = get_path(*env, "OLDPWD");
+		if (path_name == NULL)
+			return (-1);
+		if (chdir(path_name) == -1)
+		{
+			perror("cd");
+			free(path_name);
+			free(cwd);
+			return (-1);
+		}
+		update_pwd(env, cwd);
 	}
 	else
 	{
 		if (chdir(cmd[1]) == -1)
 		{
 			perror("cd");
+			free(cwd);
 			return (-1);
 		}
-		//need to handle => if cmd[1] = (..)
-		get_pwd(env, cmd[1]);
+		update_pwd(env, cwd);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/30 10:03:54 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/02 08:22:35 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	print_export(t_list *env_lst)
 		ft_putstr_fd("\n", 1);
 		env_lst = env_lst->next;
 	}
+	free_env_lst(env_lst);
 }
 
 void	add_to_env_lst(t_list *env_lst, char *content)
