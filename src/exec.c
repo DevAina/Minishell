@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/30 09:47:25 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/02 10:46:03 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,11 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 		return ;
 	}
 	check_redirection(ast);
-	execve(path, cmd, envp);
+	if (execve(path, cmd, envp) == -1)
+	{
+		ft_putendl_fd("command not found", 2);
+		return ;
+	}
 }
 
 void	pipe_cmd(char **envp, t_ast_node *ast)

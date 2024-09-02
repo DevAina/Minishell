@@ -6,11 +6,12 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/30 09:40:25 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/02 10:54:12 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <readline/history.h>
 
 void print_ast_node(t_ast_node *node, int depth)
 {
@@ -109,6 +110,7 @@ int main(int argc, char **argv, char **env)
     int     exit_status;
 	t_token	*token;
 	t_ast_node	*ast;
+	pid_t		pid;
 
 	(void)argc;
 	(void)argv;
@@ -144,14 +146,15 @@ int main(int argc, char **argv, char **env)
 			ft_unset(ast->args, &envp);
 		else
 		{
-			if (fork() == 0)
+			pid = fork();
+			if (pid == 0)
 			{
 				executor(envp, ast);
 				free_ast(&ast);
 				exit(0);
 			}
 		}
-		wait(NULL);
+		waitpid(pid, &exit_status, 0);
 		free_ast(&ast);
 		if (line && *line)
 			add_history(line);
