@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/30 10:00:32 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/03 11:48:53 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include "../libft/gnl/get_next_line.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdio.h>
