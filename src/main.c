@@ -35,7 +35,7 @@ void print_ast_node(t_ast_node *node, int depth)
                     printf("%s ", node->args[i]);
             }
             printf("\n");
-            if (node->input)
+            if (node->input)<<<<<<< traveloa
             {
                 for (i = 0; i < depth; i++)
                     printf("  ");
