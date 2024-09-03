@@ -6,12 +6,14 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/02 10:54:12 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/03 13:23:42 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <fcntl.h>
 #include <readline/history.h>
+#include <readline/readline.h>
 
 void print_ast_node(t_ast_node *node, int depth)
 {
@@ -33,7 +35,7 @@ void print_ast_node(t_ast_node *node, int depth)
                     printf("%s ", node->args[i]);
             }
             printf("\n");
-            if (node->input)
+            if (node->input)<<<<<<< traveloa
             {
                 for (i = 0; i < depth; i++)
                     printf("  ");
@@ -102,21 +104,44 @@ void print_ast(t_ast_node *root, int depth)
     }
 }
 
+void	get_history(int fd)
+{
+	char	*line;
+
+	if (fd <= 0)
+		return ;
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (line != NULL)
+		{
+			line[ft_strlen(line) - 1] = '\0';
+			add_history(line);
+			free(line);
+		}
+		else
+			break ;
+	}
+}
+
 int main(int argc, char **argv, char **env)
 {
-    //(void)envp;
 	char	*line;
 	char	**envp;
     int     exit_status;
 	t_token	*token;
 	t_ast_node	*ast;
 	pid_t		pid;
+	int			hist_fd;
 
 	(void)argc;
 	(void)argv;
 	envp = cpy_env(env);
     exit_status = 0;
 	signal(SIGINT, handler_sigint);
+	hist_fd = open(".history_file", O_RDWR
+				| O_CREAT | O_APPEND, 0777);
+	get_history(hist_fd);
 	while (1)
 	{
 		line = readline(YELLOW"minishell$ "RESET);
@@ -137,7 +162,6 @@ int main(int argc, char **argv, char **env)
         expand_tokens(token, envp, exit_status);
 		ast = parse(token);
 		free_token(token);
-//		exec_cmd(envp, ast->args, -1, NULL);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
 			mns_cd(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
@@ -157,9 +181,13 @@ int main(int argc, char **argv, char **env)
 		waitpid(pid, &exit_status, 0);
 		free_ast(&ast);
 		if (line && *line)
+		{
 			add_history(line);
+			ft_putendl_fd(line, hist_fd);
+		}
 		free(line);
 	}
+	rl_clear_history();
 	free_split(envp);
 	return (0);
 }

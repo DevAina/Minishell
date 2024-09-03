@@ -6,7 +6,7 @@
 #    By: trarijam <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 12:37:38 by trarijam          #+#    #+#              #
-#    Updated: 2024/08/13 13:21:11 by trarijam         ###   ########.fr        #
+#    Updated: 2024/09/03 13:14:23 by traveloa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,9 @@ srcs = ft_strlen.c \
 		ft_putchar_fd.c \
 		ft_putstr_fd.c \
 		ft_putendl_fd.c \
-		ft_putnbr_fd.c
+		ft_putnbr_fd.c \
+		gnl/get_next_line.c \
+		gnl/get_next_line_utils.c
 
 srcs_bonus = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c \
 				ft_lstadd_back_bonus.c ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c 

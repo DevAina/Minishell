@@ -24,6 +24,7 @@ clean :
 
 fclean : clean
 	make fclean -C ./libft
+	rm -rf .history_file
 	rm -rf ${NAME}
 
 re: fclean all

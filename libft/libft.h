@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 09:22:28 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/22 15:28:05 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/03 12:54:00 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include "gnl/get_next_line.h"
 
 typedef struct s_list
 {
