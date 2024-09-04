@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/29 16:35:57 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/08/30 10:34:07 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,8 @@ void	count_type_token(t_token *tokens, int *count)
 void	init_args_input_output_file(t_ast_node **cmd, int *count)
 {
 	if (count[ARG_COUNT] != 0)
-		(*cmd)->args = (char **)malloc(sizeof(char *) * (count[ARG_COUNT] + 1));
+		(*cmd)->args = (char **)malloc(sizeof(char *) *
+			(count[ARG_COUNT] + 1));
 	if (count[INPUT_COUNT] != 0)
 		(*cmd)->input =  (t_redirection *)malloc(sizeof(t_redirection)
 			* (count[INPUT_COUNT] + 1));
@@ -227,7 +228,8 @@ t_ast_node *parse_token(t_token **tokens, t_ast_node *cmd)
 	}
 	count_type_token(*tokens, count);
 	init_args_input_output_file(&cmd, count);
-	while (tokens != NULL && (*tokens)->type != TOKEN_PIPE && (*tokens)->type != TOKEN_EOF)
+	while (tokens != NULL && (*tokens)->type != TOKEN_PIPE
+		&&	(*tokens)->type != TOKEN_EOF)
 	{
 		process_token(tokens, cmd, count, counts);
 		*tokens = (*tokens)->next;

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/04 08:45:43 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/04 09:59:21 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <signal.h>
 
 # define RED "\033[31m"
 # define GREEN "\033[32m"
@@ -38,6 +39,13 @@
 # define INPUT_OUTPUT_COUNT 5
 # define ASSIGNEMENT_COUNT 6
 
+typedef struct s_ast_node		t_ast_node;
+typedef enum e_tokentype		t_tokentype;
+typedef struct s_token			t_token;
+typedef struct s_redirection	t_redirection;
+typedef enum e_ast_node_type	t_ast_node_type;
+typedef struct t_ast_node		t_ast_nod;
+
 /****structure for token**/
 /*
     Commandes et arguments: ls, echo, file1.txt, etc.
@@ -46,7 +54,7 @@
     Variables d'environnement: $HOME, $VAR
     Quotes: ", '
 */
-typedef enum e_tokentype
+enum e_tokentype
 {
     TOKEN_WORD,
     TOKEN_ASSIGNEMENT,
@@ -58,30 +66,30 @@ typedef enum e_tokentype
     TOKEN_HEREDOC,
     TOKEN_NEWLINE,
     TOKEN_EOF
-}   t_tokentype;
+};
 
-typedef struct	s_token
+struct	s_token
 {
     t_tokentype		type;
     char			*value;
     int				fd;
     struct s_token	*next;
-}	t_token;
+};
 
 /*structure for AST*/
-typedef enum    e_ast_node_type
+enum    e_ast_node_type
 {
     AST_COMMAND = 0,
     AST_PIPE = 1
-} t_ast_node_type;
+};
 
-typedef struct s_redirection
+struct s_redirection
 {
 	int						fd;
 	char					*target;
-}	t_redirection;
+};
 
-typedef struct s_ast_node
+struct s_ast_node
 {
     t_ast_node_type     type;
     char                **args;
@@ -93,7 +101,7 @@ typedef struct s_ast_node
 	t_redirection		*input_output;
     struct s_ast_node   *left;
     struct s_ast_node   *right;
-} t_ast_node;
+};
 
 /***built_in**/
 int		mns_cd(char **cmd, char ***env);
@@ -135,4 +143,5 @@ void	ft_unset(char **cmd, char ***env);
 /********/
 void    handler_sigint(int sig);
 void	remove_one(t_list **env_lst, char *to_remove);
+
 #endif
