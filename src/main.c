@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/03 13:23:42 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/04 08:46:08 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void print_ast_node(t_ast_node *node, int depth)
                     printf("%s ", node->args[i]);
             }
             printf("\n");
-            if (node->input)<<<<<<< traveloa
+            if (node->input)
             {
                 for (i = 0; i < depth; i++)
                     printf("  ");
