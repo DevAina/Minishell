@@ -6,14 +6,23 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/04 08:49:29 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/04 10:15:38 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <fcntl.h>
-#include <readline/history.h>
-#include <readline/readline.h>
+
+volatile sig_atomic_t	g_exit_status = 0;
+
+void	handler_sigint(int sig)
+{
+	(void)sig;
+	g_exit_status = 130;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 1);
+	rl_redisplay();
+}
 
 void print_ast_node(t_ast_node *node, int depth)
 {
@@ -126,25 +135,36 @@ void	get_history(int fd)
 
 int main(int argc, char **argv, char **env)
 {
-	char	*line;
-	char	**envp;
-    int     exit_status;
-	t_token	*token;
-	t_ast_node	*ast;
-	pid_t		pid;
-	int			hist_fd;
+	char				*line;
+	int					status;
+	char				**envp;
+	t_token				*token;
+	t_ast_node			*ast;
+	pid_t				pid;
+	int					hist_fd;
+	struct sigaction	sa;
+	struct sigaction	sa_sigquit;
+	struct sigaction	sa_ignore;
 
 	(void)argc;
 	(void)argv;
+	sigemptyset(&sa_sigquit.sa_mask);
+	sigemptyset(&sa.sa_mask);
+	sigemptyset(&sa_ignore.sa_mask);
+	sa.sa_handler = handler_sigint;
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sa_ignore.sa_handler = SIG_IGN;
+	sa_sigquit.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sa_sigquit, NULL);
 	envp = cpy_env(env);
-    exit_status = 0;
-	signal(SIGINT, handler_sigint);
 	hist_fd = open(".history_file", O_RDWR
 				| O_CREAT | O_APPEND, 0777);
 	get_history(hist_fd);
 	while (1)
 	{
-		line = readline(YELLOW"minishell$"RESET);
+
+		line = readline(YELLOW"minishell$ "RESET);
 		if (line == NULL)
 			break;
 		if (*line == '\0')
@@ -159,7 +179,7 @@ int main(int argc, char **argv, char **env)
             free(line);
             continue;
         }
-        expand_tokens(token, envp, exit_status);
+        expand_tokens(token, envp, g_exit_status);
 		ast = parse(token);
 		free_token(token);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
@@ -173,12 +193,23 @@ int main(int argc, char **argv, char **env)
 			pid = fork();
 			if (pid == 0)
 			{
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
 				executor(envp, ast);
 				free_ast(&ast);
 				exit(0);
 			}
 		}
-		waitpid(pid, &exit_status, 0);
+		sigaction(SIGINT, &sa_ignore, NULL);
+		wait(&status);
+		sigaction(SIGINT, &sa, NULL);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		if (WIFSIGNALED(status))
+		{
+			write(1, "\n", 1);
+			g_exit_status = 128 + WTERMSIG(status);
+		}
 		free_ast(&ast);
 		if (line && *line)
 		{
