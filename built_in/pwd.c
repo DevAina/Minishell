@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
+/*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 08:11:34 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/28 09:21:28 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:18:41 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ void	ft_pwd(char **args, char **env)
 	int		i;
 	char	**pwd;
 
+	(void)args;
 	i = 0;
-	if (args[1] && *args[1])
+	/*if (args[1] && *args[1])
 	{
 		ft_putendl_fd("too many arguments", 2);
 		return ;
-	}
+	}*/
 	while (ft_strnstr(env[i], "PWD", 3) == 0)
 		i++;
 	pwd = ft_split(env[i], '=');
