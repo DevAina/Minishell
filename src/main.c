@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/04 10:15:38 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/04 10:30:27 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,7 @@ int main(int argc, char **argv, char **env)
 				signal(SIGQUIT, SIG_DFL);
 				executor(envp, ast);
 				free_ast(&ast);
+				free_split(envp);
 				exit(0);
 			}
 		}
