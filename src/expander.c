@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/26 10:53:34 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:24:33 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,9 @@ char *expand_token(char *str, char **env, int exit_status)
 			in_single_quotes = !in_single_quotes;
     	else if (str[i] == '"' && !in_single_quotes)
 			in_double_quotes = !in_double_quotes;
-        else if (str[i] == '$' && !in_single_quotes)
+        else if (str[i] == '$' && !in_single_quotes
+			&& (ft_isalnum(str[i + 1]) || str[i + 1] == '_'
+			|| str[i + 1] == '?'))
         {
             tmp = expand_special_char(str, env, &i, exit_status);
             result = str_append(result, tmp);

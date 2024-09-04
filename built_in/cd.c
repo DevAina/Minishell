@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/02 08:27:35 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/04 11:28:01 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ int	mns_cd(char **cmd, char ***env)
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
+	if (cmd[2])
+	{
+		ft_putendl_fd("too many arguments", 2);
+		return (0);
+	}
 	if (!cmd[1] || ft_strncmp(cmd[1], "~", 2) == 0)
 	{
 		path_name = get_path(*env, "HOME");
