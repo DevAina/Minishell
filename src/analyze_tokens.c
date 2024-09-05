@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/23 14:12:41 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:52:04 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	is_redirection(t_tokentype type)
 {
 	if (type == TOKEN_HEREDOC || type == TOKEN_REDIR_APPEND ||
 		type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
-		type == TOKEN_REDIT_IN_OUT)
+		type == TOKEN_REDIR_IN_OUT)
 		return (1);
 	return (0);
 }

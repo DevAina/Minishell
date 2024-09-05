@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
+/*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 09:42:10 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/28 09:19:57 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:21:49 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_echo(char **args)
 
 	i = 1;
 	opt = 0;
-	if (ft_strncmp(args[1], "-n", 3) == 0)
+	if (args[1] != NULL && ft_strncmp(args[1], "-n", 3) == 0)
 	{
 		opt = 1;
 		i++;

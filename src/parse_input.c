@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/30 10:34:07 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:21:12 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	count_type_token(t_token *tokens, int *count)
 			count[ARG_COUNT] += 1;
 		if (tmp->type == TOKEN_ASSIGNEMENT)
 			count[ASSIGNEMENT_COUNT] += 1;
-		if (tmp->type == TOKEN_REDIT_IN_OUT)
+		if (tmp->type == TOKEN_REDIR_IN_OUT)
 		{
 			tmp = tmp->next;
 			if (tmp->type == TOKEN_WORD)
@@ -136,26 +136,26 @@ void	count_type_token(t_token *tokens, int *count)
 void	init_args_input_output_file(t_ast_node **cmd, int *count)
 {
 	if (count[ARG_COUNT] != 0)
-		(*cmd)->args = (char **)malloc(sizeof(char *) *
-			(count[ARG_COUNT] + 1));
+		(*cmd)->args = (char **)ft_calloc(count[ARG_COUNT] + 1,
+			sizeof(char *));
 	if (count[INPUT_COUNT] != 0)
-		(*cmd)->input =  (t_redirection *)malloc(sizeof(t_redirection)
-			* (count[INPUT_COUNT] + 1));
+		(*cmd)->input = (t_redirection *)ft_calloc(count[INPUT_COUNT] + 1,
+			sizeof(t_redirection));
 	if (count[OUTPUT_COUNT] != 0)
-		(*cmd)->output = (t_redirection *)malloc(sizeof(t_redirection)
-			* (count[OUTPUT_COUNT] + 1));
+		(*cmd)->output = (t_redirection *)ft_calloc(count[OUTPUT_COUNT] + 1,
+			sizeof(t_redirection));
 	if (count[HEREDOC_COUNT] != 0)
-		(*cmd)->heredoc =  (t_redirection *)(sizeof(t_redirection)
-			* (count[HEREDOC_COUNT] + 1));
+		(*cmd)->heredoc = (t_redirection *)ft_calloc(count[HEREDOC_COUNT] + 1,
+			sizeof(t_redirection));
 	if (count[INPUT_OUTPUT_COUNT] != 0)
-		(*cmd)->input_output = (t_redirection *)(sizeof(t_redirection)
-		* (count[INPUT_OUTPUT_COUNT] + 1));
+		(*cmd)->input_output = (t_redirection *)ft_calloc(count[INPUT_OUTPUT_COUNT] + 1,
+			sizeof(t_redirection));
 	if (count[APPEND_COUNT] != 0)
-		(*cmd)->output_append =  (t_redirection *)(sizeof(t_redirection)
-			* (count[APPEND_COUNT] + 1));
+		(*cmd)->output_append = (t_redirection *)ft_calloc(count[APPEND_COUNT] + 1,
+			sizeof(t_redirection));
 	if (count[ASSIGNEMENT_COUNT] != 0)
-		(*cmd)->assignement = (char **)malloc(sizeof(char *)
-			* (count[ASSIGNEMENT_COUNT] + 1));
+		(*cmd)->assignement = (char **)ft_calloc(count[ASSIGNEMENT_COUNT] + 1,
+			sizeof(char *));
 }
 
 void handle_redirection(t_token **tokens, t_redirection *redirection,
@@ -170,7 +170,7 @@ void handle_redirection(t_token **tokens, t_redirection *redirection,
 	}
 }
 
-void set_null_terminators(t_ast_node *cmd, int count[5], int counts[5])
+void set_null_terminators(t_ast_node *cmd, int *count, int *counts)
 {
 	if (count[ARG_COUNT] != 0)
 		cmd->args[counts[ARG_COUNT]] = NULL;
@@ -188,18 +188,23 @@ void set_null_terminators(t_ast_node *cmd, int count[5], int counts[5])
 		cmd->assignement[counts[ASSIGNEMENT_COUNT]] = NULL;
 }
 
-void process_token(t_token **tokens, t_ast_node *cmd, int count[5],
-	int counts[5])
+void process_token(t_token **tokens, t_ast_node *cmd, int *count,
+	int *counts)
 {
 	if ((*tokens)->type == TOKEN_WORD && count[ARG_COUNT] != 0)
-		cmd->args[counts[ARG_COUNT]++] = ft_strdup((*tokens)->value);
+	{
+		if ((*tokens)->value != NULL)
+			cmd->args[counts[ARG_COUNT]++] = ft_strdup((*tokens)->value);
+		else
+			cmd->args[counts[ARG_COUNT]++] = NULL;
+	}
 	if ((*tokens)->type == TOKEN_ASSIGNEMENT && count[ASSIGNEMENT_COUNT] != 0)
 		cmd->assignement[counts[ASSIGNEMENT_COUNT]++] =
 			ft_strdup((*tokens)->value);
 	if ((*tokens)->type == TOKEN_REDIR_IN)
 		handle_redirection(tokens, cmd->input,
 			&counts[INPUT_COUNT], count[INPUT_COUNT]);
-	if ((*tokens)->type == TOKEN_REDIT_IN_OUT)
+	if ((*tokens)->type == TOKEN_REDIR_IN_OUT)
 		handle_redirection(tokens, cmd->input_output,
 		&counts[INPUT_OUTPUT_COUNT], count[INPUT_COUNT]);
 	if ((*tokens)->type == TOKEN_REDIR_OUT)

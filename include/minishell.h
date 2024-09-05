@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/04 09:59:21 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:50:25 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef enum e_tokentype		t_tokentype;
 typedef struct s_token			t_token;
 typedef struct s_redirection	t_redirection;
 typedef enum e_ast_node_type	t_ast_node_type;
-typedef struct t_ast_node		t_ast_nod;
+typedef struct s_ast_node		t_ast_node;
 
 /****structure for token**/
 /*
@@ -61,7 +61,7 @@ enum e_tokentype
     TOKEN_PIPE,
     TOKEN_REDIR_IN,
     TOKEN_REDIR_OUT,
-    TOKEN_REDIT_IN_OUT,
+    TOKEN_REDIR_IN_OUT,
     TOKEN_REDIR_APPEND,
     TOKEN_HEREDOC,
     TOKEN_NEWLINE,
