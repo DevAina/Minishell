@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/04 11:41:54 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:21:15 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ int main(int argc, char **argv, char **env)
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
 	sa_ignore.sa_handler = SIG_IGN;
+	sa_sigquit.sa_flags = 0;
+	sa_ignore.sa_flags = 0;
 	sa_sigquit.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa_sigquit, NULL);
 	envp = cpy_env(env);

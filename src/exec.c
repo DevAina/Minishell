@@ -6,13 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/04 11:09:20 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:12:03 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <fcntl.h>
-#include <readline/readline.h>
 
 void	redir_input(t_ast_node *ast)
 {
@@ -75,7 +73,6 @@ void	read_input_heredoc(int fd[2], t_ast_node *ast)
 			line = readline("> ");
 			if (ft_strncmp(line, ast->heredoc[i].target,
 					ft_strlen(ast->heredoc[i].target) + 1) == 0)
-
 			{
 				free (line);
 				break ;
@@ -186,6 +183,7 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 		close(fd[0]);
 		dup2(fd[1], 1);
 		executor(envp, ast->left);
+		exit (0);
 	}
 	pid1 = fork();
 	if (pid1 == 0)
@@ -193,6 +191,7 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 		close(fd[1]);
 		dup2(fd[0], 0);
 		executor(envp, ast->right);
+		exit (0);
 	}
 	close(fd[1]);
 	close(fd[0]);
