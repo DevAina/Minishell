@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/05 15:23:57 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:24:09 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ char *expand_token(char *str, char **env, int exit_status)
             result = char_append(result, str[i]);
         i++;
     }
-    return result;
+    return (result);
 }
 
 

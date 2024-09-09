@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 13:25:23 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:30:27 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,37 +21,58 @@ int	is_redirection(t_tokentype type)
 	return (0);
 }
 
-/*
-	Checks whether after a redirection token there is a file name(token word)
-*/
-
-void	process_heredoc(char *heredoc_delimiter)
+char *expand_line(char *str, char **env, int exit_status)
 {
+    char	*result;
+    char	*tmp;
+    int		i;
+
+	tmp = NULL;
+	result = NULL;
+	i = 0;
+    while (str[i])
+    {
+		if (str[i] == '$' &&
+			(ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
+        {
+            tmp = expand_special_char(str, env, &i, exit_status);
+            result = str_append(result, tmp);
+        }
+        else
+            result = char_append(result, str[i]);
+        i++;
+    }
+    return (result);
+}
+
+void	process_heredoc(char *heredoc_delimiter, char **env, int exit_status)
+{
+	char	*result;
 	char	*line;
 	int		fd;
 
 	fd = open(".tmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (fd < 0)
-	{
-		perror("fd");
-		return ;
-	}
-	while (1)
+	result = NULL;
+	while (1 && fd > 0)
 	{
 		line = readline("heredoc> ");
+		if (line != NULL)
+			result = expand_line(line, env, exit_status);
 		if (ft_strncmp(line, heredoc_delimiter,
 			ft_strlen(heredoc_delimiter) + 1) == 0)
 		{
 			free(line);
 			break;
 		}
-		ft_putendl_fd(line, fd);
+		ft_putendl_fd(result, fd);
 		free(line);
+		free(result);
 	}
-	close(fd);
+	if (fd > 0)
+		close(fd);
 }
 
-static int	check_redirection(t_token **current_token)
+static int	check_redirection(t_token **current_token, char **env, int exit_status)
 {
 	if ((*current_token)->type == TOKEN_HEREDOC)
 	{
@@ -62,7 +83,7 @@ static int	check_redirection(t_token **current_token)
 				RESET, 2);
 			return (0);
 		}
-		process_heredoc((*current_token)->value);
+		process_heredoc((*current_token)->value, env, exit_status);
 		return (1);
 	}
 	*current_token = (*current_token)->next;
@@ -87,7 +108,7 @@ int	check_pipe(t_token *current_token, int	arg_count)
 	return (1);
 }
 
-int	analyze_tokens(t_token *tokens)
+int	analyze_tokens(t_token *tokens, char **env, int exit_status)
 {
 	t_token	*current;
 	int		arg_count;
@@ -100,7 +121,7 @@ int	analyze_tokens(t_token *tokens)
 			arg_count++;
 		if (is_redirection(current->type))
 		{
-			if (check_redirection(&current) == 0)
+			if (check_redirection(&current, env, exit_status) == 0)
 				return (0);
 		}
 		if (current->type == TOKEN_PIPE)

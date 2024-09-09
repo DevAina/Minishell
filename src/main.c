@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 13:23:47 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:14:43 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int main(int argc, char **argv, char **env)
 		}
 		token = lexer(line);
         expand_tokens(token, envp, g_exit_status);
-        if (analyze_tokens(token) == 0)
+        if (analyze_tokens(token, envp, g_exit_status) == 0)
         {
 			unlink(".tmp");
             free_token(token);
