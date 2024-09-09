@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/05 13:21:15 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 10:43:48 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,10 @@ int main(int argc, char **argv, char **env)
 	{
 		line = readline(YELLOW"minishell$ "RESET);
 		if (line == NULL)
+		{
+			ft_putendl_fd(CYAN"Exit"RESET, 1);
 			break;
+		}
 		if (*line == '\0')
 		{
 			free(line);
@@ -183,12 +186,15 @@ int main(int argc, char **argv, char **env)
         expand_tokens(token, envp, g_exit_status);
 		ast = parse(token);
 		free_token(token);
+		exec_here_doc(ast);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
-			mns_cd(ast->args, &envp);
+			g_exit_status = mns_cd(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
 			ft_export(ast->args, ast->assignement, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "unset", 6) == 0)
 			ft_unset(ast->args, &envp);
+		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "exit", 5) == 0)
+			ft_exit(ast->args);
 		else
 		{
 			pid = fork();
@@ -213,6 +219,7 @@ int main(int argc, char **argv, char **env)
 			g_exit_status = 128 + WTERMSIG(status);
 		}
 		free_ast(&ast);
+		unlink(".tmp");
 		if (line && *line)
 		{
 			add_history(line);

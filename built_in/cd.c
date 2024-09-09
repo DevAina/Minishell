@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/04 11:28:01 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 10:41:40 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,19 +80,19 @@ int	mns_cd(char **cmd, char ***env)
 	if (cmd[2])
 	{
 		ft_putendl_fd("too many arguments", 2);
-		return (0);
+		return (1);
 	}
 	if (!cmd[1] || ft_strncmp(cmd[1], "~", 2) == 0)
 	{
 		path_name = get_path(*env, "HOME");
 		if (path_name == NULL)
-			return (-1);
+			return (1);
 		if (chdir(path_name) == -1)
 		{
 			perror("cd");
 			free(path_name);
 			free(cwd);
-			return (-1);
+			return (1);
 		}
 		update_pwd(env, cwd);
 	}
@@ -100,13 +100,13 @@ int	mns_cd(char **cmd, char ***env)
 	{
 		path_name = get_path(*env, "OLDPWD");
 		if (path_name == NULL)
-			return (-1);
+			return (1);
 		if (chdir(path_name) == -1)
 		{
 			perror("cd");
 			free(path_name);
 			free(cwd);
-			return (-1);
+			return (1);
 		}
 		update_pwd(env, cwd);
 	}
@@ -116,7 +116,7 @@ int	mns_cd(char **cmd, char ***env)
 		{
 			perror("cd");
 			free(cwd);
-			return (-1);
+			return (1);
 		}
 		update_pwd(env, cwd);
 	}

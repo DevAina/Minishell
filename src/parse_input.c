@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/05 15:21:12 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 10:11:00 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +262,7 @@ t_ast_node	*parse_pipeline(t_token **tokens)
 	left = parse_command(tokens);
 	if (*tokens != NULL && (*tokens)->type == TOKEN_PIPE)
 	{
-		pipe = (t_ast_node *)malloc(sizeof(t_ast_node));
-		pipe->type = AST_PIPE;
+		pipe = init_node(AST_PIPE);
 		pipe->left = left;
 		*tokens = (*tokens)->next;
 		pipe->right = parse_pipeline(tokens);

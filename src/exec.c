@@ -6,11 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/05 15:12:03 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 10:48:22 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <fcntl.h>
+#include <unistd.h>
 
 void	redir_input(t_ast_node *ast)
 {
@@ -59,15 +61,30 @@ void	output_append(t_ast_node *ast)
 	}
 }
 
-void	read_input_heredoc(int fd[2], t_ast_node *ast)
+void	exec_here_doc(t_ast_node *ast)
+{
+	if (!ast)
+		return ;
+	if (ast->heredoc)
+		read_input_heredoc(ast);
+	if (ast->left)
+		exec_here_doc(ast->left);
+	if (ast->right)
+		exec_here_doc(ast->right);
+}
+
+void	read_input_heredoc(t_ast_node *ast)
 {
 	char	*line;
 	int		i;
+	int		fd;
 
 	i = 0;
-	close(fd[0]);
 	while (ast->heredoc[i].target)
 	{
+		fd = open(".tmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		if (!ast->heredoc[i].target)
+			return ;
 		while (1)
 		{
 			line = readline("> ");
@@ -77,26 +94,22 @@ void	read_input_heredoc(int fd[2], t_ast_node *ast)
 				free (line);
 				break ;
 			}
-			ft_putendl_fd(line, fd[1]);
+			ft_putendl_fd(line, fd);
 			free(line);
 		}
+		close(fd);
 		i++;
 	}
-	close(fd[1]);
-	exit(0);
 }
 
 void	here_doc(t_ast_node *ast)
 {
-	int		fd[2];
+	int		fd;
+	(void)ast;
 
-	pipe(fd);
-	if (fork() == 0)
-		read_input_heredoc(fd, ast);
-	wait(0);
-	close(fd[1]);
-	dup2(fd[0], 0);
-	close(fd[0]);
+	fd = open(".tmp", O_RDONLY);
+	dup2(fd, 0);
+	close(fd);
 }
 
 void	check_redirection(t_ast_node *ast)
@@ -143,6 +156,11 @@ int		check_n_exec_built_in(char **cmd, char **env, char **assignement)
 		ft_unset(cmd, &env);
 		return (1);
 	}
+	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
+	{
+		ft_exit(cmd);
+		return (1);
+	}
 	return (0);
 }
 
@@ -159,12 +177,16 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	free_split(path_list);
 	if (path == NULL)
 	{
-		ft_putendl_fd("command not found", 2);
+		ft_putendl_fd("command not found0", 2);
+		free_ast(&ast);
+		free_split(envp);
 		exit(1);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
-		ft_putendl_fd("command not found", 2);
+		ft_putendl_fd("command not found1", 2);
+		free_ast(&ast);
+		free_split(envp);
 		exit(1);
 	}
 }
@@ -183,6 +205,8 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 		close(fd[0]);
 		dup2(fd[1], 1);
 		executor(envp, ast->left);
+		free_ast(&ast);
+		free_split(envp);
 		exit (0);
 	}
 	pid1 = fork();
@@ -191,6 +215,9 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 		close(fd[1]);
 		dup2(fd[0], 0);
 		executor(envp, ast->right);
+		free_ast(&ast);
+		free_split(envp);
+
 		exit (0);
 	}
 	close(fd[1]);
