@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 10:43:48 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/09 13:23:47 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,16 +177,17 @@ int main(int argc, char **argv, char **env)
 			continue ; 
 		}
 		token = lexer(line);
+        expand_tokens(token, envp, g_exit_status);
         if (analyze_tokens(token) == 0)
         {
+			unlink(".tmp");
             free_token(token);
             free(line);
             continue;
         }
-        expand_tokens(token, envp, g_exit_status);
 		ast = parse(token);
 		free_token(token);
-		exec_here_doc(ast);
+		//exec_here_doc(ast);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
 			g_exit_status = mns_cd(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)

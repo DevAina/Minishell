@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/05 13:52:04 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 13:25:23 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,47 @@ int	is_redirection(t_tokentype type)
 /*
 	Checks whether after a redirection token there is a file name(token word)
 */
+
+void	process_heredoc(char *heredoc_delimiter)
+{
+	char	*line;
+	int		fd;
+
+	fd = open(".tmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd < 0)
+	{
+		perror("fd");
+		return ;
+	}
+	while (1)
+	{
+		line = readline("heredoc> ");
+		if (ft_strncmp(line, heredoc_delimiter,
+			ft_strlen(heredoc_delimiter) + 1) == 0)
+		{
+			free(line);
+			break;
+		}
+		ft_putendl_fd(line, fd);
+		free(line);
+	}
+	close(fd);
+}
+
 static int	check_redirection(t_token **current_token)
 {
+	if ((*current_token)->type == TOKEN_HEREDOC)
+	{
+		*current_token = (*current_token)->next;
+		if (*current_token == NULL || (*current_token)->type != TOKEN_WORD)
+		{
+			ft_putstr_fd(RED"Syntax error: expected filename after redirection\n"
+				RESET, 2);
+			return (0);
+		}
+		process_heredoc((*current_token)->value);
+		return (1);
+	}
 	*current_token = (*current_token)->next;
 	if (*current_token == NULL || (*current_token)->type != TOKEN_WORD)
 	{
