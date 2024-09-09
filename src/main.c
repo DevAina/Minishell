@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 15:14:43 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:26:50 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,11 @@ int main(int argc, char **argv, char **env)
 			free(line);
 			continue ; 
 		}
+		if (line && *line)
+		{
+			add_history(line);
+			ft_putendl_fd(line, hist_fd);
+		}
 		token = lexer(line);
         expand_tokens(token, envp, g_exit_status);
         if (analyze_tokens(token, envp, g_exit_status) == 0)
@@ -187,13 +192,12 @@ int main(int argc, char **argv, char **env)
         }
 		ast = parse(token);
 		free_token(token);
-		//exec_here_doc(ast);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
 			g_exit_status = mns_cd(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
-			ft_export(ast->args, ast->assignement, &envp);
+			g_exit_status = ft_export(ast->args, ast->assignement, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "unset", 6) == 0)
-			ft_unset(ast->args, &envp);
+			g_exit_status = ft_unset(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "exit", 5) == 0)
 			ft_exit(ast->args);
 		else
@@ -208,24 +212,22 @@ int main(int argc, char **argv, char **env)
 				free_split(envp);
 				exit(0);
 			}
-		}
-		sigaction(SIGINT, &sa_ignore, NULL);
-		wait(&status);
-		sigaction(SIGINT, &sa, NULL);
-		if (WIFEXITED(status))
-			g_exit_status = WEXITSTATUS(status);
-		if (WIFSIGNALED(status))
-		{
-			write(1, "\n", 1);
-			g_exit_status = 128 + WTERMSIG(status);
+			else
+			{
+				sigaction(SIGINT, &sa_ignore, NULL);
+				wait(&status);
+				sigaction(SIGINT, &sa, NULL);
+				if (WIFEXITED(status))
+					g_exit_status = WEXITSTATUS(status);
+				if (WIFSIGNALED(status))
+				{
+					write(1, "\n", 1);
+					g_exit_status = 128 + WTERMSIG(status);
+				}
+			}
 		}
 		free_ast(&ast);
 		unlink(".tmp");
-		if (line && *line)
-		{
-			add_history(line);
-			ft_putendl_fd(line, hist_fd);
-		}
 		free(line);
 	}
 	rl_clear_history();

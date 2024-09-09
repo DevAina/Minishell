@@ -6,13 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 09:42:10 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/05 15:21:49 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:58:16 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	ft_echo(char **args)
+int		ft_echo(char **args)
 {
 	int	opt;
 	int	i;
@@ -33,4 +33,5 @@ void	ft_echo(char **args)
 	}
 	if (opt == 0)
 		ft_putchar_fd('\n', 1);
+	return (EXIT_SUCCESS);
 }

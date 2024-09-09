@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/02 08:22:35 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:14:49 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,24 @@ void	check_n_remove(t_list **env_lst, char *content)
 	free_split(content_split);
 }
 
-void	ft_export(char **cmd, char **assignement, char ***env)
+int		check_var_name(char *name)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isalpha(name[i]) == 0 || name[i] != '_')
+		return (0);
+	i++;
+	while (name[i] != '=' || name[i])
+	{
+		if (ft_isalnum(name[i]) == 0 || name[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int		ft_export(char **cmd, char **assignement, char ***env)
 {
 	t_list	*env_lst;
 	int		i;
@@ -150,12 +167,24 @@ void	ft_export(char **cmd, char **assignement, char ***env)
 	{
 		while (cmd[i])
 		{
+			if (check_var_name(cmd[i]) == 0)
+			{
+				printf("ato\n");
+				free_env_lst(env_lst);
+				return (EXIT_FAILURE);
+			}
 			check_n_remove(&env_lst, cmd[i]);
 			add_to_env_lst(env_lst, cmd[i]);
 			i++;
 		}
 		while (assignement && assignement[j])
 		{
+			if (check_var_name(cmd[i]) == 0)
+			{
+				printf("ato1\n");
+				free_env_lst(env_lst);
+				return (EXIT_FAILURE);
+			}
 			check_n_remove(&env_lst, assignement[j]);
 			add_to_env_lst(env_lst, assignement[j]);
 			j++;
@@ -164,4 +193,5 @@ void	ft_export(char **cmd, char **assignement, char ***env)
 		*env = list_to_tab(env_lst);
 	}
 	free_env_lst(env_lst);
+	return (EXIT_SUCCESS);
 }
