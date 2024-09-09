@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 10:37:48 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:26:17 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,17 @@ void	executor(char **envp, t_ast_node *ast);
 void	read_input_heredoc(t_ast_node *ast);
 void	exec_here_doc(t_ast_node *ast);
 /*****expander*******/
+int		get_var_name_length(char *str);
+char	*get_env_value(char *var, char **env);
+char	*str_append(char *str, char *append);
+char	*char_append(char *str, char c);
+char	*expand_env_var(char *var_name, char **env);
+char	*expand_special_char(char *str, char **env, int *i, int exit_status);
+char	*expand_token(char *str, char **env, int exit_status);
 void	expand_tokens(t_token *tokens, char **env, int exit_status);
 
 /********Analyze tokens********/
-int		analyze_tokens(t_token *tokens);
+int		analyze_tokens(t_token *tokens, char **env, int exit_status);
 
 //built in cmd
 void	ft_pwd(char **args, char **env);
