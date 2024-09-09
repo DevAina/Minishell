@@ -6,13 +6,13 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:13:40 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/28 10:18:32 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:59:43 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	ft_env(char **env)
+int		ft_env(char **env)
 {
 	int	i;
 
@@ -22,4 +22,5 @@ void	ft_env(char **env)
 		ft_putendl_fd(env[i], 1);
 		i ++;
 	}
+	return (EXIT_SUCCESS);
 }

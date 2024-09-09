@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/09 10:48:22 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:32:08 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,47 +57,6 @@ void	output_append(t_ast_node *ast)
 		fd = open(ast->output_append[i].target, O_RDONLY | O_WRONLY
 				| O_CREAT | O_APPEND, 0777);
 		dup2(fd, 1);
-		i++;
-	}
-}
-
-void	exec_here_doc(t_ast_node *ast)
-{
-	if (!ast)
-		return ;
-	if (ast->heredoc)
-		read_input_heredoc(ast);
-	if (ast->left)
-		exec_here_doc(ast->left);
-	if (ast->right)
-		exec_here_doc(ast->right);
-}
-
-void	read_input_heredoc(t_ast_node *ast)
-{
-	char	*line;
-	int		i;
-	int		fd;
-
-	i = 0;
-	while (ast->heredoc[i].target)
-	{
-		fd = open(".tmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
-		if (!ast->heredoc[i].target)
-			return ;
-		while (1)
-		{
-			line = readline("> ");
-			if (ft_strncmp(line, ast->heredoc[i].target,
-					ft_strlen(ast->heredoc[i].target) + 1) == 0)
-			{
-				free (line);
-				break ;
-			}
-			ft_putendl_fd(line, fd);
-			free(line);
-		}
-		close(fd);
 		i++;
 	}
 }
@@ -177,14 +136,16 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	free_split(path_list);
 	if (path == NULL)
 	{
-		ft_putendl_fd("command not found0", 2);
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(RED" : command not found\n"RESET, 2);
 		free_ast(&ast);
 		free_split(envp);
 		exit(1);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
-		ft_putendl_fd("command not found1", 2);
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(RED" : command not found\n"RESET, 2);
 		free_ast(&ast);
 		free_split(envp);
 		exit(1);

@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 11:04:05 by traveloa          #+#    #+#             */
-/*   Updated: 2024/08/30 08:15:57 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:00:58 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	remove_one(t_list **env_lst, char *to_remove)
 		remove_one(&tmp->next, to_remove);
 }
 
-void	ft_unset(char **cmd, char ***env)
+int		ft_unset(char **cmd, char ***env)
 {
 	t_list	*env_lst;
 	int		i;
@@ -44,4 +44,5 @@ void	ft_unset(char **cmd, char ***env)
 	free_split(*env);
 	*env = list_to_tab(env_lst);
 	free_env_lst(env_lst);
+	return (EXIT_SUCCESS);
 }
