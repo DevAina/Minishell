@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/09 16:14:49 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/11 07:51:50 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,12 +138,16 @@ int		check_var_name(char *name)
 	int	i;
 
 	i = 0;
-	if (ft_isalpha(name[i]) == 0 || name[i] != '_')
+	if (ft_isalpha(name[i]) == 0 && name[i] != '_')
 		return (0);
 	i++;
-	while (name[i] != '=' || name[i])
+	while (name[i])
 	{
-		if (ft_isalnum(name[i]) == 0 || name[i] != '_')
+		if (name[i] == '=')
+			break ;
+		if (name[i] == '_')
+			i++;
+		if (ft_isalnum(name[i]) == 0)
 			return (0);
 		i++;
 	}
@@ -169,7 +173,8 @@ int		ft_export(char **cmd, char **assignement, char ***env)
 		{
 			if (check_var_name(cmd[i]) == 0)
 			{
-				printf("ato\n");
+				ft_putstr_fd(cmd[i], 2);
+				ft_putstr_fd(": not a valid identifier\n", 2);
 				free_env_lst(env_lst);
 				return (EXIT_FAILURE);
 			}
@@ -179,9 +184,10 @@ int		ft_export(char **cmd, char **assignement, char ***env)
 		}
 		while (assignement && assignement[j])
 		{
-			if (check_var_name(cmd[i]) == 0)
+			if (check_var_name(assignement[j]) == 0)
 			{
-				printf("ato1\n");
+				ft_putstr_fd(assignement[j], 2);
+				ft_putstr_fd(": not a valid identifier\n", 2);
 				free_env_lst(env_lst);
 				return (EXIT_FAILURE);
 			}

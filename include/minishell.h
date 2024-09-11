@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 16:26:12 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/11 09:54:58 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ char	**cpy_env(char **env);
 t_list	*get_env_lst(char **envp);
 char	**list_to_tab(t_list *env_lst);
 int		ft_unset(char **cmd, char ***env);
-void	ft_exit(char **cmd);
+int		ft_exit(char **cmd);
 /********/
 void    handler_sigint(int sig);
 void	remove_one(t_list **env_lst, char *to_remove);

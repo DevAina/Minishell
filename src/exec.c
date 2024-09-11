@@ -6,13 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/09 16:32:08 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/11 07:33:45 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <fcntl.h>
-#include <unistd.h>
 
 void	redir_input(t_ast_node *ast)
 {
@@ -130,7 +128,11 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 
 	check_redirection(ast);
 	if (check_n_exec_built_in(cmd, envp, ast->assignement) == 1)
-		exit(0);
+	{
+		free_ast(&ast);
+		free_split(envp);
+		exit(EXIT_SUCCESS);
+	}
 	path_list = find_path_list(envp);
 	path = find_path(path_list, cmd[0]);
 	free_split(path_list);
@@ -140,15 +142,15 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 		ft_putstr_fd(RED" : command not found\n"RESET, 2);
 		free_ast(&ast);
 		free_split(envp);
-		exit(1);
+		exit(127);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
 		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(RED" : command not found\n"RESET, 2);
+		ft_putstr_fd(RED" : Permission denied\n"RESET, 2);
 		free_ast(&ast);
 		free_split(envp);
-		exit(1);
+		exit(126);
 	}
 }
 
