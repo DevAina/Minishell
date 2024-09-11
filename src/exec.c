@@ -6,11 +6,12 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/11 07:33:45 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:13:18 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <unistd.h>
 
 void	redir_input(t_ast_node *ast)
 {
@@ -20,11 +21,13 @@ void	redir_input(t_ast_node *ast)
 	i = 0;
 	while (ast->input[i].target)
 	{
+		if (access(ast->input[i].target, F_OK) < 0)
+			ft_putstr_fd("No such file or directory\n", 2);
+		else if (access(ast->input[i].target, R_OK) < 0)
+			ft_putstr_fd("Permission denied\n", 2);
 		fd = open(ast->input[i].target, O_RDONLY);
 		if (fd < 0)
-		{
-			exit(1);
-		}
+			exit(EXIT_FAILURE);
 		dup2(fd, 0);
 		i++;
 	}
@@ -39,6 +42,8 @@ void	redir_output(t_ast_node *ast)
 	while (ast->output[i].target)
 	{
 		fd = open(ast->output[i].target, O_RDONLY | O_WRONLY | O_CREAT, 0777);
+		if (fd < 0)
+			exit (EXIT_FAILURE);
 		dup2(fd, 1);
 		i++;
 	}
@@ -54,6 +59,8 @@ void	output_append(t_ast_node *ast)
 	{
 		fd = open(ast->output_append[i].target, O_RDONLY | O_WRONLY
 				| O_CREAT | O_APPEND, 0777);
+		if (fd < 0)
+			exit (EXIT_FAILURE);
 		dup2(fd, 1);
 		i++;
 	}
@@ -147,7 +154,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	if (execve(path, cmd, envp) == -1)
 	{
 		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(RED" : Permission denied\n"RESET, 2);
+		ft_putstr_fd(RED" : Error\n"RESET, 2);
 		free_ast(&ast);
 		free_split(envp);
 		exit(126);
