@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/11 09:55:05 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:54:00 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ int main(int argc, char **argv, char **env)
 				executor(envp, ast);
 				free_ast(&ast);
 				free_split(envp);
-				exit(EXIT_SUCCESS);
+				exit(EXIT_FAILURE);
 			}
 			else
 			{

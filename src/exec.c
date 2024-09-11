@@ -6,11 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/11 14:13:18 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:38:02 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <fcntl.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 void	redir_input(t_ast_node *ast)
@@ -41,7 +43,8 @@ void	redir_output(t_ast_node *ast)
 	i = 0;
 	while (ast->output[i].target)
 	{
-		fd = open(ast->output[i].target, O_RDONLY | O_WRONLY | O_CREAT, 0777);
+		fd = open(ast->output[i].target, O_RDONLY | O_WRONLY | O_CREAT | O_TRUNC
+				, 0644);
 		if (fd < 0)
 			exit (EXIT_FAILURE);
 		dup2(fd, 1);
@@ -58,7 +61,7 @@ void	output_append(t_ast_node *ast)
 	while (ast->output_append[i].target)
 	{
 		fd = open(ast->output_append[i].target, O_RDONLY | O_WRONLY
-				| O_CREAT | O_APPEND, 0777);
+				| O_CREAT | O_APPEND, 0644);
 		if (fd < 0)
 			exit (EXIT_FAILURE);
 		dup2(fd, 1);
@@ -78,10 +81,10 @@ void	here_doc(t_ast_node *ast)
 
 void	check_redirection(t_ast_node *ast)
 {
-	if (ast->input)
-		redir_input(ast);
 	if (ast->output)
 		redir_output(ast);
+	if (ast->input)
+		redir_input(ast);
 	if (ast->output_append)
 		output_append(ast);
 	if (ast->heredoc)
@@ -151,10 +154,17 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 		free_split(envp);
 		exit(127);
 	}
+	else if (access(path, X_OK) < 0)
+	{
+		ft_putstr_fd(" command not found\n", 2);
+		free_ast(&ast);
+		free_split(envp);
+		exit(127);
+	}
 	if (execve(path, cmd, envp) == -1)
 	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(RED" : Error\n"RESET, 2);
+		if (access(path, X_OK) < 0)
+			ft_putstr_fd("Permission denied\n", 2);
 		free_ast(&ast);
 		free_split(envp);
 		exit(126);
@@ -166,6 +176,7 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	int		fd[2];
 	pid_t	pid;
 	pid_t	pid1;
+	int		status;
 
 	if (pipe(fd) == -1)
 		return ;
@@ -193,7 +204,9 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	close(fd[1]);
 	close(fd[0]);
 	waitpid(pid, NULL, 0);
-	waitpid(pid1, NULL, 0);
+	waitpid(pid1, &status, 0);
+	if (WIFEXITED(status))
+		exit(WEXITSTATUS(status));
 }
 
 void	executor(char **envp, t_ast_node *ast)
