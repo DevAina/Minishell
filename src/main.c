@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 16:26:50 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/11 09:55:05 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int main(int argc, char **argv, char **env)
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "unset", 6) == 0)
 			g_exit_status = ft_unset(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "exit", 5) == 0)
-			ft_exit(ast->args);
+			g_exit_status = ft_exit(ast->args);
 		else
 		{
 			pid = fork();
@@ -210,7 +210,7 @@ int main(int argc, char **argv, char **env)
 				executor(envp, ast);
 				free_ast(&ast);
 				free_split(envp);
-				exit(0);
+				exit(EXIT_SUCCESS);
 			}
 			else
 			{
