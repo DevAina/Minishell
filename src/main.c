@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/12 13:02:37 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:29:19 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,11 +131,11 @@ void	get_history(int fd)
 int main(int argc, char **argv, char **env)
 {
 	char				*line;
-	//int					status;
+	int					status;
 	char				**envp;
 	t_token				*token;
 	t_ast_node			*ast;
-	//pid_t				pid;
+	pid_t				pid;
 	int					hist_fd;
 	struct sigaction	sa;
 	struct sigaction	sa_sigquit;
@@ -186,7 +186,7 @@ int main(int argc, char **argv, char **env)
         }
         expand_tokens(token, envp, g_exit_status);
 		ast = parse(token);
-		/*free_token(token);
+		free_token(token);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
 			g_exit_status = mns_cd(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
@@ -220,9 +220,7 @@ int main(int argc, char **argv, char **env)
 					g_exit_status = 128 + WTERMSIG(status);
 				}
 			}
-		}*/
-		print_ast(ast, 0);
-		free_token(token);
+		}
 		free_ast(&ast);
 		unlink(".tmp");
 		free(line);
