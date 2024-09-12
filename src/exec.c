@@ -6,73 +6,53 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/12 12:57:07 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:28:42 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*#include "../include/minishell.h"
+#include "../include/minishell.h"
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-void	redir_input(t_ast_node *ast)
+void	redir_input(char *input)
 {
-	int	i;
 	int	fd;
 
-	i = 0;
-	while (ast->input[i].target)
-	{
-		if (access(ast->input[i].target, F_OK) < 0)
-			ft_putstr_fd("No such file or directory\n", 2);
-		else if (access(ast->input[i].target, R_OK) < 0)
-			ft_putstr_fd("Permission denied\n", 2);
-		fd = open(ast->input[i].target, O_RDONLY);
+		fd = open(input, O_RDONLY);
 		if (fd < 0)
+		{
+			perror (" ");
 			exit(EXIT_FAILURE);
+		}
 		dup2(fd, 0);
-		i++;
-	}
 }
 
-void	redir_output(t_ast_node *ast)
+void	redir_output(char *output)
 {
-	int	i;
 	int	fd;
 
-	i = 0;
-	while (ast->output[i].target)
-	{
-		fd = open(ast->output[i].target, O_RDONLY | O_WRONLY | O_CREAT | O_TRUNC
-				, 0644);
-		if (fd < 0)
-			exit (EXIT_FAILURE);
-		dup2(fd, 1);
-		i++;
-	}
+	fd = open(output, O_RDONLY | O_WRONLY | O_CREAT | O_TRUNC
+		, 0644);
+	if (fd < 0)
+		exit (EXIT_FAILURE);
+	dup2(fd, 1);
 }
 
-void	output_append(t_ast_node *ast)
+void	output_append(char *out_append)
 {
-	int	i;
 	int	fd;
 
-	i = 0;
-	while (ast->output_append[i].target)
-	{
-		fd = open(ast->output_append[i].target, O_RDONLY | O_WRONLY
-				| O_CREAT | O_APPEND, 0644);
-		if (fd < 0)
-			exit (EXIT_FAILURE);
-		dup2(fd, 1);
-		i++;
-	}
+	fd = open(out_append, O_RDONLY | O_WRONLY
+		   | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
+		exit (EXIT_FAILURE);
+	dup2(fd, 1);
 }
 
-void	here_doc(t_ast_node *ast)
+void	here_doc(void)
 {
 	int		fd;
-	(void)ast;
 
 	fd = open(".tmp", O_RDONLY);
 	dup2(fd, 0);
@@ -81,14 +61,21 @@ void	here_doc(t_ast_node *ast)
 
 void	check_redirection(t_ast_node *ast)
 {
-	if (ast->input)
-		redir_input(ast);
-	if (ast->output)
-		redir_output(ast);
-	if (ast->output_append)
-		output_append(ast);
-	if (ast->heredoc)
-		here_doc(ast);
+	int	i;
+
+	i = 0;
+	while (ast->redirection[i].target)
+	{
+		if (ast->redirection[i].type_redirection == REDIRECTION_IN)
+			redir_input(ast->redirection[i].target);
+		else if (ast->redirection[i].type_redirection == REDIRECTION_OUT)
+			redir_output(ast->redirection[i].target);
+		else if (ast->redirection[i].type_redirection == REDIRECTION_APPEND)
+			output_append(ast->redirection[i].target);
+		if (ast->redirection[i].type_redirection == REDIRECTION_HEREDOC)
+			here_doc();
+		i++;
+	}
 }
 
 int		check_n_exec_built_in(char **cmd, char **env, char **assignement)
@@ -136,7 +123,8 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	char	**path_list;
 	char	*path;
 
-	check_redirection(ast);
+	if (ast->redirection)
+		check_redirection(ast);
 	if (check_n_exec_built_in(cmd, envp, ast->assignement) == 1)
 	{
 		free_ast(&ast);
@@ -215,4 +203,4 @@ void	executor(char **envp, t_ast_node *ast)
 		exec_cmd(envp, ast->args, ast);
 	else if (ast->type == 1)
 		pipe_cmd(envp, ast);
-}*/
+}
