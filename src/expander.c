@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 15:24:09 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/12 15:25:09 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*expand_env_var(char *var_name, char **env)
 	value = get_env_value(var, env);
     free(var);
 	if (value == NULL)
-		return (ft_strdup(""));
+		return (NULL);
     return (value);
 }
 
@@ -156,7 +156,6 @@ char *expand_token(char *str, char **env, int exit_status)
     }
     return (result);
 }
-
 
 void expand_tokens(t_token *tokens, char **env, int exit_status)
 {
