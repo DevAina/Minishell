@@ -6,11 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/11 15:38:02 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:57:07 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+/*#include "../include/minishell.h"
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -81,10 +81,10 @@ void	here_doc(t_ast_node *ast)
 
 void	check_redirection(t_ast_node *ast)
 {
-	if (ast->output)
-		redir_output(ast);
 	if (ast->input)
 		redir_input(ast);
+	if (ast->output)
+		redir_output(ast);
 	if (ast->output_append)
 		output_append(ast);
 	if (ast->heredoc)
@@ -215,4 +215,4 @@ void	executor(char **envp, t_ast_node *ast)
 		exec_cmd(envp, ast->args, ast);
 	else if (ast->type == 1)
 		pipe_cmd(envp, ast);
-}
+}*/

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/11 09:54:58 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:58:54 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,9 @@
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
 # define RESET "\033[0m"
-# define INPUT_COUNT 0
-# define OUTPUT_COUNT 1
-# define HEREDOC_COUNT 2
-# define ARG_COUNT 3
-# define APPEND_COUNT 4
-# define INPUT_OUTPUT_COUNT 5
-# define ASSIGNEMENT_COUNT 6
+# define REDIR_COUNT 0
+# define ARG_COUNT 1
+# define ASSIGNEMENT_COUNT 2
 
 typedef struct s_ast_node		t_ast_node;
 typedef enum e_tokentype		t_tokentype;
@@ -45,6 +41,7 @@ typedef struct s_token			t_token;
 typedef struct s_redirection	t_redirection;
 typedef enum e_ast_node_type	t_ast_node_type;
 typedef struct s_ast_node		t_ast_node;
+typedef enum e_type_redirection	t_type_redirection;
 
 /****structure for token**/
 /*
@@ -83,22 +80,29 @@ enum    e_ast_node_type
     AST_PIPE = 1
 };
 
+enum	e_type_redirection
+{
+	REDIRECTION_IN = 0,
+	REDIRECTION_OUT = 1,
+	REDIRECTION_APPEND = 2,
+	REDIRECTION_HEREDOC = 3,
+};
+
+
 struct s_redirection
 {
+	t_type_redirection		type_redirection;
 	int						fd;
 	char					*target;
 };
+
 
 struct s_ast_node
 {
     t_ast_node_type     type;
     char                **args;
     char                **assignement;
-	t_redirection		*input;
-	t_redirection		*output;
-	t_redirection		*output_append;
-	t_redirection		*heredoc;
-	t_redirection		*input_output;
+	t_redirection		*redirection;
     struct s_ast_node   *left;
     struct s_ast_node   *right;
 };
