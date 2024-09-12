@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/11 14:54:00 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:02:37 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,6 @@ void print_ast_node(t_ast_node *node, int depth)
                     printf("%s ", node->args[i]);
             }
             printf("\n");
-            if (node->input)
-            {
-                for (i = 0; i < depth; i++)
-                    printf("  ");
-                printf("input file: ");
-                for (i = 0; node->input[i].target; i++)
-                    printf("%s fd: %d", node->input[i].target, node->input[i].fd);
-                printf("\n");
-            }
             if (node->assignement)
             {
                 for (i = 0; i < depth; i++)
@@ -62,33 +53,37 @@ void print_ast_node(t_ast_node *node, int depth)
                     printf("%s ", node->assignement[i]);
                 printf("\n");
             }
-            if (node->output)
-            {
-                for (i = 0; i < depth; i++)
-                    printf("  ");
-                printf("Output file: ");
-                for (i = 0; node->output[i].target; i++)
-                    printf("%s fd: %d", node->output[i].target, node->output[i].fd);
+            if (node->redirection)
+			{
+				for (i = 0; node->redirection[i].target; i++)
+                {
+					if (node->redirection[i].type_redirection == REDIRECTION_IN)
+					{
+						for (int j = 0; j < depth; j++)
+                    		printf("  ");
+						printf("Input file: %s\n", node->redirection[i].target);
+					}
+					if (node->redirection[i].type_redirection == REDIRECTION_OUT)
+					{
+						for (int j = 0; j < depth; j++)
+                    		printf("  ");
+						printf("Output file: %s\n", node->redirection[i].target);
+					}
+					if (node->redirection[i].type_redirection == REDIRECTION_HEREDOC)
+					{
+						for (int j = 0; j < depth; j++)
+                    		printf("  ");
+						printf("Delimiter heredoc: %s\n", node->redirection[i].target);
+					}
+					if (node->redirection[i].type_redirection == REDIRECTION_APPEND)
+					{
+						for (int j = 0; j < depth; j++)
+                    		printf("  ");
+						printf("Append file: %s\n", node->redirection[i].target);
+					}
+				}
                 printf("\n");
-            }
-            if (node->heredoc)
-            {
-                for (i = 0; i < depth; i++)
-                    printf("  ");
-                printf("hredeoc defilimiter: ");
-                for (i = 0; node->heredoc[i].target; i++)
-                    printf("%s fd: %d", node->heredoc[i].target, node->heredoc[i].fd);
-                printf("\n");
-            }
-            if (node->output_append)
-            {
-                for (i = 0; i < depth; i++)
-                    printf("  ");
-                printf("output append : ");
-                for (i = 0; node->output_append[i].target; i++)
-                    printf("%s fd: %d", node->output_append[i].target, node->output_append[i].fd);
-                printf("\n");
-            }
+			}
             break;
         case AST_PIPE:
             printf("PIPE\n");
@@ -136,11 +131,11 @@ void	get_history(int fd)
 int main(int argc, char **argv, char **env)
 {
 	char				*line;
-	int					status;
+	//int					status;
 	char				**envp;
 	t_token				*token;
 	t_ast_node			*ast;
-	pid_t				pid;
+	//pid_t				pid;
 	int					hist_fd;
 	struct sigaction	sa;
 	struct sigaction	sa_sigquit;
@@ -182,7 +177,6 @@ int main(int argc, char **argv, char **env)
 			ft_putendl_fd(line, hist_fd);
 		}
 		token = lexer(line);
-        expand_tokens(token, envp, g_exit_status);
         if (analyze_tokens(token, envp, g_exit_status) == 0)
         {
 			unlink(".tmp");
@@ -190,8 +184,9 @@ int main(int argc, char **argv, char **env)
             free(line);
             continue;
         }
+        expand_tokens(token, envp, g_exit_status);
 		ast = parse(token);
-		free_token(token);
+		/*free_token(token);
 		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
 			g_exit_status = mns_cd(ast->args, &envp);
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
@@ -225,7 +220,9 @@ int main(int argc, char **argv, char **env)
 					g_exit_status = 128 + WTERMSIG(status);
 				}
 			}
-		}
+		}*/
+		print_ast(ast, 0);
+		free_token(token);
 		free_ast(&ast);
 		unlink(".tmp");
 		free(line);

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 15:30:27 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/12 10:02:53 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,5 +132,7 @@ int	analyze_tokens(t_token *tokens, char **env, int exit_status)
 		}
 		current = current->next;
 	}
+	if (arg_count == 0)
+		return (0);
 	return (1);
 }
