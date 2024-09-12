@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:41:54 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/02 10:43:05 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:42:17 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ char	*find_path(char **path_list, char *cmd)
 	if (cmd == 0)
 		return (0);
 	if (ft_strchr(cmd, '/'))
-		return (cmd);
+	{
+		if (access(cmd, F_OK) == 0)
+			return (cmd);
+		return (0);
+	}
 	while (path_list[i])
 	{
 		tmp = ft_strjoin(path_list[i], "/");

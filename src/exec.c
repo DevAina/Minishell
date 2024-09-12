@@ -6,13 +6,14 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/12 13:28:42 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/12 15:16:52 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <fcntl.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 
 void	redir_input(char *input)
@@ -122,34 +123,40 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 {
 	char	**path_list;
 	char	*path;
+	char	**tmp;
+	int		i;
 
+	i = 0;
+	tmp = cmd;
+	while (ft_strlen(tmp[i]) == 0 && tmp[i] != NULL)
+		i++;
+	if (tmp[i] == NULL)
+	{
+		free_split(envp);
+		free_ast(&ast);
+		exit(EXIT_SUCCESS);
+	}
+	tmp += i;
 	if (ast->redirection)
 		check_redirection(ast);
-	if (check_n_exec_built_in(cmd, envp, ast->assignement) == 1)
+	if (check_n_exec_built_in(tmp, envp, ast->assignement) == 1)
 	{
 		free_ast(&ast);
 		free_split(envp);
 		exit(EXIT_SUCCESS);
 	}
 	path_list = find_path_list(envp);
-	path = find_path(path_list, cmd[0]);
+	path = find_path(path_list, tmp[0]);
 	free_split(path_list);
 	if (path == NULL)
 	{
-		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(tmp[0], 2);
 		ft_putstr_fd(RED" : command not found\n"RESET, 2);
 		free_ast(&ast);
 		free_split(envp);
 		exit(127);
 	}
-	else if (access(path, X_OK) < 0)
-	{
-		ft_putstr_fd(" command not found\n", 2);
-		free_ast(&ast);
-		free_split(envp);
-		exit(127);
-	}
-	if (execve(path, cmd, envp) == -1)
+	if (execve(path, tmp, envp) == -1)
 	{
 		if (access(path, X_OK) < 0)
 			ft_putstr_fd("Permission denied\n", 2);
