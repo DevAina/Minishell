@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/12 15:16:52 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/16 08:26:26 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	redir_input(char *input)
 		fd = open(input, O_RDONLY);
 		if (fd < 0)
 		{
-			perror (" ");
+			perror (input);
 			exit(EXIT_FAILURE);
 		}
 		dup2(fd, 0);
@@ -36,7 +36,10 @@ void	redir_output(char *output)
 	fd = open(output, O_RDONLY | O_WRONLY | O_CREAT | O_TRUNC
 		, 0644);
 	if (fd < 0)
+	{
+		perror (output);
 		exit (EXIT_FAILURE);
+	}
 	dup2(fd, 1);
 }
 
@@ -47,7 +50,10 @@ void	output_append(char *out_append)
 	fd = open(out_append, O_RDONLY | O_WRONLY
 		   | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
+	{
+		perror (out_append);
 		exit (EXIT_FAILURE);
+	}
 	dup2(fd, 1);
 }
 
@@ -60,7 +66,7 @@ void	here_doc(void)
 	close(fd);
 }
 
-void	check_redirection(t_ast_node *ast)
+void	check_redirection_exec(t_ast_node *ast)
 {
 	int	i;
 
@@ -138,7 +144,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	}
 	tmp += i;
 	if (ast->redirection)
-		check_redirection(ast);
+		check_redirection_exec(ast);
 	if (check_n_exec_built_in(tmp, envp, ast->assignement) == 1)
 	{
 		free_ast(&ast);
