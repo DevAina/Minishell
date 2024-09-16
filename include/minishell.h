@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/16 12:50:47 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:14:46 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_redirection	t_redirection;
 typedef enum e_ast_node_type	t_ast_node_type;
 typedef struct s_ast_node		t_ast_node;
 typedef enum e_type_redirection	t_type_redirection;
+typedef struct s_data			t_data;
 
 /****structure for token**/
 /*
@@ -105,6 +106,19 @@ struct s_ast_node
 	t_redirection		*redirection;
     struct s_ast_node   *left;
     struct s_ast_node   *right;
+};
+
+struct s_data
+{
+	char				*line;
+	char				**envp;
+	t_token				*token;
+	t_ast_node			*ast;
+	int					hist_fd;
+	struct sigaction	sa;
+	struct sigaction	sa_sigquit;
+	struct sigaction	sa_ignore;
+	int					fd_tmp;
 };
 
 /***built_in**/

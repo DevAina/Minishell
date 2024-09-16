@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/16 12:56:33 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:57:04 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,129 +132,136 @@ void	get_history(int fd)
 	}
 }
 
+void	setup_signals(t_data *data)
+{
+	sigemptyset(&data->sa_sigquit.sa_mask);
+	sigemptyset(&data->sa.sa_mask);
+	sigemptyset(&data->sa_ignore.sa_mask);
+	data->sa.sa_handler = handler_sigint;
+	data->sa.sa_flags = 0;
+	sigaction(SIGINT, &data->sa, NULL);
+	data->sa_ignore.sa_handler = SIG_IGN;
+	data->sa_sigquit.sa_flags = 0;
+	data->sa_ignore.sa_flags = 0;
+	data->sa_sigquit.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &data->sa_sigquit, NULL);
+}
+
+void	init_data(t_data *data, char **env)
+{
+	data->line = NULL;
+	data->envp = cpy_env(env);
+	data->token = NULL;
+	data->ast = NULL;
+	data->fd_tmp = -1;
+	data->hist_fd = open(".history_file", O_RDWR
+		| O_CREAT | O_APPEND, 0777);
+	if (data->hist_fd == -1)
+	{
+		perror("open");
+		exit(EXIT_FAILURE);
+	}
+	setup_signals(data);
+}
+
+void	handle_built_in_cmd(t_data *data, t_ast_node *ast, char ***envp)
+{
+	if (ast->redirection)
+		data->fd_tmp = check_redirection_exec(ast);
+	if (ft_strncmp(ast->args[0], "cd", 3) == 0)
+		g_exit_status = mns_cd(ast->args, envp);
+	else if (ft_strncmp(ast->args[0], "export", 7) == 0)
+		g_exit_status = ft_export(ast->args, ast->assignement, envp);
+	else if (ft_strncmp(ast->args[0], "unset", 6) == 0)
+		g_exit_status = ft_unset(ast->args, envp);
+	else if (ft_strncmp(ast->args[0], "exit", 5) == 0)
+		g_exit_status = ft_exit(ast->args, ast, *envp);
+	dup2(data->fd_tmp, STDOUT_FILENO);
+	close(data->fd_tmp);
+}
+
+void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		executor(envp, ast);
+		free_ast(&ast);
+		free_split(envp);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		sigaction(SIGINT, &data->sa_ignore, NULL);
+		wait(&status);
+		sigaction(SIGINT, &data->sa, NULL);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		if (WIFSIGNALED(status))
+		{
+			write(1, "\n", 1);
+			g_exit_status = 128 + WTERMSIG(status);
+		}
+	}
+}
+
+void process_line(t_data *data)
+{
+	add_history(data->line);
+	ft_putendl_fd(data->line, data->hist_fd);
+	data->token = lexer(data->line);
+	if (analyze_tokens(data->token, data->envp, g_exit_status) == 0)
+	{
+		unlink(".tmp");
+		free_token(data->token);
+		return ;
+	}
+	expand_tokens(data->token, data->envp, g_exit_status);
+	data->ast = parse(data->token);
+	free_token(data->token);
+	if (data->ast->args[0] == NULL)
+		return ;
+	if (data->ast->type == AST_COMMAND
+		&& (ft_strncmp(data->ast->args[0], "cd", 3) == 0
+		|| ft_strncmp(data->ast->args[0], "export", 7) == 0
+		|| ft_strncmp(data->ast->args[0], "unset", 6) == 0
+		|| ft_strncmp(data->ast->args[0], "exit", 5) == 0))
+		handle_built_in_cmd(data, data->ast, &data->envp);
+	else
+		execute_fork_cmd(data, data->envp, data->ast);
+}
+
 int main(int argc, char **argv, char **env)
 {
-	char				*line;
-	int					status;
-	char				**envp;
-	t_token				*token;
-	t_ast_node			*ast;
-	pid_t				pid;
-	int					hist_fd;
-	struct sigaction	sa;
-	struct sigaction	sa_sigquit;
-	struct sigaction	sa_ignore;
-	int					fd_tmp = -1;
+	t_data	data;
 
 	(void)argc;
 	(void)argv;
-	sigemptyset(&sa_sigquit.sa_mask);
-	sigemptyset(&sa.sa_mask);
-	sigemptyset(&sa_ignore.sa_mask);
-	sa.sa_handler = handler_sigint;
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sa_ignore.sa_handler = SIG_IGN;
-	sa_sigquit.sa_flags = 0;
-	sa_ignore.sa_flags = 0;
-	sa_sigquit.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &sa_sigquit, NULL);
-	envp = cpy_env(env);
-	hist_fd = open(".history_file", O_RDWR
-				| O_CREAT | O_APPEND, 0777);
-	get_history(hist_fd);
+	init_data(&data, env);
 	while (1)
 	{
-		line = readline(YELLOW"minishell$ "RESET);
-		if (line == NULL)
+		data.line = readline(YELLOW"minishell$ "RESET);
+		if (data.line == NULL)
 		{
 			ft_putendl_fd(CYAN"Exit"RESET, 1);
 			break;
 		}
-		if (*line == '\0')
+		if (*data.line == '\0')
 		{
-			free(line);
+			free(data.line);
 			continue ; 
 		}
-		if (line && *line)
-		{
-			add_history(line);
-			ft_putendl_fd(line, hist_fd);
-		}
-		token = lexer(line);
-        if (analyze_tokens(token, envp, g_exit_status) == 0)
-        {
-			unlink(".tmp");
-            free_token(token);
-            free(line);
-            continue;
-        }
-        expand_tokens(token, envp, g_exit_status);
-		ast = parse(token);
-		free_token(token);
-		if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "cd", 3) == 0)
-		{
-			if (ast->redirection)
-				fd_tmp = check_redirection_exec(ast);
-			g_exit_status = mns_cd(ast->args, &envp);
-			dup2(fd_tmp, STDOUT_FILENO);
-			close(fd_tmp);
-		}
-		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
-		{
-			if (ast->redirection)
-				fd_tmp = check_redirection_exec(ast);
-			g_exit_status = ft_export(ast->args, ast->assignement, &envp);
-			dup2(fd_tmp, STDOUT_FILENO);
-			close(fd_tmp);
-		}
-		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "unset", 6) == 0)
-		{
-			if (ast->redirection)
-				fd_tmp = check_redirection_exec(ast);
-			g_exit_status = ft_unset(ast->args, &envp);
-			dup2(fd_tmp, STDOUT_FILENO);
-			close(fd_tmp);
-		}
-		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "exit", 5) == 0)
-		{
-			if (ast->redirection)
-				fd_tmp = check_redirection_exec(ast);
-			g_exit_status = ft_exit(ast->args, ast, envp);
-			dup2(fd_tmp, STDOUT_FILENO);
-			close(fd_tmp);
-		}
-		else
-		{
-			pid = fork();
-			if (pid == 0)
-			{
-				signal(SIGINT, SIG_DFL);
-				signal(SIGQUIT, SIG_DFL);
-				executor(envp, ast);
-				free_ast(&ast);
-				free_split(envp);
-				exit(EXIT_FAILURE);
-			}
-			else
-			{
-				sigaction(SIGINT, &sa_ignore, NULL);
-				wait(&status);
-				sigaction(SIGINT, &sa, NULL);
-				if (WIFEXITED(status))
-					g_exit_status = WEXITSTATUS(status);
-				if (WIFSIGNALED(status))
-				{
-					write(1, "\n", 1);
-					g_exit_status = 128 + WTERMSIG(status);
-				}
-			}
-		}
-		free_ast(&ast);
+		process_line(&data);
+		free_ast(&data.ast);
 		unlink(".tmp");
-		free(line);
+		free(data.line);
 	}
 	rl_clear_history();
-	free_split(envp);
+	free_split(data.envp);
 	return (0);
 }
