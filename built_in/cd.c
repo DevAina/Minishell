@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/09 10:41:40 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/16 10:28:00 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	mns_cd(char **cmd, char ***env)
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
-	if (cmd[2])
+	if (cmd[1] && cmd[2])
 	{
 		ft_putendl_fd("too many arguments", 2);
 		return (1);

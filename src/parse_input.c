@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/12 12:59:50 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/16 10:57:22 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	free_ast(t_ast_node **node)
 		return ;
 	if ((*node)->type != AST_PIPE && (*node)->args != NULL)
 		free_matrix((*node)->args);
+	if ((*node)->type != AST_PIPE && (*node)->assignement != NULL)
+		free_matrix((*node)->assignement);
 	if ((*node)->type != AST_PIPE && (*node)->redirection != NULL)
 		free_redirection((*node)->redirection);
 	if ((*node)->left != NULL)

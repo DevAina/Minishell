@@ -6,12 +6,14 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/16 08:57:33 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/16 10:53:44 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <complex.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 volatile sig_atomic_t	g_exit_status = 0;
 
@@ -193,24 +195,32 @@ int main(int argc, char **argv, char **env)
 			if (ast->redirection)
 				check_redirection_exec(ast);
 			g_exit_status = mns_cd(ast->args, &envp);
+			close(1);
+			open ("/dev/tty", O_RDWR);
 		}
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "export", 7) == 0)
 		{
 			if (ast->redirection)
 				check_redirection_exec(ast);
 			g_exit_status = ft_export(ast->args, ast->assignement, &envp);
+			close(1);
+			open ("/dev/tty", O_RDWR);
 		}
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "unset", 6) == 0)
 		{
 			if (ast->redirection)
 				check_redirection_exec(ast);
 			g_exit_status = ft_unset(ast->args, &envp);
+			close(1);
+			open ("/dev/tty", O_RDWR);
 		}
 		else if (ast->type == AST_COMMAND && ft_strncmp(ast->args[0], "exit", 5) == 0)
 		{
 			if (ast->redirection)
 				check_redirection_exec(ast);
-			g_exit_status = ft_exit(ast->args);
+			g_exit_status = ft_exit(ast->args, ast, envp);
+			close(1);
+			open ("/dev/tty", O_RDWR);
 		}
 		else
 		{
