@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/16 10:43:14 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:50:27 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,13 @@ void	here_doc(void)
 	dup2(fd, 0);
 }
 
-void	check_redirection_exec(t_ast_node *ast)
+int	check_redirection_exec(t_ast_node *ast)
 {
 	int	i;
+	int	fd;
 
 	i = 0;
+	fd = dup(STDOUT_FILENO);
 	while (ast->redirection[i].target)
 	{
 		if (ast->redirection[i].type_redirection == REDIRECTION_IN)
@@ -82,6 +84,7 @@ void	check_redirection_exec(t_ast_node *ast)
 			here_doc();
 		i++;
 	}
+	return (fd);
 }
 
 int		check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast)
@@ -98,7 +101,7 @@ int		check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast)
 	}
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 	{
-		ft_env(env);
+		ft_env(env, cmd);
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
@@ -155,16 +158,14 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	free_split(path_list);
 	if (path == NULL)
 	{
-		ft_putstr_fd(tmp[0], 2);
-		ft_putstr_fd(RED" : command not found\n"RESET, 2);
+		perror(" ");
 		free_ast(&ast);
 		free_split(envp);
 		exit(127);
 	}
 	if (execve(path, tmp, envp) == -1)
 	{
-		if (access(path, X_OK) < 0)
-			ft_putstr_fd("Permission denied\n", 2);
+		perror(" ");
 		free_ast(&ast);
 		free_split(envp);
 		exit(126);
