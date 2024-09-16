@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/16 08:56:59 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:50:47 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ t_token     *lexer(char *input);
 void        free_ast(t_ast_node **node);
 
 //utils for exec
-void	check_redirection_exec(t_ast_node *ast);
+int		check_redirection_exec(t_ast_node *ast);
 char	**find_path_list(char **env);
 char	*find_path(char **path_list, char *cmd);
 void	free_split(char **str);
@@ -145,13 +145,13 @@ int		analyze_tokens(t_token *tokens, char **env, int exit_status);
 //built in cmd
 int		ft_pwd(char **args, char **env);
 int		ft_echo(char **args);
-int		ft_env(char **env);
+int		ft_env(char **env, char **cmd);
 int		ft_export(char **cmd, char **assignement, char ***env);
 char	**cpy_env(char **env);
 t_list	*get_env_lst(char **envp);
 char	**list_to_tab(t_list *env_lst);
 int		ft_unset(char **cmd, char ***env);
-int		ft_exit(char **cmd);
+int		ft_exit(char **cmd, t_ast_node *ast, char **envp);
 /********/
 void    handler_sigint(int sig);
 void	remove_one(t_list **env_lst, char *to_remove);

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/16 08:26:26 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:50:27 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,15 @@ void	here_doc(void)
 
 	fd = open(".tmp", O_RDONLY);
 	dup2(fd, 0);
-	close(fd);
 }
 
-void	check_redirection_exec(t_ast_node *ast)
+int	check_redirection_exec(t_ast_node *ast)
 {
 	int	i;
+	int	fd;
 
 	i = 0;
+	fd = dup(STDOUT_FILENO);
 	while (ast->redirection[i].target)
 	{
 		if (ast->redirection[i].type_redirection == REDIRECTION_IN)
@@ -83,9 +84,10 @@ void	check_redirection_exec(t_ast_node *ast)
 			here_doc();
 		i++;
 	}
+	return (fd);
 }
 
-int		check_n_exec_built_in(char **cmd, char **env, char **assignement)
+int		check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast)
 {
 	if (ft_strncmp(cmd[0], "pwd", 3) == 0)
 	{
@@ -99,12 +101,12 @@ int		check_n_exec_built_in(char **cmd, char **env, char **assignement)
 	}
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 	{
-		ft_env(env);
+		ft_env(env, cmd);
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
 	{
-		ft_export(cmd,assignement, &env);
+		ft_export(cmd, ast->assignement, &env);
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "cd", 3) == 0)
@@ -119,7 +121,7 @@ int		check_n_exec_built_in(char **cmd, char **env, char **assignement)
 	}
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
 	{
-		ft_exit(cmd);
+		ft_exit(cmd, ast, env);
 		return (1);
 	}
 	return (0);
@@ -145,7 +147,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	tmp += i;
 	if (ast->redirection)
 		check_redirection_exec(ast);
-	if (check_n_exec_built_in(tmp, envp, ast->assignement) == 1)
+	if (check_n_exec_built_in(tmp, envp, ast) == 1)
 	{
 		free_ast(&ast);
 		free_split(envp);
@@ -156,16 +158,14 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	free_split(path_list);
 	if (path == NULL)
 	{
-		ft_putstr_fd(tmp[0], 2);
-		ft_putstr_fd(RED" : command not found\n"RESET, 2);
+		perror(" ");
 		free_ast(&ast);
 		free_split(envp);
 		exit(127);
 	}
 	if (execve(path, tmp, envp) == -1)
 	{
-		if (access(path, X_OK) < 0)
-			ft_putstr_fd("Permission denied\n", 2);
+		perror(" ");
 		free_ast(&ast);
 		free_split(envp);
 		exit(126);
