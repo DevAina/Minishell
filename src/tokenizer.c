@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/05 13:50:49 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:54:16 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,18 @@
 
 void	free_token(t_token *token)
 {
+	if (token == NULL)
+		return ;
 	t_token	*tmp;
 
 	while (token != NULL)
 	{
-		//printf("token value: %s\n", token->value);
 		tmp = token;
 		token = token->next;
 		free(tmp->value);
 		free(tmp);
 	}
+	token = NULL;
 }
 
 int	is_valid_var_char(char c)
