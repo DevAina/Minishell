@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/17 10:46:17 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/17 08:48:12 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,90 +26,6 @@ void	handler_sigint(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();
-}
-
-void print_ast_node(t_ast_node *node, int depth)
-{
-	int	i;
-
-    if (!node) return;
-
-    // Indentation pour la structure arborescente
-    for (i = 0; i < depth; i++)
-        printf("  ");
-
-    // Affichage selon le type de nœud
-    switch (node->type) {
-        case AST_COMMAND:
-            printf("COMMAND: ");
-            if (node->args)
-            {
-                for (i = 0; node->args[i]; i++)
-                    printf("%s ", node->args[i]);
-            }
-            printf("\n");
-            if (node->assignement)
-            {
-                for (i = 0; i < depth; i++)
-                    printf("  ");
-                printf("assignement: ");
-                for (i = 0; node->assignement[i]; i++)
-                    printf("%s ", node->assignement[i]);
-                printf("\n");
-            }
-            if (node->redirection)
-			{
-				for (i = 0; node->redirection[i].target; i++)
-                {
-					if (node->redirection[i].type_redirection == REDIRECTION_IN)
-					{
-						for (int j = 0; j < depth; j++)
-                    		printf("  ");
-						printf("Input file: %s\n", node->redirection[i].target);
-					}
-					if (node->redirection[i].type_redirection == REDIRECTION_OUT)
-					{
-						for (int j = 0; j < depth; j++)
-                    		printf("  ");
-						printf("Output file: %s\n", node->redirection[i].target);
-					}
-					if (node->redirection[i].type_redirection == REDIRECTION_HEREDOC)
-					{
-						for (int j = 0; j < depth; j++)
-                    		printf("  ");
-						printf("Delimiter heredoc: %s\n", node->redirection[i].target);
-					}
-					if (node->redirection[i].type_redirection == REDIRECTION_APPEND)
-					{
-						for (int j = 0; j < depth; j++)
-                    		printf("  ");
-						printf("Append file: %s\n", node->redirection[i].target);
-					}
-				}
-                printf("\n");
-			}
-            break;
-        case AST_PIPE:
-            printf("PIPE\n");
-            break;
-        default:
-            printf("UNKNOWN NODE TYPE\n");
-    }
-}
-
-void print_ast(t_ast_node *root, int depth)
-{
-    if (!root)
-		return;
-
-    print_ast_node(root, depth);
-
-    if (root->left) {
-        print_ast(root->left, depth + 1);
-    }
-    if (root->right) {
-        print_ast(root->right, depth + 1);
-    }
 }
 
 void	get_history(int fd)
@@ -182,10 +98,25 @@ void	handle_built_in_cmd(t_data *data, t_ast_node *ast, char ***envp)
 	close(data->fd_tmp);
 }
 
+void	wait_child_process(t_data *data)
+{
+	int	status;
+
+	sigaction(SIGINT, &data->sa_ignore, NULL);
+	wait(&status);
+	sigaction(SIGINT, &data->sa, NULL);
+	if (WIFEXITED(status))
+		g_exit_status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+	{
+		write(1, "\n", 1);
+		g_exit_status = 128 + WTERMSIG(status);
+	}
+}
+
 void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 {
 	pid_t	pid;
-	int		status;
 
 	pid = fork();
 	if (pid == 0)
@@ -198,18 +129,7 @@ void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 		exit(EXIT_FAILURE);
 	}
 	else
-	{
-		sigaction(SIGINT, &data->sa_ignore, NULL);
-		wait(&status);
-		sigaction(SIGINT, &data->sa, NULL);
-		if (WIFEXITED(status))
-			g_exit_status = WEXITSTATUS(status);
-		if (WIFSIGNALED(status))
-		{
-			write(1, "\n", 1);
-			g_exit_status = 128 + WTERMSIG(status);
-		}
-	}
+		wait_child_process(data);
 }
 
 void process_line(t_data *data)
@@ -241,6 +161,16 @@ void process_line(t_data *data)
 		execute_fork_cmd(data, data->envp, data->ast);
 }
 
+int	check_eof(char *str)
+{
+	if (*str == '\0')
+	{
+		free(str);
+		return (1);
+	}
+	return (0);
+}
+
 int main(int argc, char **argv, char **env)
 {
 	t_data	data;
@@ -256,11 +186,8 @@ int main(int argc, char **argv, char **env)
 			ft_putendl_fd(CYAN"Exit"RESET, 1);
 			break;
 		}
-		if (*data.line == '\0')
-		{
-			free(data.line);
+		if (check_eof(data.line) == 1)
 			continue ; 
-		}
 		process_line(&data);
 		free_ast(&data.ast);
 		unlink(".tmp");
