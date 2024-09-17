@@ -6,11 +6,26 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 09:42:10 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/09 15:58:16 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:09:47 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int		opt_cmp(char *str)
+{
+	int		i;
+
+	i = 1;
+	if (str[0] != '-')
+		return (0);
+	while (str[i] == 'n' && str[i])
+		i++;
+	if (i == (int)ft_strlen(str))
+		return (1);
+	else
+		return (0);
+}
 
 int		ft_echo(char **args)
 {
@@ -19,7 +34,7 @@ int		ft_echo(char **args)
 
 	i = 1;
 	opt = 0;
-	if (args[1] != NULL && ft_strncmp(args[1], "-n", 3) == 0)
+	while (args[i] != NULL && opt_cmp(args[i]) == 1)
 	{
 		opt = 1;
 		i++;

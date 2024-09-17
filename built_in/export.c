@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/11 07:51:50 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/17 14:32:42 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,17 +122,6 @@ char	**cpy_env(char **env)
 	return (env_cpy);
 }
 
-void	check_n_remove(t_list **env_lst, char *content)
-{
-	t_list	*tmp;
-	char	**content_split;
-
-	tmp = *env_lst;
-	content_split = ft_split(content, '=');
-	remove_one(env_lst, content_split[0]);
-	free_split(content_split);
-}
-
 int		check_var_name(char *name)
 {
 	int	i;
@@ -148,56 +137,138 @@ int		check_var_name(char *name)
 		if (name[i] == '_')
 			i++;
 		if (ft_isalnum(name[i]) == 0)
-			return (0);
+		{
+			if (name[i] == '+' && name[i + 1] == '=')
+				i++;
+			else
+				return (0);
+		}	
 		i++;
 	}
 	return (1);
 }
 
+char*	get_var_name(char *var)
+{
+	int		i;
+	int		j;
+	char	*name;
+
+	i = 0;
+	j = 0;
+	while (var[i] && var[i] != '+' && var[i] != '=')
+		i++;
+	name = ft_calloc(i + 1, sizeof(char));
+	while (j < i)
+	{
+		name[j] = var[j];
+		j++;
+	}
+	name[j] = '\0';
+	return (name);
+}
+
+char	*get_var_value(char *var)
+{
+	int		i;
+	char	*value;
+
+	i = 0;
+	while (var[i] && var[i] != '=')
+		i++;
+	i++;
+	value = ft_calloc(ft_strlen(var) - i, sizeof(char));
+	while (i < (int)ft_strlen(var))
+	{
+		value[i] = var[i];
+		i++;
+	}
+	value[i] = '\0';
+	return (value);
+}
+
+char	*append_value(char *name, char *value, char *assignement)
+{
+	char	*new_value;
+	char	*ret;
+	char	*tmp;
+
+	if (ft_strchr(assignement, '+') == NULL)
+		return (assignement);
+	new_value = get_var_value(assignement);
+	ret = ft_strjoin(name, value);
+	tmp = ret;
+	free(value);
+	free(name);
+	return (ret);
+}
+
+void	export_assignement(char **assignement, t_list *env_lst, int	*status)
+{
+	int	j;
+	char	*var_name;
+
+	j = 0;
+	while (assignement && assignement[j])
+	{
+		if (check_var_name(assignement[j]) == 0)
+		{
+			ft_putstr_fd(assignement[j], 2);
+			ft_putstr_fd(": not a valid identifier\n", 2);
+			*status = EXIT_FAILURE;
+			j++;
+			continue ;
+		}
+		var_name = get_var_name(assignement[j]);
+		remove_one(&env_lst, var_name);
+		add_to_env_lst(env_lst, assignement[j]);
+		free(var_name);
+		j++;
+	}
+}
+
+void	export_without_assignement(char **cmd, t_list *env_lst, int *status)
+{
+	int	i;
+	char	*var_name;
+
+	i = 1;
+	while (cmd[i])
+	{
+		if (check_var_name(cmd[i]) == 0)
+		{
+			ft_putstr_fd(cmd[i], 2);
+			ft_putstr_fd(": not a valid identifier\n", 2);
+			*status = EXIT_FAILURE;
+			i++;
+			continue;
+		}
+		var_name = get_var_name(cmd[i]);
+		remove_one(&env_lst, var_name);
+		add_to_env_lst(env_lst, cmd[i]);
+		free(var_name);
+		i++;
+	}
+}
+
 int		ft_export(char **cmd, char **assignement, char ***env)
 {
 	t_list	*env_lst;
-	int		i;
-	int		j;
 	char	**tmp;
+	int		status;
 
-	i = 1;
-	j = 0;
 	tmp = *env;
+	status = 0;
 	env_lst = get_env_lst(*env);
 	if (!cmd[1] && !assignement)
 		print_export(env_lst);
 	else
 	{
-		while (cmd[i])
-		{
-			if (check_var_name(cmd[i]) == 0)
-			{
-				ft_putstr_fd(cmd[i], 2);
-				ft_putstr_fd(": not a valid identifier\n", 2);
-				free_env_lst(env_lst);
-				return (EXIT_FAILURE);
-			}
-			check_n_remove(&env_lst, cmd[i]);
-			add_to_env_lst(env_lst, cmd[i]);
-			i++;
-		}
-		while (assignement && assignement[j])
-		{
-			if (check_var_name(assignement[j]) == 0)
-			{
-				ft_putstr_fd(assignement[j], 2);
-				ft_putstr_fd(": not a valid identifier\n", 2);
-				free_env_lst(env_lst);
-				return (EXIT_FAILURE);
-			}
-			check_n_remove(&env_lst, assignement[j]);
-			add_to_env_lst(env_lst, assignement[j]);
-			j++;
-		}
+		export_without_assignement(cmd, env_lst, &status);
+		export_assignement(assignement, env_lst, &status);
 		free_split(tmp);
 		*env = list_to_tab(env_lst);
 	}
 	free_env_lst(env_lst);
-	return (EXIT_SUCCESS);
+	return (status);
 }
