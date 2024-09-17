@@ -6,11 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/16 10:57:22 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:44:27 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	free_matrix(char **matrix)
 {

@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: trarijam <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/23 12:37:38 by trarijam          #+#    #+#              #
-#    Updated: 2024/09/04 08:46:31 by traveloa         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = libft.a
 
 srcs = ft_strlen.c \
@@ -66,19 +54,19 @@ FLAGS = -Wall -Wextra -Werror
 all: ${NAME}
 
 .c.o:
-	${CC} ${FLAGS} -I. -c $< -o ${<:.c=.o}
+	@${CC} ${FLAGS} -I. -c $< -o ${<:.c=.o}
 
 ${NAME}: ${OBJS} ${INCLUDE}
-	ar rc ${NAME} ${OBJS}
+	@ar rc ${NAME} ${OBJS}
 
 bonus: ${OBJS} ${OBJS_BONUS}
-	ar rc ${NAME} ${OBJS} ${OBJS_BONUS}
+	@ar rc ${NAME} ${OBJS} ${OBJS_BONUS}
 
 clean:
-	rm -f ${OBJS} ${OBJS_BONUS}
+	@rm -f ${OBJS} ${OBJS_BONUS}
 
 fclean: clean
-	rm -f ${NAME}
+	@rm -f ${NAME}
 
 re: fclean all
 
