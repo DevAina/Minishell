@@ -77,6 +77,8 @@ void	init_data(t_data *data, char **env)
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
+	get_history(data->hist_fd);
+	close(data->hist_fd);
 	setup_signals(data);
 }
 
@@ -133,7 +135,10 @@ void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 void process_line(t_data *data)
 {
 	add_history(data->line);
+	data->hist_fd = open(".history_file", O_RDWR
+		| O_APPEND, 0777);
 	ft_putendl_fd(data->line, data->hist_fd);
+	close(data->hist_fd);
 	data->token = lexer(data->line);
 	if (analyze_tokens(data->token, data->envp, g_exit_status) == 0)
 	{

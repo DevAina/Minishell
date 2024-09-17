@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/17 08:32:08 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/17 10:13:31 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,7 @@ void	pipe_exec_left(int fd[2], t_ast_node *ast, char **envp)
 	executor(envp, ast->left);
 	free_ast(&ast);
 	free_split(envp);
+	close(fd[1]);
 	exit (EXIT_FAILURE);
 }
 
@@ -205,6 +206,7 @@ void	pipe_exec_right( int fd[2], t_ast_node *ast, char **envp)
 	executor(envp, ast->right);
 	free_ast(&ast);
 	free_split(envp);
+	close(fd[0]);
 	exit (EXIT_FAILURE);
 }
 
