@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/16 18:57:04 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/17 08:34:22 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ void process_line(t_data *data)
 	expand_tokens(data->token, data->envp, g_exit_status);
 	data->ast = parse(data->token);
 	free_token(data->token);
-	if (data->ast->args[0] == NULL)
+	if (data->ast->type == AST_COMMAND && data->ast->args[0] == NULL)
 		return ;
 	if (data->ast->type == AST_COMMAND
 		&& (ft_strncmp(data->ast->args[0], "cd", 3) == 0
