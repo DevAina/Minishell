@@ -6,11 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:26 by trarijam          #+#    #+#             */
-/*   Updated: 2024/08/30 08:14:30 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/17 14:22:06 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	mns_strcmp(char *s1, char *s2)
 {

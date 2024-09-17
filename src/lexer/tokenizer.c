@@ -6,11 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/16 18:54:16 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:44:19 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	free_token(t_token *token)
 {

@@ -6,11 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/12 15:55:49 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:50:53 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	get_var_name_length(char *str)
 {
