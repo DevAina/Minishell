@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/17 13:50:53 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:50:15 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,25 @@ void	init_for_expand_token(int *i, int *in_single_quotes,
 	*in_double_quotes = 0;	
 }
 
+int		should_expand(char *str, int i, int in_single_quotes)
+{
+	return (str[i] == '$' && !in_single_quotes
+		&& (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'));
+}
 
-char *expand_token(char *str, char **env, int exit_status)
+char	*finalize_result(char *result)
+{
+	if (result == NULL)
+		return (ft_strdup(""));
+	return (result);
+}
+
+int		is_ignored_dollar(char current, char next)
+{
+	return (current == '$' && (next == '\'' || next == '"'));
+}
+
+char	*expand_token(char *str, char **env, int exit_status)
 {
     char	*result;
     char	*tmp;
@@ -145,18 +162,18 @@ char *expand_token(char *str, char **env, int exit_status)
 			in_single_quotes = !in_single_quotes;
     	else if (str[i] == '"' && !in_single_quotes)
 			in_double_quotes = !in_double_quotes;
-        else if (str[i] == '$' && !in_single_quotes &&
-			(ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
+        else if (should_expand(str, i, in_single_quotes))
         {
             tmp = expand_special_char(str, env, &i, exit_status);
             result = str_append(result, tmp);
 			free(tmp);
-        }
-        else
+        }	
+        else if (!is_ignored_dollar(str[i], str[i + 1]))
             result = char_append(result, str[i]);
     }
-    return (result);
-} 
+	return (finalize_result(result));
+}
+
 
 void expand_tokens(t_token *tokens, char **env, int exit_status)
 {

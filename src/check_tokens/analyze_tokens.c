@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/17 13:44:13 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:11:04 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,16 @@ int	is_redirection(t_tokentype type)
 		return (1);
 	return (0);
 }
-
-char *expand_line(char *str, char **env, int exit_status)
+static int	is_delimiter(const char *line, const char *heredoc_delimiter)
 {
-    char	*result;
-    char	*tmp;
-    int		i;
-
-	tmp = NULL;
-	result = NULL;
-	i = 0;
-    while (str[i])
-    {
-		if (str[i] == '$' &&
-			(ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
-        {
-            tmp = expand_special_char(str, env, &i, exit_status);
-            result = str_append(result, tmp);
-        }
-        else
-            result = char_append(result, str[i]);
-        i++;
-    }
-    return (result);
+	if (ft_strncmp(line, heredoc_delimiter,
+		ft_strlen(heredoc_delimiter) + 1) == 0)
+		return (1);
+	return (0);
 }
 
-void	process_heredoc(char *heredoc_delimiter, char **env, int exit_status)
+void	process_heredoc(char *heredoc_delimiter, char **env, int exit_status
+	, int is_expand)
 {
 	char	*result;
 	char	*line;
@@ -56,12 +40,14 @@ void	process_heredoc(char *heredoc_delimiter, char **env, int exit_status)
 	while (1 && fd > 0)
 	{
 		line = readline("heredoc> ");
-		if (line != NULL)
-			result = expand_line(line, env, exit_status);
-		if (ft_strncmp(line, heredoc_delimiter,
-			ft_strlen(heredoc_delimiter) + 1) == 0)
+		if (line != NULL && is_expand == 0)
+			result = expand_token(line, env, exit_status);
+		else
+			result = ft_strdup(line);
+		if (is_delimiter(line, heredoc_delimiter))
 		{
 			free(line);
+			free(result);
 			break;
 		}
 		ft_putendl_fd(result, fd);
@@ -72,27 +58,72 @@ void	process_heredoc(char *heredoc_delimiter, char **env, int exit_status)
 		close(fd);
 }
 
+static int	is_invalid_redirection(t_token *token)
+{
+	return (token == NULL || token->type != TOKEN_WORD);
+}
+
+static int	print_syntax_error(void)
+{
+	ft_putstr_fd(RED"Syntax error: expected filename after redirection"
+		" or expected delimiter after heredoc\n" RESET, 2);
+	return (0);
+}
+
+static int	determine_expansion(t_token *current_token, char *tmp)
+{
+	if (mns_strcmp(current_token->value, tmp) == 0)
+		return (0);
+	return (1);
+}
+
+char	*expand_for_heredoc(char *heredoc_delimiter)
+{
+	char	*result;
+	int		i;
+
+	result = NULL;
+	i = 0;
+	while (heredoc_delimiter[i] != '\0')
+	{
+		if (heredoc_delimiter[i] == '\'' || heredoc_delimiter[i] == '"')
+			i++;
+		else if (heredoc_delimiter[i] == '$' && (heredoc_delimiter[i + 1] == '\''
+			|| heredoc_delimiter[i + 1] == '"'))
+			i++;
+		else
+		{
+			result = char_append(result, heredoc_delimiter[i]);
+			i++;
+		}
+	}
+	if (result == NULL)
+		return (ft_strdup(""));
+	return (result);
+}
+
+static int	handle_heredoc(t_token **current_token, char **env, int exit_status)
+{
+	char	*tmp;
+	int		is_expand;
+
+	*current_token = (*current_token)->next;
+	if (is_invalid_redirection(*current_token))
+		return (print_syntax_error());
+	tmp = expand_for_heredoc((*current_token)->value);
+	is_expand = determine_expansion(*current_token, tmp);
+	process_heredoc(tmp, env, exit_status, is_expand);
+	free(tmp);
+	return (1);
+}
+
 static int	check_redirection(t_token **current_token, char **env, int exit_status)
 {
 	if ((*current_token)->type == TOKEN_HEREDOC)
-	{
-		*current_token = (*current_token)->next;
-		if (*current_token == NULL || (*current_token)->type != TOKEN_WORD)
-		{
-			ft_putstr_fd(RED"Syntax error: expected filename after redirection\n"
-				RESET, 2);
-			return (0);
-		}
-		process_heredoc((*current_token)->value, env, exit_status);
-		return (1);
-	}
+		return (handle_heredoc(current_token, env, exit_status));
 	*current_token = (*current_token)->next;
-	if (*current_token == NULL || (*current_token)->type != TOKEN_WORD)
-	{
-		ft_putstr_fd(RED"Syntax error: expected filename after redirection\n"
-			RESET, 2);
-		return (0);
-	}
+	if (is_invalid_redirection(*current_token))
+		return (print_syntax_error());
 	return (1);
 }
 
