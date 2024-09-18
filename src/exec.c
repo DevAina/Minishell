@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/17 13:40:07 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:28:12 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,8 +193,6 @@ void	pipe_exec_left(int fd[2], t_ast_node *ast, char **envp)
 	close(fd[0]);
 	dup2(fd[1], 1);
 	executor(envp, ast->left);
-	free_ast(&ast);
-	free_split(envp);
 	close(fd[1]);
 	exit (EXIT_FAILURE);
 }
@@ -203,10 +201,8 @@ void	pipe_exec_right( int fd[2], t_ast_node *ast, char **envp)
 {
 	close(fd[1]);
 	dup2(fd[0], 0);
-	executor(envp, ast->right);
-	free_ast(&ast);
-	free_split(envp);
 	close(fd[0]);
+	executor(envp, ast->right);
 	exit (EXIT_FAILURE);
 }
 
@@ -229,6 +225,8 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 	close(fd[0]);
 	waitpid(pid, NULL, 0);
 	waitpid(pid1, &status, 0);
+	free_ast(&ast);
+	free_split(envp);
 	if (WIFEXITED(status))
 		exit(WEXITSTATUS(status));
 }

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/17 14:43:34 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/18 08:49:36 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 		executor(envp, ast);
 		free_ast(&ast);
 		free_split(envp);
+		/*	if (WIFEXITED(status))
+		exit(WEXITSTATUS(status));*/
 		exit(EXIT_FAILURE);
 	}
 	else

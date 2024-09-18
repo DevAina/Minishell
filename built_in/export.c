@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/17 14:32:42 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/18 07:45:24 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	**list_to_tab(t_list *env_lst)
 
 char	**cpy_env(char **env)
 {
-	int	i;
+	int		i;
 	char	**env_cpy;
 
 	i = 0;
@@ -122,7 +122,7 @@ char	**cpy_env(char **env)
 	return (env_cpy);
 }
 
-int		check_var_name(char *name)
+int	check_var_name(char *name)
 {
 	int	i;
 
@@ -142,13 +142,13 @@ int		check_var_name(char *name)
 				i++;
 			else
 				return (0);
-		}	
+		}
 		i++;
 	}
 	return (1);
 }
 
-char*	get_var_name(char *var)
+char	*get_var_name(char *var)
 {
 	int		i;
 	int		j;
@@ -171,42 +171,73 @@ char*	get_var_name(char *var)
 char	*get_var_value(char *var)
 {
 	int		i;
+	int		j;
 	char	*value;
 
 	i = 0;
+	j = 0;
 	while (var[i] && var[i] != '=')
 		i++;
+	if (var[i] == '\0')
+		return (0);
 	i++;
-	value = ft_calloc(ft_strlen(var) - i, sizeof(char));
-	while (i < (int)ft_strlen(var))
+	value = ft_calloc(ft_strlen(var) - i + 1, sizeof(char));
+	while (var[i])
 	{
-		value[i] = var[i];
+		value[j] = var[i];
 		i++;
+		j++;
 	}
-	value[i] = '\0';
 	return (value);
 }
 
-char	*append_value(char *name, char *value, char *assignement)
+void	add_new_var(t_list *env_lst, char *var)
 {
-	char	*new_value;
-	char	*ret;
+	char	*var_name;
 	char	*tmp;
+	char	*var_value;
+	t_list	*head;
 
-	if (ft_strchr(assignement, '+') == NULL)
-		return (assignement);
-	new_value = get_var_value(assignement);
-	ret = ft_strjoin(name, value);
-	tmp = ret;
-	free(value);
-	free(name);
-	return (ret);
+	head = env_lst;
+	var_name = get_var_name(var);
+	if (ft_strchr(var, '+') == NULL)
+	{
+		remove_one(&env_lst, var_name);
+		add_to_env_lst(env_lst, var);
+	}
+	else
+	{
+		var_value = get_var_value(var);
+		while (env_lst)
+		{
+			tmp = get_var_name((char *)env_lst->content);
+			if (ft_strncmp(var_name, tmp, ft_strlen(var_name)) == 0)
+			{
+				free(tmp);
+				tmp = (char *)env_lst->content;
+				env_lst->content = ft_strjoin(tmp, var_value);
+				free(tmp);
+				break ;
+			}
+			free(tmp);
+			env_lst = env_lst->next;
+		}
+		if (env_lst == NULL)
+		{
+			tmp = ft_strjoin(var_name, "=");
+			free(var_name);
+			var_name = ft_strjoin(tmp, var_value);
+			add_to_env_lst(head, var_name);
+			free(tmp);
+		}
+		free(var_value);
+	}
+	free(var_name);
 }
 
 void	export_assignement(char **assignement, t_list *env_lst, int	*status)
 {
-	int	j;
-	char	*var_name;
+	int		j;
 
 	j = 0;
 	while (assignement && assignement[j])
@@ -219,18 +250,14 @@ void	export_assignement(char **assignement, t_list *env_lst, int	*status)
 			j++;
 			continue ;
 		}
-		var_name = get_var_name(assignement[j]);
-		remove_one(&env_lst, var_name);
-		add_to_env_lst(env_lst, assignement[j]);
-		free(var_name);
+		add_new_var(env_lst, assignement[j]);
 		j++;
 	}
 }
 
 void	export_without_assignement(char **cmd, t_list *env_lst, int *status)
 {
-	int	i;
-	char	*var_name;
+	int		i;
 
 	i = 1;
 	while (cmd[i])
@@ -241,17 +268,14 @@ void	export_without_assignement(char **cmd, t_list *env_lst, int *status)
 			ft_putstr_fd(": not a valid identifier\n", 2);
 			*status = EXIT_FAILURE;
 			i++;
-			continue;
+			continue ;
 		}
-		var_name = get_var_name(cmd[i]);
-		remove_one(&env_lst, var_name);
-		add_to_env_lst(env_lst, cmd[i]);
-		free(var_name);
+		add_new_var(env_lst, cmd[i]);
 		i++;
 	}
 }
 
-int		ft_export(char **cmd, char **assignement, char ***env)
+int	ft_export(char **cmd, char **assignement, char ***env)
 {
 	t_list	*env_lst;
 	char	**tmp;
