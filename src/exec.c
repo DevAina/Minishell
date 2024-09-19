@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/18 16:28:12 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:04:07 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,11 +180,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	if (ast->redirection)
 		check_redirection_exec(ast);
 	if (check_n_exec_built_in(tmp, envp, ast) == 1)
-	{
-		free_ast(&ast);
-		free_split(envp);
-		exit(EXIT_SUCCESS);
-	}
+		return ;
 	execute(ast, envp, cmd);
 }
 
@@ -194,6 +190,8 @@ void	pipe_exec_left(int fd[2], t_ast_node *ast, char **envp)
 	dup2(fd[1], 1);
 	executor(envp, ast->left);
 	close(fd[1]);
+	free_ast(&ast);
+	free_split(envp);
 	exit (EXIT_FAILURE);
 }
 
@@ -203,6 +201,8 @@ void	pipe_exec_right( int fd[2], t_ast_node *ast, char **envp)
 	dup2(fd[0], 0);
 	close(fd[0]);
 	executor(envp, ast->right);
+	free_ast(&ast);
+	free_split(envp);
 	exit (EXIT_FAILURE);
 }
 
@@ -210,29 +210,26 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 {
 	int		fd[2];
 	pid_t	pid;
-	pid_t	pid1;
-	int		status;
 
 	if (pipe(fd) == -1)
 		return ;
 	pid = fork();
 	if (pid == 0)
 		pipe_exec_left(fd, ast, envp);
-	pid1 = fork();
-	if (pid1 == 0)
-		pipe_exec_right(fd, ast, envp);
+	waitpid(pid, NULL, 0);
+	pipe_exec_right(fd, ast, envp);
 	close(fd[1]);
 	close(fd[0]);
-	waitpid(pid, NULL, 0);
-	waitpid(pid1, &status, 0);
-	free_ast(&ast);
-	free_split(envp);
-	if (WIFEXITED(status))
-		exit(WEXITSTATUS(status));
 }
 
 void	executor(char **envp, t_ast_node *ast)
 {
+	if (ast == NULL)
+	{
+		free_ast(&ast);
+		free_split(envp);
+		exit (EXIT_FAILURE);
+	}
 	if (ast->type == 0)
 		exec_cmd(envp, ast->args, ast);
 	else if (ast->type == 1)
