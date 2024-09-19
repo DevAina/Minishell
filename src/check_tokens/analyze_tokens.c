@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/18 15:11:04 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/19 17:04:29 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	is_redirection(t_tokentype type)
 }
 static int	is_delimiter(const char *line, const char *heredoc_delimiter)
 {
+	if (line == NULL)
+		return (1);
 	if (ft_strncmp(line, heredoc_delimiter,
 		ft_strlen(heredoc_delimiter) + 1) == 0)
 		return (1);
@@ -47,15 +49,15 @@ void	process_heredoc(char *heredoc_delimiter, char **env, int exit_status
 		if (is_delimiter(line, heredoc_delimiter))
 		{
 			free(line);
-			free(result);
+			if (result != NULL)
+				free(result);
 			break;
 		}
 		ft_putendl_fd(result, fd);
 		free(line);
 		free(result);
 	}
-	if (fd > 0)
-		close(fd);
+	close(fd);
 }
 
 static int	is_invalid_redirection(t_token *token)
