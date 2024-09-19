@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/19 15:02:46 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:47:41 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	handle_built_in_cmd(t_data *data, t_ast_node *ast, char ***envp)
 {
 	data->fd_tmp = dup(STDOUT_FILENO);
 	if (ast->redirection)
-		data->fd_tmp = check_redirection_exec(ast);
+		check_redirection_exec(ast, *envp);
 	if (ft_strncmp(ast->args[0], "cd", 3) == 0)
 		g_exit_status = mns_cd(ast->args, envp);
 	else if (ft_strncmp(ast->args[0], "export", 7) == 0)
@@ -136,10 +136,7 @@ void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 void process_line(t_data *data)
 {
 	add_history(data->line);
-	data->hist_fd = open(".history_file", O_RDWR
-		| O_APPEND, 0777);
 	ft_putendl_fd(data->line, data->hist_fd);
-	close(data->hist_fd);
 	data->token = lexer(data->line);
 	if (analyze_tokens(data->token, data->envp, g_exit_status) == 0)
 	{
@@ -179,6 +176,8 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&data, env);
+	data.hist_fd = open(".history_file", O_WRONLY
+		| O_APPEND, 0777);
 	while (1)
 	{
 		data.line = readline(YELLOW"minishell$ "RESET);
@@ -194,6 +193,7 @@ int main(int argc, char **argv, char **env)
 		unlink(".tmp");
 		free(data.line);
 	}
+	close(data.hist_fd);
 	rl_clear_history();
 	free_split(data.envp);
 	return (0);

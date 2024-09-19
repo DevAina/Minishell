@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/18 08:48:26 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:28:29 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ t_token     *lexer(char *input);
 void        free_ast(t_ast_node **node);
 
 //utils for exec
-int		check_redirection_exec(t_ast_node *ast);
+int		check_redirection_exec(t_ast_node *ast, char **envp);
 char	**find_path_list(char **env);
 char	*find_path(char **path_list, char *cmd);
 void	free_split(char **str);
