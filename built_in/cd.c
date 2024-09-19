@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/16 10:28:00 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:22:20 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,5 +120,6 @@ int	mns_cd(char **cmd, char ***env)
 		}
 		update_pwd(env, cwd);
 	}
+	free(cwd);
 	return (0);
 }

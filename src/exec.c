@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/19 15:04:07 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:42:52 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <time.h>
 #include <unistd.h>
 
-void	redir_input(char *input)
+void	redir_input(char *input, t_ast_node *node, char **envp)
 {
 	int	fd;
 
@@ -24,12 +24,14 @@ void	redir_input(char *input)
 	if (fd < 0)
 	{
 		perror (input);
+		free_ast(&node);
+		free_split(envp);
 		exit(EXIT_FAILURE);
 	}
 	dup2(fd, 0);
 }
 
-void	redir_output(char *output)
+void	redir_output(char *output, t_ast_node *node, char **envp)
 {
 	int	fd;
 
@@ -38,12 +40,14 @@ void	redir_output(char *output)
 	if (fd < 0)
 	{
 		perror (output);
+		free_ast(&node);
+		free_split(envp);
 		exit (EXIT_FAILURE);
 	}
 	dup2(fd, 1);
 }
 
-void	output_append(char *out_append)
+void	output_append(char *out_append, t_ast_node *node, char **envp)
 {
 	int	fd;
 
@@ -52,6 +56,8 @@ void	output_append(char *out_append)
 	if (fd < 0)
 	{
 		perror (out_append);
+		free_ast(&node);
+		free_split(envp);
 		exit (EXIT_FAILURE);
 	}
 	dup2(fd, 1);
@@ -65,26 +71,26 @@ void	here_doc(void)
 	dup2(fd, 0);
 }
 
-int	check_redirection_exec(t_ast_node *ast)
+int	check_redirection_exec(t_ast_node *ast, char **envp)
 {
 	int	i;
-	int	fd;
+	//int	fd;
 
 	i = 0;
-	fd = dup(STDOUT_FILENO);
+	//fd = dup(STDOUT_FILENO);
 	while (ast->redirection[i].target)
 	{
 		if (ast->redirection[i].type_redirection == REDIRECTION_IN)
-			redir_input(ast->redirection[i].target);
+			redir_input(ast->redirection[i].target, ast, envp);
 		else if (ast->redirection[i].type_redirection == REDIRECTION_OUT)
-			redir_output(ast->redirection[i].target);
+			redir_output(ast->redirection[i].target, ast, envp);
 		else if (ast->redirection[i].type_redirection == REDIRECTION_APPEND)
-			output_append(ast->redirection[i].target);
+			output_append(ast->redirection[i].target, ast, envp);
 		if (ast->redirection[i].type_redirection == REDIRECTION_HEREDOC)
 			here_doc();
 		i++;
 	}
-	return (fd);
+	return (0);
 }
 
 int	check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast)
@@ -178,7 +184,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 
 	tmp = check_void_cmd(cmd, envp, ast);
 	if (ast->redirection)
-		check_redirection_exec(ast);
+		check_redirection_exec(ast, envp);
 	if (check_n_exec_built_in(tmp, envp, ast) == 1)
 		return ;
 	execute(ast, envp, cmd);
