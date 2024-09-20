@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/19 16:42:52 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/20 08:49:26 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,8 @@ char	**check_void_cmd(char **cmd, char **envp, t_ast_node *ast)
 	char	**tmp;
 	int		i;
 
+	if (cmd == NULL)
+		return (NULL);
 	i = 0;
 	tmp = cmd;
 	while (ft_strlen(tmp[i]) == 0 && tmp[i] != NULL)
@@ -185,6 +187,8 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	tmp = check_void_cmd(cmd, envp, ast);
 	if (ast->redirection)
 		check_redirection_exec(ast, envp);
+	if (ast->args == NULL)
+		return ;
 	if (check_n_exec_built_in(tmp, envp, ast) == 1)
 		return ;
 	execute(ast, envp, cmd);
