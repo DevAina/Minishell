@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/20 09:14:49 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/20 10:40:02 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,15 +115,19 @@ void	wait_child_process(t_data *data)
 void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 {
 	pid_t	pid;
+	int		flag;
 
+	flag = 0;
 	pid = fork();
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		executor(envp, ast);
+		executor(envp, ast, &flag);
 		free_ast(&ast);
 		free_split(envp);
+		if (flag == 1)
+			exit(EXIT_SUCCESS);
 		exit(EXIT_FAILURE);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/19 16:28:29 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/20 10:41:29 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,8 @@ int		check_redirection_exec(t_ast_node *ast, char **envp);
 char	**find_path_list(char **env);
 char	*find_path(char **path_list, char *cmd);
 void	free_split(char **str);
-void	exec_cmd(char **envp, char **cmd, t_ast_node *ast);
-void	executor(char **envp, t_ast_node *ast);
+void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag);
+void	executor(char **envp, t_ast_node *ast, int *flag);
 /*****expander*******/
 int		get_var_name_length(char *str);
 char	*get_env_value(char *var, char **env);

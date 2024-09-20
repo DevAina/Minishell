@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/20 08:58:26 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/20 10:41:22 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void	execute(t_ast_node *ast, char **envp, char **cmd)
 	}
 }
 
-void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
+void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag)
 {
 	char	**tmp;
 
@@ -194,33 +194,36 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast)
 	if (ast->args == NULL)
 		return ;
 	if (check_n_exec_built_in(tmp, envp, ast) == 1)
+	{
+		*flag = 1;
 		return ;
+	}
 	execute(ast, envp, cmd);
 }
 
-void	pipe_exec_left(int fd[2], t_ast_node *ast, char **envp)
+void	pipe_exec_left(int fd[2], t_ast_node *ast, char **envp, int *flag)
 {
 	close(fd[0]);
 	dup2(fd[1], 1);
-	executor(envp, ast->left);
+	executor(envp, ast->left, flag);
 	close(fd[1]);
 	free_ast(&ast);
 	free_split(envp);
 	exit (EXIT_FAILURE);
 }
 
-void	pipe_exec_right( int fd[2], t_ast_node *ast, char **envp)
+void	pipe_exec_right( int fd[2], t_ast_node *ast, char **envp, int *flag)
 {
 	close(fd[1]);
 	dup2(fd[0], 0);
 	close(fd[0]);
-	executor(envp, ast->right);
+	executor(envp, ast->right, flag);
 	free_ast(&ast);
 	free_split(envp);
 	exit (EXIT_FAILURE);
 }
 
-void	pipe_cmd(char **envp, t_ast_node *ast)
+void	pipe_cmd(char **envp, t_ast_node *ast, int *flag)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -229,23 +232,17 @@ void	pipe_cmd(char **envp, t_ast_node *ast)
 		return ;
 	pid = fork();
 	if (pid == 0)
-		pipe_exec_left(fd, ast, envp);
+		pipe_exec_left(fd, ast, envp, flag);
 	waitpid(pid, NULL, 0);
-	pipe_exec_right(fd, ast, envp);
+	pipe_exec_right(fd, ast, envp, flag);
 	close(fd[1]);
 	close(fd[0]);
 }
 
-void	executor(char **envp, t_ast_node *ast)
+void	executor(char **envp, t_ast_node *ast, int *flag)
 {
-	if (ast == NULL)
-	{
-		free_ast(&ast);
-		free_split(envp);
-		exit (EXIT_FAILURE);
-	}
 	if (ast->type == 0)
-		exec_cmd(envp, ast->args, ast);
+		exec_cmd(envp, ast->args, ast, flag);
 	else if (ast->type == 1)
-		pipe_cmd(envp, ast);
+		pipe_cmd(envp, ast, flag);
 }
