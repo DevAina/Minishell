@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/20 08:49:26 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/20 08:58:26 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	redir_input(char *input, t_ast_node *node, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	dup2(fd, 0);
+	close(fd);
 }
 
 void	redir_output(char *output, t_ast_node *node, char **envp)
@@ -45,6 +46,7 @@ void	redir_output(char *output, t_ast_node *node, char **envp)
 		exit (EXIT_FAILURE);
 	}
 	dup2(fd, 1);
+	close(fd);
 }
 
 void	output_append(char *out_append, t_ast_node *node, char **envp)
@@ -61,6 +63,7 @@ void	output_append(char *out_append, t_ast_node *node, char **envp)
 		exit (EXIT_FAILURE);
 	}
 	dup2(fd, 1);
+	close(fd);
 }
 
 void	here_doc(void)
@@ -69,6 +72,7 @@ void	here_doc(void)
 
 	fd = open(".tmp", O_RDONLY);
 	dup2(fd, 0);
+	close(fd);
 }
 
 int	check_redirection_exec(t_ast_node *ast, char **envp)
