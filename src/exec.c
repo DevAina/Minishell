@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/20 14:25:41 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/20 14:29:51 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	redir_input(char *input, t_ast_node *node, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	dup2(fd, 0);
-	//close(fd);
+	close(fd);
 }
 
 void	redir_output(char *output, t_ast_node *node, char **envp)
@@ -78,10 +78,10 @@ void	here_doc(void)
 int	check_redirection_exec(t_ast_node *ast, char **envp)
 {
 	int	i;
-	int	fd;
+	//int	fd;
 
 	i = 0;
-	fd = dup(STDOUT_FILENO);
+	//fd = dup(STDOUT_FILENO);
 	while (ast->redirection[i].target)
 	{
 		if (ast->redirection[i].type_redirection == REDIRECTION_IN)
