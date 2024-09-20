@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/18 13:50:15 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/20 11:59:34 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,15 @@ char	*finalize_result(char *result)
 	return (result);
 }
 
-int		is_ignored_dollar(char current, char next)
+int		is_ignored_dollar(char current, char next,
+	int in_double_quotes, int in_single_quotes)
 {
-	return (current == '$' && (next == '\'' || next == '"'));
+	if (current == '$' && (next == '\'' || next == '"')
+		&& (in_double_quotes || in_single_quotes))
+		return (1);
+	if (current == '$' && (next == '\'' || next == '"'))
+		return (0);
+	return (1);
 }
 
 char	*expand_token(char *str, char **env, int exit_status)
@@ -168,7 +174,8 @@ char	*expand_token(char *str, char **env, int exit_status)
             result = str_append(result, tmp);
 			free(tmp);
         }	
-        else if (!is_ignored_dollar(str[i], str[i + 1]))
+        else if (is_ignored_dollar(str[i], str[i + 1],
+			in_double_quotes, in_single_quotes) == 1)
             result = char_append(result, str[i]);
     }
 	return (finalize_result(result));
