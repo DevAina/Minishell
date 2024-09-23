@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/20 14:29:51 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/23 08:34:06 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag)
 {
 	char	**tmp;
 
+	(void)flag;
 	tmp = check_void_cmd(cmd, envp, ast);
 	if (ast->redirection)
 		check_redirection_exec(ast, envp);
@@ -209,6 +210,8 @@ void	pipe_exec_left(int fd[2], t_ast_node *ast, char **envp, int *flag)
 	close(fd[1]);
 	free_ast(&ast);
 	free_split(envp);
+	if (*flag == 1)
+		exit (EXIT_SUCCESS);
 	exit (EXIT_FAILURE);
 }
 
@@ -220,6 +223,8 @@ void	pipe_exec_right( int fd[2], t_ast_node *ast, char **envp, int *flag)
 	executor(envp, ast->right, flag);
 	free_ast(&ast);
 	free_split(envp);
+	if (*flag == 1)
+		exit (EXIT_SUCCESS);
 	exit (EXIT_FAILURE);
 }
 
@@ -233,10 +238,10 @@ void	pipe_cmd(char **envp, t_ast_node *ast, int *flag)
 	pid = fork();
 	if (pid == 0)
 		pipe_exec_left(fd, ast, envp, flag);
-	waitpid(pid, NULL, 0);
 	pipe_exec_right(fd, ast, envp, flag);
 	close(fd[1]);
 	close(fd[0]);
+	waitpid(pid, NULL, 0);
 }
 
 void	executor(char **envp, t_ast_node *ast, int *flag)
