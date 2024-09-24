@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/24 10:58:35 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:24:12 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	wait_child_process(t_data *data)
 	}
 }
 
-void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
+void	execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 {
 	pid_t	pid;
 	int		flag;
@@ -126,14 +126,28 @@ void execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 		signal(SIGQUIT, SIG_DFL);
 		executor(envp, ast, &flag);
 		free_ast(&ast);
-		free_split(envp);	
+		free_split(envp);
 		exit(flag);
 	}
 	else
 		wait_child_process(data);
 }
 
-void process_line(t_data *data)
+int	check_built_in(t_ast_node *ast)
+{
+	if (ft_strncmp(ast->args[0], "cd", 3) == 0)
+		return (1);
+	else if (ft_strncmp(ast->args[0], "export", 7) == 0)
+		return (1);
+	else if (ft_strncmp(ast->args[0], "unset", 6) == 0)
+		return (1);
+	else if (ft_strncmp(ast->args[0], "exit", 5) == 0)
+		return (1);
+	else
+		return (0);
+}
+
+void	process_line(t_data *data)
 {
 	add_history(data->line);
 	data->hist_fd = open(".history_file", O_WRONLY | O_CREAT | O_APPEND, 0777);
@@ -154,10 +168,7 @@ void process_line(t_data *data)
 		&& data->ast->args[0] == NULL)
 		return ;
 	if (data->ast->type == AST_COMMAND && data->ast->args != NULL
-		&& (ft_strncmp(data->ast->args[0], "cd", 3) == 0
-		|| ft_strncmp(data->ast->args[0], "export", 7) == 0
-		|| ft_strncmp(data->ast->args[0], "unset", 6) == 0
-		|| ft_strncmp(data->ast->args[0], "exit", 5) == 0))
+		&& check_built_in(data->ast) == 1)
 		handle_built_in_cmd(data, data->ast, &data->envp);
 	else
 		execute_fork_cmd(data, data->envp, data->ast);
@@ -173,7 +184,7 @@ int	check_eof(char *str)
 	return (0);
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
 
@@ -186,10 +197,10 @@ int main(int argc, char **argv, char **env)
 		if (data.line == NULL)
 		{
 			ft_putendl_fd(CYAN"Exit"RESET, 1);
-			break;
+			break ;
 		}
 		if (check_eof(data.line) == 1)
-			continue ; 
+			continue ;
 		process_line(&data);
 		free_ast(&data.ast);
 		unlink(".tmp");
