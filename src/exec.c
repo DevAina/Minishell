@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/23 08:34:06 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 08:21:05 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,29 +158,26 @@ char	**check_void_cmd(char **cmd, char **envp, t_ast_node *ast)
 	return (tmp);
 }
 
-void	execute(t_ast_node *ast, char **envp, char **cmd)
+void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 {
 	char	**path_list;
 	char	*path;
 
+	(void)ast;
 	path_list = find_path_list(envp);
 	path = find_path(path_list, cmd[0]);
 	free_split(path_list);
 	if (path == NULL)
 	{
-		ft_putstr_fd(cmd[0], 2);
-		perror(" ");
-		free_ast(&ast);
-		free_split(envp);
-		exit(127);
+		perror(cmd[0]);
+		*flag = 127;
+		return ;
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
-		ft_putstr_fd(cmd[0], 2);
-		perror(" ");
-		free_ast(&ast);
-		free_split(envp);
-		exit(126);
+		perror(cmd[0]);
+		*flag = 126;
+		return ;
 	}
 }
 
@@ -188,7 +185,6 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag)
 {
 	char	**tmp;
 
-	(void)flag;
 	tmp = check_void_cmd(cmd, envp, ast);
 	if (ast->redirection)
 		check_redirection_exec(ast, envp);
@@ -196,52 +192,53 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag)
 		return ;
 	if (check_n_exec_built_in(tmp, envp, ast) == 1)
 	{
-		*flag = 1;
+		*flag = 0;
 		return ;
 	}
-	execute(ast, envp, cmd);
+	execute(ast, envp, cmd, flag);
 }
 
 void	pipe_exec_left(int fd[2], t_ast_node *ast, char **envp, int *flag)
 {
 	close(fd[0]);
 	dup2(fd[1], 1);
-	executor(envp, ast->left, flag);
 	close(fd[1]);
-	free_ast(&ast);
-	free_split(envp);
-	if (*flag == 1)
-		exit (EXIT_SUCCESS);
-	exit (EXIT_FAILURE);
+	executor(envp, ast->left, flag);
 }
 
-void	pipe_exec_right( int fd[2], t_ast_node *ast, char **envp, int *flag)
+int	pipe_exec_right( int fd[2], t_ast_node *ast, char **envp, int *flag)
 {
 	close(fd[1]);
 	dup2(fd[0], 0);
 	close(fd[0]);
 	executor(envp, ast->right, flag);
-	free_ast(&ast);
-	free_split(envp);
-	if (*flag == 1)
-		exit (EXIT_SUCCESS);
-	exit (EXIT_FAILURE);
+	return (*flag);
 }
 
 void	pipe_cmd(char **envp, t_ast_node *ast, int *flag)
 {
 	int		fd[2];
 	pid_t	pid;
+	pid_t	pid1;
 
+	pid1 = 1;
 	if (pipe(fd) == -1)
 		return ;
 	pid = fork();
 	if (pid == 0)
 		pipe_exec_left(fd, ast, envp, flag);
-	pipe_exec_right(fd, ast, envp, flag);
+	else
+	{
+		pid1 = fork();
+		if (pid1 == 0)
+			pipe_exec_right(fd, ast, envp, flag);
+	}
 	close(fd[1]);
 	close(fd[0]);
 	waitpid(pid, NULL, 0);
+	waitpid(pid1, flag, 0);
+	if (WIFEXITED(*flag))
+		*flag = WEXITSTATUS(*flag);
 }
 
 void	executor(char **envp, t_ast_node *ast, int *flag)
