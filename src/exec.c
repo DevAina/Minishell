@@ -6,14 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/24 08:21:05 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 10:57:59 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <fcntl.h>
 #include <stdlib.h>
-#include <time.h>
 #include <unistd.h>
 
 void	redir_input(char *input, t_ast_node *node, char **envp)
@@ -78,10 +77,8 @@ void	here_doc(void)
 int	check_redirection_exec(t_ast_node *ast, char **envp)
 {
 	int	i;
-	//int	fd;
 
 	i = 0;
-	//fd = dup(STDOUT_FILENO);
 	while (ast->redirection[i].target)
 	{
 		if (ast->redirection[i].type_redirection == REDIRECTION_IN)
@@ -97,24 +94,9 @@ int	check_redirection_exec(t_ast_node *ast, char **envp)
 	return (0);
 }
 
-int	check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast)
+int	check_n_exec_built_in1(char **cmd, char **env, t_ast_node *ast)
 {
-	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
-	{
-		ft_pwd(cmd, env);
-		return (1);
-	}
-	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
-	{
-		ft_echo(cmd);
-		return (1);
-	}
-	else if (ft_strncmp(cmd[0], "env", 4) == 0)
-	{
-		ft_env(env, cmd);
-		return (1);
-	}
-	else if (ft_strncmp(cmd[0], "export", 7) == 0)
+	if (ft_strncmp(cmd[0], "export", 7) == 0)
 	{
 		ft_export(cmd, ast->assignement, &env);
 		return (1);
@@ -127,6 +109,26 @@ int	check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast)
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 	{
 		ft_unset(cmd, &env);
+		return (1);
+	}
+	else if (ft_strncmp(cmd[0], "env", 4) == 0)
+	{
+		ft_env(env, cmd);
+		return (1);
+	}
+	return (0);
+}
+
+int	check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast)
+{
+	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
+	{
+		ft_pwd(cmd, env);
+		return (1);
+	}
+	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
+	{
+		ft_echo(cmd);
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
@@ -190,7 +192,8 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag)
 		check_redirection_exec(ast, envp);
 	if (ast->args == NULL)
 		return ;
-	if (check_n_exec_built_in(tmp, envp, ast) == 1)
+	if (check_n_exec_built_in(tmp, envp, ast) == 1
+		|| check_n_exec_built_in1(tmp, envp, ast) == 1)
 	{
 		*flag = 0;
 		return ;

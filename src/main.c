@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/24 08:18:12 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 10:58:35 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	init_data(t_data *data, char **env)
 void	handle_built_in_cmd(t_data *data, t_ast_node *ast, char ***envp)
 {
 	data->fd_tmp = dup(STDOUT_FILENO);
+	close(data->fd_tmp);
 	if (ast->redirection)
 		check_redirection_exec(ast, *envp);
 	if (ft_strncmp(ast->args[0], "cd", 3) == 0)
