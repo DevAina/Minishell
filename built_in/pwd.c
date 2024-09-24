@@ -6,13 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 08:11:34 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/09 16:01:30 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 08:53:41 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int		ft_pwd(char **args, char **env)
+int	ft_pwd(char **args, char **env)
 {
 	int		i;
 	char	**pwd;

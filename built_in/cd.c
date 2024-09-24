@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/19 16:22:20 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/24 10:37:02 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*get_path(char **env, char *path_name)
 	while (env[i])
 	{
 		if (ft_strncmp(path_name, env[i], 4) == 0)
-			break;
+			break ;
 		i++;
 	}
 	tmp = ft_split(env[i], '=');
@@ -71,47 +71,44 @@ void	update_pwd(char ***env, char *old_pwd)
 	free_env_lst(head);
 }
 
-int	mns_cd(char **cmd, char ***env)
+int	change_dir(char *path, char ***env)
 {
 	char	*path_name;
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
+	path_name = get_path(*env, path);
+	if (path_name == NULL)
+		return (1);
+	if (chdir(path_name) == -1)
+	{
+		perror("cd");
+		free(path_name);
+		free(cwd);
+		return (1);
+	}
+	free(path_name);
+	update_pwd(env, cwd);
+	free(cwd);
+	return (0);
+}
+
+int	mns_cd(char **cmd, char ***env)
+{
+	char	*cwd;
+
 	if (cmd[1] && cmd[2])
 	{
 		ft_putendl_fd("too many arguments", 2);
 		return (1);
 	}
 	if (!cmd[1] || ft_strncmp(cmd[1], "~", 2) == 0)
-	{
-		path_name = get_path(*env, "HOME");
-		if (path_name == NULL)
-			return (1);
-		if (chdir(path_name) == -1)
-		{
-			perror("cd");
-			free(path_name);
-			free(cwd);
-			return (1);
-		}
-		update_pwd(env, cwd);
-	}
+		return (change_dir("HOME", env));
 	else if (ft_strncmp(cmd[1], "-", 2) == 0)
-	{
-		path_name = get_path(*env, "OLDPWD");
-		if (path_name == NULL)
-			return (1);
-		if (chdir(path_name) == -1)
-		{
-			perror("cd");
-			free(path_name);
-			free(cwd);
-			return (1);
-		}
-		update_pwd(env, cwd);
-	}
+		return (change_dir("OLDPWD", env));
 	else
 	{
+		cwd = getcwd(NULL, 0);
 		if (chdir(cmd[1]) == -1)
 		{
 			perror("cd");
@@ -119,7 +116,7 @@ int	mns_cd(char **cmd, char ***env)
 			return (1);
 		}
 		update_pwd(env, cwd);
+		free(cwd);
+		return (0);
 	}
-	free(cwd);
-	return (0);
 }
