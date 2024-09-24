@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:04:33 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/19 16:39:52 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:11:08 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,16 @@ void	free_ast(t_ast_node **node)
 
 t_ast_node	*init_node(t_ast_node_type type)
 {
-	t_ast_node *node;
+	t_ast_node	*node;
 
 	node = (t_ast_node *)malloc(sizeof(t_ast_node));
-    node->type = type;
-    node->args = NULL;
-    node->left = NULL;
-    node->right = NULL;
+	node->type = type;
+	node->args = NULL;
+	node->left = NULL;
+	node->right = NULL;
 	node->assignement = NULL;
-    node->redirection = NULL;
-    return (node);
+	node->redirection = NULL;
+	return (node);
 }
 
 void	count_redirection(t_token **tokens, int *count)
@@ -97,7 +97,6 @@ void	count_redirection(t_token **tokens, int *count)
 	}
 }
 
-
 void	count_type_token(t_token *tokens, int *count)
 {
 	t_token	*tmp;
@@ -125,16 +124,16 @@ void	init_args_input_output_file(t_ast_node **cmd, int *count)
 {
 	if (count[ARG_COUNT] != 0)
 		(*cmd)->args = (char **)ft_calloc(count[ARG_COUNT] + 1,
-			sizeof(char *));
+				sizeof(char *));
 	if (count[REDIR_COUNT] != 0)
 		(*cmd)->redirection = (t_redirection *)ft_calloc(count[REDIR_COUNT] + 1,
-			sizeof(t_redirection));
+				sizeof(t_redirection));
 	if (count[ASSIGNEMENT_COUNT] != 0)
 		(*cmd)->assignement = (char **)ft_calloc(count[ASSIGNEMENT_COUNT] + 1,
-			sizeof(char *));
+				sizeof(char *));
 }
 
-void handle_redirection(t_token **tokens, t_redirection *redirection,
+void	handle_redirection(t_token **tokens, t_redirection *redirection,
 	int *file_count, int count)
 {
 	redirection[*file_count].fd = (*tokens)->fd;
@@ -154,7 +153,7 @@ void handle_redirection(t_token **tokens, t_redirection *redirection,
 	}
 }
 
-void set_null_terminators(t_ast_node *cmd, int *count, int *counts)
+void	set_null_terminators(t_ast_node *cmd, int *count, int *counts)
 {
 	if (count[ARG_COUNT] != 0)
 		cmd->args[counts[ARG_COUNT]] = NULL;
@@ -164,7 +163,7 @@ void set_null_terminators(t_ast_node *cmd, int *count, int *counts)
 		cmd->assignement[counts[ASSIGNEMENT_COUNT]] = NULL;
 }
 
-void process_token(t_token **tokens, t_ast_node *cmd, int *count,
+void	process_token(t_token **tokens, t_ast_node *cmd, int *count,
 	int *counts)
 {
 	if ((*tokens)->type == TOKEN_WORD && count[ARG_COUNT] != 0)
@@ -175,8 +174,8 @@ void process_token(t_token **tokens, t_ast_node *cmd, int *count,
 			cmd->args[counts[ARG_COUNT]++] = NULL;
 	}
 	if ((*tokens)->type == TOKEN_ASSIGNEMENT && count[ASSIGNEMENT_COUNT] != 0)
-		cmd->assignement[counts[ASSIGNEMENT_COUNT]++] =
-			ft_strdup((*tokens)->value);
+		cmd->assignement[counts[ASSIGNEMENT_COUNT]++]
+			= ft_strdup((*tokens)->value);
 	if ((*tokens)->type == TOKEN_REDIR_IN)
 		handle_redirection(tokens, cmd->redirection,
 			&counts[REDIR_COUNT], count[REDIR_COUNT]);
@@ -191,10 +190,10 @@ void process_token(t_token **tokens, t_ast_node *cmd, int *count,
 			&counts[REDIR_COUNT], count[REDIR_COUNT]);
 }
 
-t_ast_node *parse_token(t_token **tokens, t_ast_node *cmd)
+t_ast_node	*parse_token(t_token **tokens, t_ast_node *cmd)
 {
-	int counts[3];
-	int count[3];
+	int	counts[3];
+	int	count[3];
 	int	i;
 
 	i = 0;
@@ -207,16 +206,14 @@ t_ast_node *parse_token(t_token **tokens, t_ast_node *cmd)
 	count_type_token(*tokens, count);
 	init_args_input_output_file(&cmd, count);
 	while (tokens != NULL && (*tokens)->type != TOKEN_PIPE
-		&&	(*tokens)->type != TOKEN_EOF)
+		&& (*tokens)->type != TOKEN_EOF)
 	{
 		process_token(tokens, cmd, count, counts);
 		*tokens = (*tokens)->next;
 	}
-
 	set_null_terminators(cmd, count, counts);
 	return (cmd);
 }
-
 
 t_ast_node	*parse_command(t_token **tokens)
 {

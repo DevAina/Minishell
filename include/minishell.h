@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/24 10:06:40 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:16:46 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,31 +54,31 @@ typedef struct s_data			t_data;
 */
 enum e_tokentype
 {
-    TOKEN_WORD,
-    TOKEN_ASSIGNEMENT,
-    TOKEN_PIPE,
-    TOKEN_REDIR_IN,
-    TOKEN_REDIR_OUT,
-    TOKEN_REDIR_IN_OUT,
-    TOKEN_REDIR_APPEND,
-    TOKEN_HEREDOC,
-    TOKEN_NEWLINE,
-    TOKEN_EOF
+	TOKEN_WORD,
+	TOKEN_ASSIGNEMENT,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_REDIR_IN_OUT,
+	TOKEN_REDIR_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_NEWLINE,
+	TOKEN_EOF
 };
 
 struct	s_token
 {
-    t_tokentype		type;
-    char			*value;
-    int				fd;
-    struct s_token	*next;
+	t_tokentype		type;
+	char			*value;
+	int				fd;
+	struct s_token	*next;
 };
 
 /*structure for AST*/
-enum    e_ast_node_type
+enum	e_ast_node_type
 {
-    AST_COMMAND = 0,
-    AST_PIPE = 1
+	AST_COMMAND = 0,
+	AST_PIPE = 1
 };
 
 enum	e_type_redirection
@@ -89,23 +89,21 @@ enum	e_type_redirection
 	REDIRECTION_HEREDOC = 3,
 };
 
-
-struct s_redirection
+struct	s_redirection
 {
 	t_type_redirection		type_redirection;
 	int						fd;
 	char					*target;
 };
 
-
-struct s_ast_node
+struct	s_ast_node
 {
-    t_ast_node_type     type;
-    char                **args;
-    char                **assignement;
+	t_ast_node_type		type;
+	char				**args;
+	char				**assignement;
 	t_redirection		*redirection;
-    struct s_ast_node   *left;
-    struct s_ast_node   *right;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
 };
 
 struct s_data
@@ -122,53 +120,53 @@ struct s_data
 };
 
 /***built_in**/
-int		mns_cd(char **cmd, char ***env);
+int			mns_cd(char **cmd, char ***env);
 
 /******utils********/
-int		mns_strcmp(char *s1, char *s2);
-t_list	*get_env_lst(char **envp);
-void	free_env_lst(t_list *env_lst);
+int			mns_strcmp(char *s1, char *s2);
+t_list		*get_env_lst(char **envp);
+void		free_env_lst(t_list *env_lst);
 
 /**********AST*******/
 
 t_ast_node	*parse(t_token *tokens);
-void        free_token(t_token *token);
-t_token     *lexer(char *input);
-void        free_ast(t_ast_node **node);
+void		free_token(t_token *token);
+t_token		*lexer(char *input);
+void		free_ast(t_ast_node **node);
 
 //utils for exec
-int		check_redirection_exec(t_ast_node *ast, char **envp);
-char	**find_path_list(char **env);
-char	*find_path(char **path_list, char *cmd);
-void	free_split(char **str);
-void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag);
-void	executor(char **envp, t_ast_node *ast, int *flag);
+int			check_redirection_exec(t_ast_node *ast, char **envp);
+char		**find_path_list(char **env);
+char		*find_path(char **path_list, char *cmd);
+void		free_split(char **str);
+void		exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag);
+void		executor(char **envp, t_ast_node *ast, int *flag);
 /*****expander*******/
-int		get_var_name_length(char *str);
-char	*get_env_value(char *var, char **env);
-char	*str_append(char *str, char *append);
-char	*char_append(char *str, char c);
-char	*expand_env_var(char *var_name, char **env);
-char	*expand_special_char(char *str, char **env, int *i, int exit_status);
-char	*expand_token(char *str, char **env, int exit_status);
-void	expand_tokens(t_token *tokens, char **env, int exit_status);
+int			get_var_name_length(char *str);
+char		*get_env_value(char *var, char **env);
+char		*str_append(char *str, char *append);
+char		*char_append(char *str, char c);
+char		*expand_env_var(char *var_name, char **env);
+char		*expand_special_char(char *str, char **env, int *i,
+				int exit_status);
+char		*expand_token(char *str, char **env, int exit_status);
+void		expand_tokens(t_token *tokens, char **env, int exit_status);
 
 /********Analyze tokens********/
-int		analyze_tokens(t_token *tokens, char **env, int exit_status);
+int			analyze_tokens(t_token *tokens, char **env, int exit_status);
 
 //built in cmd
-int		ft_pwd(char **args, char **env);
-int		ft_echo(char **args);
-int		ft_env(char **env, char **cmd);
-int		ft_export(char **cmd, char **assignement, char ***env);
-char	**cpy_env(char **env);
-t_list	*get_env_lst(char **envp);
-char	**list_to_tab(t_list *env_lst);
-int		ft_unset(char **cmd, char ***env);
-int		ft_exit(char **cmd, t_ast_node *ast, char **envp);
+int			ft_pwd(char **args, char **env);
+int			ft_echo(char **args);
+int			ft_env(char **env, char **cmd);
+int			ft_export(char **cmd, char **assignement, char ***env);
+char		**cpy_env(char **env);
+t_list		*get_env_lst(char **envp);
+char		**list_to_tab(t_list *env_lst);
+int			ft_unset(char **cmd, char ***env);
+int			ft_exit(char **cmd, t_ast_node *ast, char **envp);
 /********/
-void    handler_sigint(int sig);
-void	remove_one(t_list **env_lst, char *to_remove);
-
-char	*get_var_value(char *var);
+void		handler_sigint(int sig);
+void		remove_one(t_list **env_lst, char *to_remove);	
+char		*get_var_value(char *var);
 #endif

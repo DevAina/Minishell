@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/17 13:44:19 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/24 14:53:38 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	free_token(t_token *token)
 {
-	if (token == NULL)
-		return ;
 	t_token	*tmp;
 
+	if (token == NULL)
+		return ;
 	while (token != NULL)
 	{
 		tmp = token;
@@ -30,7 +30,7 @@ void	free_token(t_token *token)
 
 int	is_valid_var_char(char c)
 {
-	if (ft_isalnum(c) || c== '_')
+	if (ft_isalnum(c) || c == '_')
 		return (1);
 	return (0);
 }
@@ -80,14 +80,14 @@ int	mns_is_space(char c)
 	return (0);
 }
 
-int is_special_char(char c)
+int	is_special_char(char c)
 {
 	if (c == '|' || c == '<' || c == '>' || c == ' ')
 		return (1);
 	return (0);
 }
 
-static void	block_if_for_get_len_word(char *input, int index, 
+static	void	block_if_for_get_len_word(char *input, int index,
 	int	*in_quotes, char *type_quotes)
 {
 	if (!*in_quotes)
@@ -145,8 +145,8 @@ int	get_fd(char *input, int *index)
 	int	fd;
 
 	fd = -1;
-	if (ft_isdigit(input[*index]) && (input[*index + 1] == '>' ||
-		input[*index + 1] == '<'))
+	if (ft_isdigit(input[*index]) && (input[*index + 1] == '>'
+			|| input[*index + 1] == '<'))
 	{
 		fd = ft_atoi(input + *index);
 		*index += 1;

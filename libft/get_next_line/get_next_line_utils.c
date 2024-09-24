@@ -6,7 +6,7 @@
 /*   By: traveloa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 08:44:13 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/03 13:06:34 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:12:41 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ char	*gnl_ft_strjoin(char *s1, char *s2)
 	unsigned int	i;
 	unsigned int	j;
 
-	str = gnl_ft_calloc((gnl_ft_strlen(s1) + gnl_ft_strlen(s2) + 1), sizeof(char));
+	str = gnl_ft_calloc((gnl_ft_strlen(s1) + gnl_ft_strlen(s2) + 1),
+			sizeof(char));
 	if (!str)
 		return (0);
 	i = 0;
