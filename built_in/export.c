@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/18 07:45:24 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 09:45:20 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,15 @@ void	sort_env_lst(t_list	**env_lst)
 	}
 }
 
+void	print_var_value(char *value, int i, t_list *env_lst)
+{
+	ft_putchar_fd(value[i], 1);
+	i++;
+	ft_putchar_fd('"', 1);
+	ft_putstr_fd((char *)env_lst->content + i, 1);
+	ft_putchar_fd('"', 1);
+}
+
 void	print_export(t_list *env_lst)
 {
 	int		i;
@@ -66,13 +75,7 @@ void	print_export(t_list *env_lst)
 			i++;
 		}
 		if (tmp[i])
-		{
-			ft_putchar_fd(tmp[i], 1);
-			i++;
-			ft_putchar_fd('"', 1);
-			ft_putstr_fd((char *)env_lst->content + i, 1);
-			ft_putchar_fd('"', 1);
-		}
+			print_var_value(tmp, i, env_lst);
 		ft_putstr_fd("\n", 1);
 		env_lst = env_lst->next;
 	}
@@ -191,14 +194,49 @@ char	*get_var_value(char *var)
 	return (value);
 }
 
-void	add_new_var(t_list *env_lst, char *var)
+void	concatenate_var(t_list *env_lst, char *tmp, char *var_value
+			, char *var_name)
 {
-	char	*var_name;
+	while (env_lst)
+	{
+		tmp = get_var_name((char *)env_lst->content);
+		if (ft_strncmp(var_name, tmp, ft_strlen(var_name)) == 0)
+		{
+			free(tmp);
+			tmp = (char *)env_lst->content;
+			env_lst->content = ft_strjoin(tmp, var_value);
+			free(tmp);
+			break ;
+		}
+		free(tmp);
+		env_lst = env_lst->next;
+	}
+}
+
+void	handle_var_concatenation(t_list *env_lst, char *var_name
+			, char *var_value)
+{
 	char	*tmp;
-	char	*var_value;
 	t_list	*head;
 
 	head = env_lst;
+	tmp = NULL;
+	concatenate_var(env_lst, tmp, var_value, var_name);
+	if (env_lst == NULL)
+	{
+		tmp = ft_strjoin(var_name, "=");
+		free(var_name);
+		var_name = ft_strjoin(tmp, var_value);
+		add_to_env_lst(head, var_name);
+		free(tmp);
+	}
+}
+
+void	add_new_var(t_list *env_lst, char *var)
+{
+	char	*var_name;
+	char	*var_value;
+
 	var_name = get_var_name(var);
 	if (ft_strchr(var, '+') == NULL)
 	{
@@ -208,28 +246,7 @@ void	add_new_var(t_list *env_lst, char *var)
 	else
 	{
 		var_value = get_var_value(var);
-		while (env_lst)
-		{
-			tmp = get_var_name((char *)env_lst->content);
-			if (ft_strncmp(var_name, tmp, ft_strlen(var_name)) == 0)
-			{
-				free(tmp);
-				tmp = (char *)env_lst->content;
-				env_lst->content = ft_strjoin(tmp, var_value);
-				free(tmp);
-				break ;
-			}
-			free(tmp);
-			env_lst = env_lst->next;
-		}
-		if (env_lst == NULL)
-		{
-			tmp = ft_strjoin(var_name, "=");
-			free(var_name);
-			var_name = ft_strjoin(tmp, var_value);
-			add_to_env_lst(head, var_name);
-			free(tmp);
-		}
+		handle_var_concatenation(env_lst, var_name, var_value);
 		free(var_value);
 	}
 	free(var_name);

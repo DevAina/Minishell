@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/20 10:41:29 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 10:06:40 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,4 +170,5 @@ int		ft_exit(char **cmd, t_ast_node *ast, char **envp);
 void    handler_sigint(int sig);
 void	remove_one(t_list **env_lst, char *to_remove);
 
+char	*get_var_value(char *var);
 #endif

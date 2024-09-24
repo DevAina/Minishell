@@ -6,13 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 09:42:10 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/17 13:09:47 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 08:59:34 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int		opt_cmp(char *str)
+int	opt_cmp(char *str)
 {
 	int		i;
 
@@ -27,7 +27,7 @@ int		opt_cmp(char *str)
 		return (0);
 }
 
-int		ft_echo(char **args)
+int	ft_echo(char **args)
 {
 	int	opt;
 	int	i;

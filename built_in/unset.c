@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 11:04:05 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/16 08:48:43 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/24 08:59:52 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	remove_one(t_list **env_lst, char *to_remove)
 		remove_one(&tmp->next, to_remove);
 }
 
-int		ft_unset(char **cmd, char ***env)
+int	ft_unset(char **cmd, char ***env)
 {
 	t_list	*env_lst;
 	int		i;
