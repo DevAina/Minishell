@@ -3,7 +3,7 @@ NAME = minishell
 FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline -g
 
 BUILT_IN = ./built_in/cd.c ./built_in/export.c ./built_in/pwd.c ./built_in/echo.c \
-		./built_in/env.c ./built_in/unset.c ./built_in/exit.c
+		./built_in/env.c ./built_in/unset.c ./built_in/exit.c ./built_in/export_utils.c
 
 LEXER = ./src/lexer/tokenizer.c 
 
@@ -13,7 +13,7 @@ EXPANDER = ./src/expander/expander.c
 
 PARSER = ./src/parser/parse_input.c
 
-UTILS = ./src/utils/mns_utils.c
+UTILS = ./src/utils/mns_utils.c ./src/utils/env_utils.c
 
 SRCS =  ${LEXER} ${CHECK_TOKENS} ${EXPANDER} ${PARSER} ${UTILS} ${BUILT_IN} \
 		./src/main.c ./src/exec.c ./src/exec_utils.c
