@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:49:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/24 14:53:38 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/25 11:42:07 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ t_token	*get_next_token(char *input, int *index)
 	else if (input[*index] == '\n')
 		return (create_token(TOKEN_NEWLINE, "\n", index, fd));
 	else if (input[*index] == '\0')
-		return (create_token(TOKEN_NEWLINE, "\0", index, fd));
+		return (create_token(TOKEN_EOF, "\0", index, fd));
 	else
 		return (get_token_word(input, index));
 }
@@ -198,19 +198,17 @@ void	block_if_for_lexer(t_token **current, t_token **head
 	}
 }
 
-/**Function for analyzing the input**/
 t_token	*lexer(char *input)
 {
 	t_token	*head;
 	t_token	*current;
 	t_token	*new_token;
 	int		i;
-	int		len;
 
 	head = NULL;
+	current = NULL;
 	i = 0;
-	len = ft_strlen(input);
-	while (i < len)
+	while (i < (int)ft_strlen(input))
 	{
 		if (mns_is_space(input[i]))
 		{
@@ -223,7 +221,7 @@ t_token	*lexer(char *input)
 		block_if_for_lexer(&current, &head, new_token);
 	}
 	if (current == NULL)
-		return (head);
+		return (NULL);
 	current->next = create_token(TOKEN_EOF, "\0", &i, -1);
 	return (head);
 }
