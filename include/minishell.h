@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/24 15:16:46 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/25 09:04:53 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,19 @@ struct s_data
 	int					fd_tmp;
 };
 
+/******env utils*****/
+char		**cpy_env(char **env);
+char		**list_to_tab(t_list *env_lst);
+void		sort_env_lst(t_list	**env_lst);
+t_list		*get_env_lst(char **envp);
 /***built_in**/
 int			mns_cd(char **cmd, char ***env);
-
+/***export utils***/
+void		print_export(t_list *env_lst);
+void		print_var_value(char *value, int i, t_list *env_lst);
+int			check_var_name(char *name);
+char		*get_var_name(char *var);
+char		*get_var_value(char *var);
 /******utils********/
 int			mns_strcmp(char *s1, char *s2);
 t_list		*get_env_lst(char **envp);

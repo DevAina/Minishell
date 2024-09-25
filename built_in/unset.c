@@ -6,11 +6,21 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 11:04:05 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/24 08:59:52 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/25 09:02:44 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	var_len(char *var)
+{
+	int	i;
+
+	i = 0;
+	while (var[i] && var[i] != '=')
+		i++;
+	return (i);
+}
 
 void	remove_one(t_list **env_lst, char *to_remove)
 {
@@ -18,14 +28,12 @@ void	remove_one(t_list **env_lst, char *to_remove)
 	int		len;
 	char	*content;
 
-	len = 0;
 	tmp = *env_lst;
 	if (tmp == NULL || to_remove == NULL)
 		return ;
 	content = (char *)tmp->content;
-	while (content[len] != '=' && content[len])
-		len++;
-	if (ft_strncmp(to_remove, (char *)tmp->content, len) == 0)
+	len = var_len(content);
+	if (ft_strncmp(to_remove, (char *)tmp->content, len + 1) == 0)
 	{
 		*env_lst = tmp->next;
 		free(tmp->content);

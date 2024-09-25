@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/24 11:24:12 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/25 08:55:54 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int	main(int argc, char **argv, char **env)
 	init_data(&data, env);
 	while (1)
 	{
-		data.line = readline(YELLOW"minishell$ "RESET);
+		data.line = readline("minishell$ ");
 		if (data.line == NULL)
 		{
 			ft_putendl_fd(CYAN"Exit"RESET, 1);
