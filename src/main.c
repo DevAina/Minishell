@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/25 08:55:54 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/25 11:45:03 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,14 +147,24 @@ int	check_built_in(t_ast_node *ast)
 		return (0);
 }
 
-void	process_line(t_data *data)
+void	uptdate_history(t_data *data)
 {
 	add_history(data->line);
 	data->hist_fd = open(".history_file", O_WRONLY | O_CREAT | O_APPEND, 0777);
 	ft_putendl_fd(data->line, data->hist_fd);
 	if (data->hist_fd != -1)
 		close(data->hist_fd);
+}
+
+void	process_line(t_data *data)
+{
+	uptdate_history(data);
 	data->token = lexer(data->line);
+	if (data->token == NULL)
+	{
+		data->ast = NULL;
+		return ;
+	}
 	if (analyze_tokens(data->token, data->envp, g_exit_status) == 0)
 	{
 		unlink(".tmp");
@@ -205,6 +215,7 @@ int	main(int argc, char **argv, char **env)
 		free_ast(&data.ast);
 		unlink(".tmp");
 		free(data.line);
+		data.ast = NULL;
 	}
 	rl_clear_history();
 	free_split(data.envp);
