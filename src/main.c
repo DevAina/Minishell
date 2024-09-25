@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/25 11:45:03 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:27:45 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&data, env);
+	ft_putstr_fd("\033]2;Mofo akondro\007", STDIN_FILENO);
 	while (1)
 	{
 		data.line = readline("minishell$ ");
