@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 07:23:35 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 08:11:44 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
-
 
 /******env utils*****/
 char		**cpy_env(char **env);
@@ -55,8 +54,10 @@ char		*find_path(char **path_list, char *cmd);
 void		free_split(char **str);
 void		exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag);
 void		executor(char **envp, t_ast_node *ast, int *flag);
-int			check_n_exec_built_in1(char **cmd, char **env, t_ast_node *ast);
-int			check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast);
+int			check_n_exec_built_in1(char **cmd, char **env,
+				t_ast_node *ast, int *flag);
+int			check_n_exec_built_in(char **cmd, char **env,
+				t_ast_node *ast, int *flag);
 char		**check_void_cmd(char **cmd, char **envp, t_ast_node *ast);
 void		execute(t_ast_node *ast, char **envp, char **cmd, int *flag);
 //built in cmd
@@ -68,7 +69,7 @@ char		**cpy_env(char **env);
 t_list		*get_env_lst(char **envp);
 char		**list_to_tab(t_list *env_lst);
 int			ft_unset(char **cmd, char ***env);
-int			ft_exit(char **cmd, t_ast_node *ast, char **envp);
+int			ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag);
 /********/
 void		handler_sigint(int sig);
 void		remove_one(t_list **env_lst, char *to_remove);	
