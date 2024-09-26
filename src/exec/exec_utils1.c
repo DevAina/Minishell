@@ -6,52 +6,58 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 07:22:36 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 08:09:12 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	check_n_exec_built_in1(char **cmd, char **env, t_ast_node *ast)
+int	check_n_exec_built_in1(char **cmd, char **env, t_ast_node *ast, int *flag)
 {
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
 	{
 		ft_export(cmd, ast->assignement, &env);
+		*flag = 0;
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "cd", 3) == 0)
 	{
 		mns_cd(cmd, &env);
+		*flag = 0;
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 	{
 		ft_unset(cmd, &env);
+		*flag = 0;
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 	{
 		ft_env(env, cmd);
+		*flag = 0;
 		return (1);
 	}
 	return (0);
 }
 
-int	check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast)
+int	check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast, int *flag)
 {
 	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
 	{
 		ft_pwd(cmd, env);
+		*flag = 0;
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
 	{
 		ft_echo(cmd);
+		*flag = 0;
 		return (1);
 	}
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
 	{
-		ft_exit(cmd, ast, env);
+		*flag = ft_exit(cmd, ast, env, 0);
 		return (1);
 	}
 	return (0);

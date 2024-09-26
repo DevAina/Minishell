@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:13:33 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 07:22:22 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 08:10:13 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,3 @@ int	check_redirection_exec(t_ast_node *ast, char **envp)
 	}
 	return (0);
 }
-
-

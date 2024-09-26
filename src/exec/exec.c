@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 07:23:21 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 08:07:56 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,9 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag)
 		check_redirection_exec(ast, envp);
 	if (ast->args == NULL)
 		return ;
-	if (check_n_exec_built_in(tmp, envp, ast) == 1
-		|| check_n_exec_built_in1(tmp, envp, ast) == 1)
-	{
-		*flag = 0;
+	if (check_n_exec_built_in(tmp, envp, ast, flag) == 1
+		|| check_n_exec_built_in1(tmp, envp, ast, flag) == 1)
 		return ;
-	}
 	execute(ast, envp, cmd, flag);
 }
 

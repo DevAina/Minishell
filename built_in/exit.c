@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 10:17:50 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/24 09:10:41 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 08:04:51 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	get_exit_status(int *status, char **cmd)
 	}
 }
 
-int	ft_exit(char **cmd, t_ast_node *ast, char **envp)
+int	ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag)
 {
 	int	status;
 
@@ -47,8 +47,11 @@ int	ft_exit(char **cmd, t_ast_node *ast, char **envp)
 		status = ft_atoi(cmd[1]);
 		get_exit_status(&status, cmd);
 	}
-	free_ast(&ast);
-	free_split(envp);
-	exit(status);
-	return (EXIT_SUCCESS);
+	if (flag == 1)
+	{
+		free_ast(&ast);
+		free_split(envp);
+		exit(status);
+	}
+	return (status);
 }

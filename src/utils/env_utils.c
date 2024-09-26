@@ -6,7 +6,7 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 07:57:31 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/25 08:01:39 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 08:10:39 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,3 @@ char	**cpy_env(char **env)
 	env_cpy[i] = NULL;
 	return (env_cpy);
 }
-

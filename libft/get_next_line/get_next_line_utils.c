@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: traveloa <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/15 08:44:13 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/24 12:12:41 by traveloa         ###   ########.fr       */
+/*   Created: 2024/09/26 08:12:34 by traveloa          #+#    #+#             */
+/*   Updated: 2024/09/26 08:12:36 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
