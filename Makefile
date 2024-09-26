@@ -17,8 +17,10 @@ PARSER = ./src/parser/free_ast.c ./src/parser/init_utils.c ./src/parser/parse_ut
 
 UTILS = ./src/utils/mns_utils.c ./src/utils/env_utils.c
 
-SRCS =  ${LEXER} ${CHECK_TOKENS} ${EXPANDER} ${PARSER} ${UTILS} ${BUILT_IN} \
-		./src/main.c ./src/exec.c ./src/exec_utils.c
+EXEC = ./src/exec/exec.c ./src/exec/exec_redir.c ./src/exec/exec_utils.c ./src/exec/exec_utils1.c
+
+SRCS =  ${LEXER} ${CHECK_TOKENS} ${EXPANDER} ${PARSER} ${UTILS} ${BUILT_IN}  ${EXEC}\
+		./src/main.c
 
 OBJS = ${SRCS:.c=.o}
 

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 07:07:30 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 07:23:35 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <stdlib.h>
+# include <unistd.h>
+
 
 /******env utils*****/
 char		**cpy_env(char **env);
@@ -52,7 +55,10 @@ char		*find_path(char **path_list, char *cmd);
 void		free_split(char **str);
 void		exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag);
 void		executor(char **envp, t_ast_node *ast, int *flag);
-
+int			check_n_exec_built_in1(char **cmd, char **env, t_ast_node *ast);
+int			check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast);
+char		**check_void_cmd(char **cmd, char **envp, t_ast_node *ast);
+void		execute(t_ast_node *ast, char **envp, char **cmd, int *flag);
 //built in cmd
 int			ft_pwd(char **args, char **env);
 int			ft_echo(char **args);
