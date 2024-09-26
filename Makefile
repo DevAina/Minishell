@@ -5,22 +5,26 @@ FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline -g
 BUILT_IN = ./built_in/cd.c ./built_in/export.c ./built_in/pwd.c ./built_in/echo.c \
 		./built_in/env.c ./built_in/unset.c ./built_in/exit.c ./built_in/export_utils.c
 
-LEXER = ./src/lexer/tokenizer.c ./src/lexer/token_creation.c ./src/lexer/token_utils.c \
-		./src/lexer/fd_handling.c
+LEXER = ./srcs/lexer/tokenizer.c ./srcs/lexer/token_creation.c ./srcs/lexer/token_utils.c \
+		./srcs/lexer/fd_handling.c
 
-CHECK_TOKENS = ./src/check_tokens/handle_heredoc.c ./src/check_tokens/utils.c ./src/check_tokens/analyze_tokens.c
+CHECK_TOKENS = ./srcs/check_tokens/handle_heredoc.c ./srcs/check_tokens/utils.c ./srcs/check_tokens/analyze_tokens.c
 
-EXPANDER = ./src/expander/expander.c ./src/expander/expand_helpers.c ./src/expander/expander_utils.c
+EXPANDER = ./srcs/expander/expander.c ./srcs/expander/expand_helpers.c ./srcs/expander/expander_utils.c
 
-PARSER = ./src/parser/free_ast.c ./src/parser/init_utils.c ./src/parser/parse_utils.c ./src/parser/parse.c \
-			./src/parser/redirection_utils.c
+HANDLE_INPUT = ./srcs/handle_input/process_line_utils.c
 
-UTILS = ./src/utils/mns_utils.c ./src/utils/env_utils.c
+INIT = ./srcs/init/init_data.c
 
-EXEC = ./src/exec/exec.c ./src/exec/exec_redir.c ./src/exec/exec_utils.c ./src/exec/exec_utils1.c
+PARSER = ./srcs/parser/free_ast.c ./srcs/parser/init_utils.c ./srcs/parser/parse_utils.c ./srcs/parser/parse.c \
+			./srcs/parser/redirection_utils.c
+
+UTILS = ./srcs/utils/mns_utils.c ./srcs/utils/env_utils.c
+
+EXEC = ./srcs/exec/exec.c ./srcs/exec/exec_redir.c ./srcs/exec/exec_utils.c ./srcs/exec/exec_utils1.c
 
 SRCS =  ${LEXER} ${CHECK_TOKENS} ${EXPANDER} ${PARSER} ${UTILS} ${BUILT_IN}  ${EXEC}\
-		./src/main.c
+		${HANDLE_INPUT} ${INIT} ./srcs/main.c
 
 OBJS = ${SRCS:.c=.o}
 

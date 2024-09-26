@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
+/*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 11:04:05 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 07:10:46 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 10:34:28 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../includes/minishell.h"
 
 int	lst_srch_var(t_list *lst, char *var_name)
 {

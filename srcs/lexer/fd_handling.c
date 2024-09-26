@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   fd_handling.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 08:11:34 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 10:34:22 by trarijam         ###   ########.fr       */
+/*   Created: 2024/09/25 13:55:11 by trarijam          #+#    #+#             */
+/*   Updated: 2024/09/26 10:35:35 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int	ft_pwd(char **args, char **env)
+int	get_fd(char *input, int *index)
 {
-	int		i;
-	char	**pwd;
+	int	fd;
 
-	(void)args;
-	i = 0;
-	while (ft_strnstr(env[i], "PWD", 3) == 0)
-		i++;
-	pwd = ft_split(env[i], '=');
-	ft_putendl_fd(pwd[1], 1);
-	free_split(pwd);
-	return (EXIT_SUCCESS);
+	fd = -1;
+	if (ft_isdigit(input[*index]) && (input[*index + 1] == '>'
+			|| input[*index + 1] == '<'))
+	{
+		fd = ft_atoi(input + *index);
+		*index += 1;
+	}
+	return (fd);
 }
