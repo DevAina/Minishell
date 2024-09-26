@@ -6,41 +6,51 @@
 /*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 11:04:05 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/25 09:02:44 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 07:10:46 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	var_len(char *var)
+int	lst_srch_var(t_list *lst, char *var_name)
 {
-	int	i;
+	char	*tmp;
 
-	i = 0;
-	while (var[i] && var[i] != '=')
-		i++;
-	return (i);
+	while (lst)
+	{
+		tmp = get_var_name((char *)lst->content);
+		if (mns_strcmp(tmp, var_name) == 0)
+		{
+			free (tmp);
+			return (1);
+		}
+		free (tmp);
+		lst = lst->next;
+	}
+	return (0);
 }
 
 void	remove_one(t_list **env_lst, char *to_remove)
 {
 	t_list	*tmp;
-	int		len;
 	char	*content;
 
 	tmp = *env_lst;
 	if (tmp == NULL || to_remove == NULL)
 		return ;
-	content = (char *)tmp->content;
-	len = var_len(content);
-	if (ft_strncmp(to_remove, (char *)tmp->content, len + 1) == 0)
+	content = get_var_name((char *)tmp->content);
+	if (mns_strcmp(to_remove, content) == 0)
 	{
 		*env_lst = tmp->next;
+		free(content);
 		free(tmp->content);
 		free(tmp);
 	}
 	else
+	{
+		free (content);
 		remove_one(&tmp->next, to_remove);
+	}
 }
 
 int	ft_unset(char **cmd, char ***env)

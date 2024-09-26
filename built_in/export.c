@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/25 09:03:11 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/26 07:09:07 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	handle_var_concatenation(t_list *env_lst, char *var_name
 	}
 }
 
-void	add_new_var(t_list *env_lst, char *var)
+void	add_new_var(t_list *env_lst, char *var, int flag)
 {
 	char	*var_name;
 	char	*var_value;
@@ -62,10 +62,15 @@ void	add_new_var(t_list *env_lst, char *var)
 		handle_var_concatenation(env_lst, var_name, var_value);
 		free(var_value);
 	}
-	else
+	else if (flag == 0)
 	{
 		remove_one(&env_lst, var_name);
 		ft_lstadd_back(&env_lst, ft_lstnew((void *)ft_strdup(var)));
+	}
+	else if (flag == 1)
+	{
+		if (lst_srch_var(env_lst, var_name) == 0)
+			ft_lstadd_back(&env_lst, ft_lstnew((void *)ft_strdup(var)));
 	}
 	free(var_name);
 }
@@ -86,7 +91,7 @@ void	export_assignement(char **assignement, t_list *env_lst, int	*status,
 			j++;
 			continue ;
 		}
-		add_new_var(env_lst, assignement[j]);
+		add_new_var(env_lst, assignement[j], flag);
 		j++;
 	}
 }
