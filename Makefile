@@ -12,7 +12,7 @@ CHECK_TOKENS = ./srcs/check_tokens/handle_heredoc.c ./srcs/check_tokens/utils.c 
 
 EXPANDER = ./srcs/expander/expander.c ./srcs/expander/expand_helpers.c ./srcs/expander/expander_utils.c
 
-HANDLE_INPUT = ./srcs/handle_input/process_line_utils.c
+HANDLE_INPUT = ./srcs/handle_input/process_line_utils.c ./srcs/handle_input/pre_expand.c
 
 INIT = ./srcs/init/init_data.c
 
