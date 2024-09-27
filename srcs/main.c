@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/27 11:36:45 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/27 16:08:49 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	process_line(t_data *data)
 
 	uptdate_history(data);
 	line_expanded = expand_line(data->line, data->envp, g_exit_status);
-	printf("[%s]\n\n", line_expanded);
 	data->token = lexer(line_expanded);
 	if (data->token == NULL)
 	{

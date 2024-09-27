@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 08:11:34 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 10:34:22 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/27 16:08:15 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,17 @@
 
 int	ft_pwd(char **args, char **env)
 {
-	int		i;
-	char	**pwd;
+	char	*pwd;
 
 	(void)args;
-	i = 0;
-	while (ft_strnstr(env[i], "PWD", 3) == 0)
-		i++;
-	pwd = ft_split(env[i], '=');
-	ft_putendl_fd(pwd[1], 1);
-	free_split(pwd);
+	(void)env;
+	pwd = getcwd(NULL, 0);
+	if (pwd)
+	{
+		ft_putendl_fd(pwd, 1);
+		free(pwd);
+	}
+	else
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
