@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/27 16:08:49 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/27 16:15:05 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,10 @@ void	wait_child_process(t_data *data)
 
 void	process_line(t_data *data)
 {
-	char	*line_expanded;
+	t_token		*expanded;
 
 	uptdate_history(data);
-	line_expanded = expand_line(data->line, data->envp, g_exit_status);
-	data->token = lexer(line_expanded);
+	data->token = lexer(data->line);
 	if (data->token == NULL)
 	{
 		data->ast = NULL;
@@ -73,14 +72,13 @@ void	process_line(t_data *data)
 	if (analyze_tokens(data->token, data->envp, g_exit_status) == 0)
 	{
 		unlink(".tmp");
-		free(line_expanded);
 		free_token(data->token);
 		return ;
 	}
-	free(line_expanded);
-	expand_tokens(data->token, data->envp, g_exit_status);
-	data->ast = parse(data->token);
+	expanded = expand_tokens(data->token, data->envp, g_exit_status);
 	free_token(data->token);
+	data->ast = parse(expanded);
+	free_token(expanded);
 	if (data->ast->type == AST_COMMAND && data->ast->args != NULL
 		&& data->ast->args[0] == NULL)
 		return ;
