@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_expand.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: traveloa <traveloa@student.42antananarivo  +#+  +:+       +#+        */
+/*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:24:19 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/27 11:30:22 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/27 12:41:43 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
