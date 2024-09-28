@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/27 16:15:05 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:15:58 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	handle_built_in_cmd(t_data *data, t_ast_node *ast, char ***envp)
 	if (ft_strncmp(ast->args[0], "cd", 3) == 0)
 		g_exit_status = mns_cd(ast->args, envp);
 	else if (ft_strncmp(ast->args[0], "export", 7) == 0)
-		g_exit_status = ft_export(ast->args, ast->assignement, envp);
+		g_exit_status = ft_export(ast->args, envp);
 	else if (ft_strncmp(ast->args[0], "unset", 6) == 0)
 		g_exit_status = ft_unset(ast->args, envp);
 	else if (ft_strncmp(ast->args[0], "exit", 5) == 0)

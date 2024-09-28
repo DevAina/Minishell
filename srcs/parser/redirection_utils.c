@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:38:09 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:36:03 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:22:47 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	count_type_token(t_token *tokens, int *count)
 	{
 		if (tmp->type == TOKEN_WORD)
 			count[ARG_COUNT] += 1;
-		if (tmp->type == TOKEN_ASSIGNEMENT)
-			count[ASSIGNEMENT_COUNT] += 1;
 		if (tmp->type == TOKEN_REDIR_IN_OUT)
 		{
 			tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:12:30 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/25 17:18:52 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:25:04 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # define RESET "\033[0m"
 # define REDIR_COUNT 0
 # define ARG_COUNT 1
-# define ASSIGNEMENT_COUNT 2
 
 typedef enum e_tokentype		t_tokentype;
 typedef struct s_token			t_token;
@@ -39,7 +38,6 @@ typedef struct s_data			t_data;
 enum e_tokentype
 {
 	TOKEN_WORD,
-	TOKEN_ASSIGNEMENT,
 	TOKEN_PIPE,
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
@@ -84,7 +82,6 @@ struct	s_ast_node
 {
 	t_ast_node_type		type;
 	char				**args;
-	char				**assignement;
 	t_redirection		*redirection;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:36:37 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:35:51 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:23:26 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_ast_node	*init_node(t_ast_node_type type)
 	node->args = NULL;
 	node->left = NULL;
 	node->right = NULL;
-	node->assignement = NULL;
 	node->redirection = NULL;
 	return (node);
 }
@@ -34,7 +33,4 @@ void	init_args_input_output_file(t_ast_node **cmd, int *count)
 	if (count[REDIR_COUNT] != 0)
 		(*cmd)->redirection = (t_redirection *)ft_calloc(count[REDIR_COUNT] + 1,
 				sizeof(t_redirection));
-	if (count[ASSIGNEMENT_COUNT] != 0)
-		(*cmd)->assignement = (char **)ft_calloc(count[ASSIGNEMENT_COUNT] + 1,
-				sizeof(char *));
 }

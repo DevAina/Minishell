@@ -6,17 +6,17 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/28 08:12:24 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:21:16 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	check_n_exec_built_in1(char **cmd, char **env, t_ast_node *ast, int *flag)
+int	check_n_exec_built_in1(char **cmd, char **env, int *flag)
 {
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
 	{
-		ft_export(cmd, ast->assignement, &env);
+		ft_export(cmd, &env);
 		*flag = 0;
 		return (1);
 	}
@@ -95,10 +95,8 @@ void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 	free_split(path_list);
 	if (path == NULL)
 	{
-		//ft_putstr_fd(RED, 2);
 		ft_putstr_fd(cmd[0], 2);
 		ft_putstr_fd(" : command not found\n", 2);
-		//ft_putstr_fd(RESET, 2);
 		*flag = 127;
 		return ;
 	}
