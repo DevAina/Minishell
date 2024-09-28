@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 10:35:03 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 08:12:24 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast, int *flag)
 	}
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
 	{
-		ft_echo(cmd);
+		ft_echo(ast);
 		*flag = 0;
 		return (1);
 	}
@@ -95,10 +95,10 @@ void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 	free_split(path_list);
 	if (path == NULL)
 	{
-		ft_putstr_fd(RED, 2);
+		//ft_putstr_fd(RED, 2);
 		ft_putstr_fd(cmd[0], 2);
 		ft_putstr_fd(" : command not found\n", 2);
-		ft_putstr_fd(RESET, 2);
+		//ft_putstr_fd(RESET, 2);
 		*flag = 127;
 		return ;
 	}

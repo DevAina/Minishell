@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:33:45 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 07:36:16 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	mns_cd(char **cmd, char ***env)
 
 	if (cmd[1] && cmd[2])
 	{
-		ft_putendl_fd("too many arguments", 2);
+		ft_putendl_fd(" too many arguments", 2);
 		return (1);
 	}
 	if (!cmd[1] || ft_strncmp(cmd[1], "~", 2) == 0)

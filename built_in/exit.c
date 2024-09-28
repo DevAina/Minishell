@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 10:17:50 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 10:34:05 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 07:37:33 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	get_exit_status(int *status, char **cmd)
 			i++;
 		if (cmd[1][i] < '0' || cmd[1][i] > '9')
 		{
-			ft_putstr_fd("numeric argument requiered\n", 2);
+			ft_putstr_fd(" numeric argument required\n", 2);
 			*status = 2;
 			break ;
 		}
@@ -38,7 +38,7 @@ int	ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag)
 	status = 0;
 	if (cmd[1] && cmd[2])
 	{
-		ft_putstr_fd("too many arguments\n", 2);
+		ft_putstr_fd(" too many arguments\n", 2);
 		return (EXIT_FAILURE);
 	}
 	if (cmd[1])
