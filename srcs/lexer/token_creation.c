@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:39:37 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:35:38 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:22:12 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@ t_token	*create_token(t_tokentype type, const char *value, int *index,
 	if (token == NULL)
 		return (NULL);
 	token->type = type;
-	if (ft_strchr(value, '=') != NULL)
-	{
-		if (valid_name_assignement(value))
-			token->type = TOKEN_ASSIGNEMENT;
-	}
 	token->value = ft_strdup(value);
 	if (fd == 1 || fd == 2 || fd == 0)
 		token->fd = fd;

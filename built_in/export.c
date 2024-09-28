@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:54:36 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 10:34:18 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:19:53 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	handle_var_concatenation(t_list *env_lst, char *var_name
 	}
 }
 
-void	add_new_var(t_list *env_lst, char *var, int flag)
+void	add_new_var(t_list *env_lst, char *var)
 {
 	char	*var_name;
 	char	*var_value;
@@ -62,12 +62,12 @@ void	add_new_var(t_list *env_lst, char *var, int flag)
 		handle_var_concatenation(env_lst, var_name, var_value);
 		free(var_value);
 	}
-	else if (flag == 0)
+	else if (ft_strchr(var, '='))
 	{
 		remove_one(&env_lst, var_name);
 		ft_lstadd_back(&env_lst, ft_lstnew((void *)ft_strdup(var)));
 	}
-	else if (flag == 1)
+	else
 	{
 		if (lst_srch_var(env_lst, var_name) == 0)
 			ft_lstadd_back(&env_lst, ft_lstnew((void *)ft_strdup(var)));
@@ -75,12 +75,11 @@ void	add_new_var(t_list *env_lst, char *var, int flag)
 	free(var_name);
 }
 
-void	export_assignement(char **assignement, t_list *env_lst, int	*status,
-						int flag)
+void	export_assignement(char **assignement, t_list *env_lst, int	*status)
 {
 	int		j;
 
-	j = flag;
+	j = 1;
 	while (assignement && assignement[j])
 	{
 		if (check_var_name(assignement[j]) == 0)
@@ -91,12 +90,12 @@ void	export_assignement(char **assignement, t_list *env_lst, int	*status,
 			j++;
 			continue ;
 		}
-		add_new_var(env_lst, assignement[j], flag);
+		add_new_var(env_lst, assignement[j]);
 		j++;
 	}
 }
 
-int	ft_export(char **cmd, char **assignement, char ***env)
+int	ft_export(char **cmd, char ***env)
 {
 	t_list	*env_lst;
 	char	**tmp;
@@ -105,12 +104,11 @@ int	ft_export(char **cmd, char **assignement, char ***env)
 	tmp = *env;
 	status = 0;
 	env_lst = get_env_lst(*env);
-	if (!cmd[1] && !assignement)
+	if (!cmd[1])
 		print_export(env_lst);
 	else
 	{
-		export_assignement(cmd, env_lst, &status, 1);
-		export_assignement(assignement, env_lst, &status, 0);
+		export_assignement(cmd, env_lst, &status);
 		free_split(tmp);
 		*env = list_to_tab(env_lst);
 	}

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:33:43 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:35:49 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:23:10 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void	free_ast(t_ast_node **node)
 		return ;
 	if ((*node)->type != AST_PIPE && (*node)->args != NULL)
 		free_split((*node)->args);
-	if ((*node)->type != AST_PIPE && (*node)->assignement != NULL)
-		free_split((*node)->assignement);
 	if ((*node)->type != AST_PIPE && (*node)->redirection != NULL)
 		free_redirection((*node)->redirection);
 	if ((*node)->left != NULL)
