@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 09:52:51 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/27 11:35:16 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/09/28 08:26:26 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,3 @@ void	handle_ast(t_data *data)
 	else
 		execute_fork_cmd(data, data->envp, data->ast);
 }
-
-

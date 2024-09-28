@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/27 16:02:58 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/09/28 08:26:03 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,17 @@ t_token	*split_word(char *word)
 		}
 		i++;
 	}
-	free(split);
+	free_split(split);
 	return (token);
 }
 
 t_expand_result	expand_token(char *str, char **env, int exit_status)
 {
 	t_expand_result	result;
-	char	*tmp;
-	int		i;
-	int		in_single_quotes;
-	int		in_double_quotes;
+	char			*tmp;
+	int				i;
+	int				in_single_quotes;
+	int				in_double_quotes;
 
 	tmp = NULL;
 	result.value = NULL;
@@ -108,11 +108,11 @@ t_expand_result	expand_token(char *str, char **env, int exit_status)
 
 t_token	*expand_tokens(t_token *tokens, char **env, int exit_status)
 {
-	t_token	*expanded_tokens;
-	t_token	*new_token;
-	t_token	*current;
-	 t_token *last;
-	int		skip_next;
+	t_token			*expanded_tokens;
+	t_token			*new_token;
+	t_token			*current;
+	t_token			*last;
+	int				skip_next;
 	t_expand_result	expanded;
 
 	current = tokens;
@@ -157,7 +157,7 @@ t_token	*expand_tokens(t_token *tokens, char **env, int exit_status)
 			else
 				last->next = new_token;
 			while (new_token && new_token->next)
-                new_token = new_token->next;
+				new_token = new_token->next;
 			last = new_token;
 			free(expanded.value);
 		}
