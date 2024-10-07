@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/28 10:06:08 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/07 09:46:46 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ t_token	*split_word(char *word)
 	last = NULL;
 	i = 0;
 	split = ft_split(word, ' ');
+	if (split[i] == NULL)
+		return (free_split(split), create_token(TOKEN_WORD, "", &i, -1));
 	while (split[i] != NULL)
 	{
 		tmp = create_token(TOKEN_WORD, split[i], &index_tmp, -1);
@@ -93,9 +95,7 @@ t_expand_result	expand_token(char *str, char **env, int exit_status)
 			tmp = expand_special_char(str, env, &i, exit_status);
 			result.value = str_append(result.value, tmp);
 			if (!in_double_quotes)
-			{
 				result.create_token = 1;
-			}
 			free(tmp);
 		}
 		else if (is_ignored_dollar(str[i], str[i + 1],
