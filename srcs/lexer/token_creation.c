@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:39:37 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/28 10:22:12 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/07 14:15:18 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ t_token	*create_token(t_tokentype type, const char *value, int *index,
 	else
 		token->fd = 0;
 	token->next = NULL;
-	*index += ft_strlen(value);
+	if (index != NULL)
+		*index += ft_strlen(value);
 	return (token);
 }
 
