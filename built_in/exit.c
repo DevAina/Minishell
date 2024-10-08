@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 10:17:50 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/08 11:04:42 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/08 12:40:14 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	get_exit_status(int *status, char **cmd)
 	}
 }
 
-static int		check_digit(char *str)
+static int	check_digit(char *str)
 {
 	int		i;
 
