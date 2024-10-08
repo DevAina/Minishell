@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:03:22 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/08 07:27:59 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/08 11:01:27 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ void			handle_quotes(char c, int *in_single_quotes,
 char			*expand_special_char(char *str, char **env, int *i,
 					int exit_status);
 int				should_expand(char *str, int i, int in_single_quotes);
+t_token			*add_new_token(t_token *expanded_tokens, t_token *new_token,
+					t_token **last);
+t_token			*process_word(t_token *current, t_expand_params *params);
+char			*finalize_result(char *result);
+int				is_ignored_dollar(char current, char next,
+					int in_double_quotes, int in_single_quotes);
+int				handle_quotes_expander(char c, int *in_single_quotes,
+					int *in_double_quotes);
 t_expand_result	expand_token(char *str, char **env, int exit_status);
 t_token			*expand_tokens(t_token *tokens, char **env, int exit_status);
 
