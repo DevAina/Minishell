@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/28 10:14:44 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/08 12:34:13 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char		**check_void_cmd(char **cmd, char **envp, t_ast_node *ast);
 void		execute(t_ast_node *ast, char **envp, char **cmd, int *flag);
 //built in cmd
 int			ft_pwd(char **args, char **env);
-int			ft_echo(t_ast_node *ast);
+int			ft_echo(char **args);
 int			ft_env(char **env, char **cmd);
 int			ft_export(char **cmd, char ***env);
 char		**cpy_env(char **env);

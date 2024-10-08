@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 09:42:10 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/28 08:19:34 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/08 12:34:35 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,22 @@ int	opt_cmp(char *str)
 		return (0);
 }
 
-int	ft_echo(t_ast_node *ast)
+int	ft_echo(char **args)
 {
 	int	opt;
 	int	i;
 
 	i = 1;
 	opt = 0;
-	while (ast->args[i] != NULL && opt_cmp(ast->args[i]) == 1)
+	while (args[i] != NULL && opt_cmp(args[i]) == 1)
 	{
 		opt = 1;
 		i++;
 	}
-	while (ast->args[i])
+	while (args[i])
 	{
-		ft_putstr_fd(ast->args[i], 1);
-		if (ast->args[i + 1])
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1])
 			ft_putchar_fd(' ', 1);
 		i++;
 	}

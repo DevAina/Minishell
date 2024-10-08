@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/28 10:21:16 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/08 12:33:59 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	check_n_exec_built_in(char **cmd, char **env, t_ast_node *ast, int *flag)
 	}
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
 	{
-		ft_echo(ast);
+		ft_echo(cmd);
 		*flag = 0;
 		return (1);
 	}
