@@ -10,10 +10,11 @@ LEXER = ./srcs/lexer/tokenizer.c ./srcs/lexer/token_creation.c ./srcs/lexer/toke
 
 CHECK_TOKENS = ./srcs/check_tokens/handle_heredoc.c ./srcs/check_tokens/utils.c ./srcs/check_tokens/analyze_tokens.c
 
-EXPANDER = ./srcs/expander/expander.c ./srcs/expander/expand_helpers.c ./srcs/expander/expander_utils.c
+EXPANDER = ./srcs/expander/expander.c ./srcs/expander/expand_helpers.c ./srcs/expander/expander_utils.c \
+				./srcs/expander/expand_token_utils.c ./srcs/expander/expand_token.c \
+				./srcs/expander/process_word.c 
 
-HANDLE_INPUT = ./srcs/handle_input/process_line_utils.c ./srcs/handle_input/pre_expand.c
-
+HANDLE_INPUT = ./srcs/handle_input/process_line_utils.c
 INIT = ./srcs/init/init_data.c
 
 PARSER = ./srcs/parser/free_ast.c ./srcs/parser/init_utils.c ./srcs/parser/parse_utils.c ./srcs/parser/parse.c \
