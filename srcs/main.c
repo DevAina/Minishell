@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/28 10:15:58 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/08 08:36:13 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	process_line(t_data *data)
 	{
 		unlink(".tmp");
 		free_token(data->token);
+		g_exit_status = 2;
 		return ;
 	}
 	expanded = expand_tokens(data->token, data->envp, g_exit_status);

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:03:22 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/07 11:43:01 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/08 07:27:59 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 # define MNS_EXPANDER_H
 # include "mns_lexer.h"
 
-
-typedef struct	s_expand_params
+typedef struct s_expand_params
 {
-    char        **env;
-    int         exit_status;
-    t_token     *expanded_tokens;
-    t_token     **last;
-}	t_expand_params;
+	char		**env;
+	int			exit_status;
+	t_token		*expanded_tokens;
+	t_token		**last;
+}				t_expand_params;
 
 typedef struct s_expand_result
 {
@@ -32,13 +31,13 @@ typedef struct s_expand_result
 
 typedef struct s_expand_context
 {
-    t_expand_result	*result;
-    char			*str;
-    char			**env;
-    int				*i;
-    int				exit_status;
-    int				in_single_quotes;
-    int				in_double_quotes;
+	t_expand_result	*result;
+	char			*str;
+	char			**env;
+	int				*i;
+	int				exit_status;
+	int				in_single_quotes;
+	int				in_double_quotes;
 }	t_expand_context;
 
 int				get_var_name_length(char *str);
