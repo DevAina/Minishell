@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/08 12:34:13 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/09 14:08:01 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <fcntl.h>
 
 /******env utils*****/
-void		handle_built_in_cmd(t_data *data, t_ast_node *ast, char ***envp);
+void		handle_built_in_cmd(t_ast_node *ast, char ***envp);
 void		handle_ast(t_data *data);
 char		**cpy_env(char **env);
 char		**list_to_tab(t_list *env_lst);

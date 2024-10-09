@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 09:52:51 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/28 08:26:26 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/09 14:08:30 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	handle_ast(t_data *data)
 {
 	if (data->ast->type == AST_COMMAND && data->ast->args != NULL
 		&& check_built_in(data->ast) == 1)
-		handle_built_in_cmd(data, data->ast, &data->envp);
+		handle_built_in_cmd(data->ast, &data->envp);
 	else
 		execute_fork_cmd(data, data->envp, data->ast);
 }
