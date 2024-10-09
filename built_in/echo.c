@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 09:42:10 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/08 12:34:35 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/09 14:14:03 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	opt_cmp(char *str)
 
 	i = 1;
 	if (str[0] != '-')
+		return (0);
+	if (str[i] != 'n')
 		return (0);
 	while (str[i] == 'n' && str[i])
 		i++;
