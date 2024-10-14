@@ -6,13 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:55:21 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:34:48 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:45:05 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*special_expand_char(char *str, char **env, int exit_status)
+/* static char	*special_expand_char(char *str, char **env, int exit_status)
 {
 	char	*result;
 	char	*tmp;
@@ -35,9 +35,9 @@ static char	*special_expand_char(char *str, char **env, int exit_status)
 			result = char_append(result, str[i]);
 	}
 	return (result);
-}
+} */
 
-static void	process_heredoc(char *heredoc_delimiter, char **env, int exit_status
+/* void	process_heredoc_redir(char *heredoc_delimiter, char **env, int exit_status
 	, int is_expand)
 {
 	char	*result;
@@ -65,7 +65,7 @@ static void	process_heredoc(char *heredoc_delimiter, char **env, int exit_status
 		free(result);
 	}
 	close(fd);
-}
+} */
 
 char	*expand_for_heredoc(char *heredoc_delimiter)
 {
@@ -92,7 +92,7 @@ char	*expand_for_heredoc(char *heredoc_delimiter)
 	return (result);
 }
 
-int	handle_heredoc(t_token **current_token, char **env, int exit_status)
+/* int	handle_heredoc(t_token **current_token, char **env, int exit_status)
 {
 	char	*tmp;
 	int		is_expand;
@@ -102,7 +102,7 @@ int	handle_heredoc(t_token **current_token, char **env, int exit_status)
 		return (print_syntax_error());
 	tmp = expand_for_heredoc((*current_token)->value);
 	is_expand = determine_expansion(*current_token, tmp);
-	process_heredoc(tmp, env, exit_status, is_expand);
+	process_heredoc_redir(tmp, env, exit_status, is_expand);
 	free(tmp);
 	return (1);
-}
+} */

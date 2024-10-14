@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:41:54 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/08 08:31:55 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/14 12:35:23 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ char	**find_path_list(char **env)
 			break ;
 		i++;
 	}
-	path = ft_split(tmp + 5, ':');
-	return (path);
+	if (tmp)
+		return (ft_split(tmp + 5, ':'));
+	else
+		return (NULL);
 }
 
 char	*check_path(char **path_list, char *cmd)
@@ -38,6 +40,8 @@ char	*check_path(char **path_list, char *cmd)
 	char	*tmp;
 
 	i = 0;
+	if (path_list == NULL)
+		return (NULL);
 	while (path_list[i])
 	{
 		tmp = ft_strjoin(path_list[i], "/");

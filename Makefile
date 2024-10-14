@@ -14,7 +14,10 @@ EXPANDER = ./srcs/expander/expander.c ./srcs/expander/expand_helpers.c ./srcs/ex
 				./srcs/expander/expand_token_utils.c ./srcs/expander/expand_token.c \
 				./srcs/expander/process_word.c 
 
+HANDLE_HEREDOC = ./srcs/handle_heredoc/heredoc.c
+
 HANDLE_INPUT = ./srcs/handle_input/process_line_utils.c
+
 INIT = ./srcs/init/init_data.c
 
 PARSER = ./srcs/parser/free_ast.c ./srcs/parser/init_utils.c ./srcs/parser/parse_utils.c ./srcs/parser/parse.c \
@@ -25,7 +28,7 @@ UTILS = ./srcs/utils/mns_utils.c ./srcs/utils/env_utils.c
 EXEC = ./srcs/exec/exec.c ./srcs/exec/exec_redir.c ./srcs/exec/exec_utils.c ./srcs/exec/exec_utils1.c
 
 SRCS =  ${LEXER} ${CHECK_TOKENS} ${EXPANDER} ${PARSER} ${UTILS} ${BUILT_IN}  ${EXEC}\
-		${HANDLE_INPUT} ${INIT} ./srcs/main.c
+		${HANDLE_INPUT} ${INIT}  ${HANDLE_HEREDOC} ./srcs/main.c
 
 OBJS = ${SRCS:.c=.o}
 

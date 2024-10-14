@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/14 09:55:47 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/14 11:12:38 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ int	main(int argc, char **argv, char **env)
 		{
 			ft_putendl_fd(CYAN"Exit"RESET, 1);
 			break ;
+		}
+		if (heredoc(&data, g_exit_status) == 130)
+		{
+			g_exit_status = 130;
+			continue;
 		}
 		if (check_eof(data.line) == 1)
 			continue ;

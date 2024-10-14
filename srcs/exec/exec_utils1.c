@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/08 12:33:59 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/14 12:37:26 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 	(void)ast;
 	path_list = find_path_list(envp);
 	path = find_path(path_list, cmd[0]);
-	free_split(path_list);
+	if (path_list)
+		free_split(path_list);
 	if (path == NULL)
 	{
 		ft_putstr_fd(cmd[0], 2);
