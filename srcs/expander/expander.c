@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/08 10:59:31 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/14 09:55:17 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_token	*add_new_token(t_token *expanded_tokens, t_token *new_token,
 	t_token **last)
 {
-	if (!expanded_tokens)
+	if (expanded_tokens == NULL)
 		expanded_tokens = new_token;
 	else
 		(*last)->next = new_token;
@@ -72,11 +72,11 @@ t_token	*expand_tokens(t_token *tokens, char **env, int exit_status)
 		else if (current->type == TOKEN_HEREDOC)
 			skip_next = process_skip(current, &params, 1);
 		else if (current->type == TOKEN_WORD)
-			expanded_tokens = process_word(current, &params);
+			params.expanded_tokens = process_word(current, &params);
 		else
-			expanded_tokens = process_heredoc(current, expanded_tokens,
+			params.expanded_tokens = process_heredoc(current, params.expanded_tokens,
 					params.last);
 		current = current->next;
 	}
-	return (expanded_tokens);
+	return (params.expanded_tokens);
 }
