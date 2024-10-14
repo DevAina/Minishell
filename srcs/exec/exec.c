@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/08 12:33:47 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/14 12:38:38 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag)
 	if (check_n_exec_built_in(tmp, envp, ast, flag) == 1
 		|| check_n_exec_built_in1(tmp, envp, flag) == 1)
 		return ;
-	execute(ast, envp, cmd, flag);
+	execute(ast, envp, tmp, flag);
 }
 
 void	pipe_exec_left(int fd[2], t_ast_node *ast, char **envp, int *flag)

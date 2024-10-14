@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:03:22 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/08 11:01:27 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:25:35 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ typedef struct s_expand_context
 	int				in_double_quotes;
 }	t_expand_context;
 
+int			process_heredoc_redir(char *heredoc_delimiter, char **env, int exit_status
+					, int is_expand);
 int				get_var_name_length(char *str);
 char			*get_env_value(char *var, char **env);
+char			*expand_for_heredoc(char *heredoc_delimiter);
 char			*str_append(char *str, char *append);
 char			*char_append(char *str, char c);
 char			*expand_env_var(char *var_name, char **env);

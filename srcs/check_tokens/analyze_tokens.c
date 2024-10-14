@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:34:45 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:45:33 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ int	print_syntax_error(void)
 static int	check_redirection(t_token **current_token,
 							char **env, int exit_status)
 {
-	if ((*current_token)->type == TOKEN_HEREDOC)
-		return (handle_heredoc(current_token, env, exit_status));
+	(void)env;
+	(void)exit_status;
+	/* if ((*current_token)->type == TOKEN_HEREDOC)
+		return (handle_heredoc(current_token, env, exit_status)); */
 	*current_token = (*current_token)->next;
 	if (is_invalid_redirection(*current_token))
 		return (print_syntax_error());
