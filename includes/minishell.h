@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/14 10:37:12 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/14 15:13:48 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char		**list_to_tab(t_list *env_lst);
 int			ft_unset(char **cmd, char ***env);
 int			ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag);
 /********/
-int		heredoc(t_data *data, int exit_status);
+int			heredoc(t_data *data, int exit_status);
 char		*expand_line(char *line, char **env, int exit_status);
 void		handler_sigint(int sig);
 int			check_eof(char *str);
