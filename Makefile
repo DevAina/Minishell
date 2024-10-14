@@ -8,7 +8,7 @@ BUILT_IN = ./built_in/cd.c ./built_in/export.c ./built_in/pwd.c ./built_in/echo.
 LEXER = ./srcs/lexer/tokenizer.c ./srcs/lexer/token_creation.c ./srcs/lexer/token_utils.c \
 		./srcs/lexer/fd_handling.c
 
-CHECK_TOKENS = ./srcs/check_tokens/handle_heredoc.c ./srcs/check_tokens/utils.c ./srcs/check_tokens/analyze_tokens.c
+CHECK_TOKENS = ./srcs/check_tokens/utils.c ./srcs/check_tokens/analyze_tokens.c
 
 EXPANDER = ./srcs/expander/expander.c ./srcs/expander/expand_helpers.c ./srcs/expander/expander_utils.c \
 				./srcs/expander/expand_token_utils.c ./srcs/expander/expand_token.c \
