@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:45:04 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 08:47:51 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 09:19:22 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int	process_heredoc_token(t_token **current, t_data *data, int exit_status)
 		return (-2);
 	tmp_value = expand_for_heredoc((*current)->value);
 	is_expand = determine_expansion(*current, tmp_value);
-	status = process_heredoc_redir(tmp_value, data->envp, exit_status, is_expand);
+	status = process_heredoc_redir(tmp_value, data->envp, exit_status,
+			is_expand);
 	free(tmp_value);
 	return (status);
 }

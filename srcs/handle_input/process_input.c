@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 09:05:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 09:06:58 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 13:55:27 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_state(int state)
 
 int	process_input(t_data *data, int exit_status)
 {
-	int state;
+	int	state;
 
 	state = heredoc(data, exit_status);
 	if (handle_state(state))

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/28 07:36:16 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/15 13:58:36 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,19 @@ char	*get_path(char **env, char *path_name)
 	char	**tmp;
 
 	i = 0;
+	path = 0;
 	while (env[i])
 	{
 		if (ft_strncmp(path_name, env[i], 4) == 0)
 			break ;
 		i++;
 	}
-	tmp = ft_split(env[i], '=');
-	path = ft_strdup(tmp[1]);
-	free_split(tmp);
+	if (path)
+	{
+		tmp = ft_split(env[i], '=');
+		path = ft_strdup(tmp[1]);
+		free_split(tmp);
+	}
 	return (path);
 }
 
@@ -78,8 +82,6 @@ int	change_dir(char *path, char ***env)
 
 	cwd = getcwd(NULL, 0);
 	path_name = get_path(*env, path);
-	if (path_name == NULL)
-		return (1);
 	if (chdir(path_name) == -1)
 	{
 		perror("cd");

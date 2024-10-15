@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:37:00 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/25 16:49:52 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 13:51:13 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ int	handle_heredoc(t_token **current_token, char **env, int exit_status);
 
 /*******analyze_tokens*******/
 int	print_syntax_error(void);
-int	analyze_tokens(t_token *tokens, char **env, int exit_status);
+int	analyze_tokens(t_token *tokens);
 
 #endif
