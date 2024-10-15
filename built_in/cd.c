@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 13:58:36 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/15 15:39:41 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,30 @@ char	*get_path(char **env, char *path_name)
 	path = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(path_name, env[i], 4) == 0)
+		if (ft_strncmp(path_name, env[i], ft_strlen(path_name)) == 0)
 			break ;
 		i++;
 	}
-	if (path)
-	{
-		tmp = ft_split(env[i], '=');
-		path = ft_strdup(tmp[1]);
-		free_split(tmp);
-	}
+	tmp = ft_split(env[i], '=');
+	path = ft_strdup(tmp[1]);
+	free_split(tmp);
 	return (path);
 }
 
 void	update_old_pwd(t_list *env_lst, char *old_pwd)
 {
-	while (env_lst)
+	if (old_pwd)
 	{
-		if (ft_strncmp("OLDPWD", (char *)env_lst->content, 3) == 0)
+		while (env_lst)
 		{
-			free(env_lst->content);
-			env_lst->content = ft_strjoin("OLDPWD=", old_pwd);
-			break ;
+			if (ft_strncmp("OLDPWD", (char *)env_lst->content, 3) == 0)
+			{
+				free(env_lst->content);
+				env_lst->content = ft_strjoin("OLDPWD=", old_pwd);
+				break ;
+			}
+			env_lst = env_lst->next;
 		}
-		env_lst = env_lst->next;
 	}
 }
 
@@ -59,16 +59,19 @@ void	update_pwd(char ***env, char *old_pwd)
 	pwd = getcwd(NULL, 0);
 	head = env_lst;
 	update_old_pwd(env_lst, old_pwd);
-	while (env_lst)
+	if (pwd)
 	{
-		if (ft_strncmp("PWD", (char *)env_lst->content, 3) == 0)
+		while (env_lst)
 		{
-			free(env_lst->content);
-			env_lst->content = ft_strjoin("PWD=", pwd);
-			free(pwd);
-			break ;
+			if (ft_strncmp("PWD", (char *)env_lst->content, 3) == 0)
+			{
+				free(env_lst->content);
+				env_lst->content = ft_strjoin("PWD=", pwd);
+				free(pwd);
+				break ;
+			}
+			env_lst = env_lst->next;
 		}
-		env_lst = env_lst->next;
 	}
 	free_split(*env);
 	*env = list_to_tab(head);
