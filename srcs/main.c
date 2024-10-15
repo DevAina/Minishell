@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 09:06:54 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 13:51:37 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	process_line(t_data *data)
 		data->ast = NULL;
 		return ;
 	}
-	if (analyze_tokens(data->token, data->envp, g_exit_status) == 0)
+	if (analyze_tokens(data->token) == 0)
 	{
 		unlink(".tmp");
 		free_token(data->token);
@@ -110,7 +110,7 @@ int	main(int argc, char **argv, char **env)
 		if (process_input(&data, g_exit_status) == 1)
 		{
 			g_exit_status = 130;
-			continue;
+			continue ;
 		}
 		cleanup_data(&data);
 	}

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:55:11 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 08:57:42 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 09:20:03 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ char	*special_expand_char(char *str, char **env, int exit_status)
 
 int	process_tokens_heredoc(t_token *token, t_data *data, int exit_status)
 {
-	int	status;
-	t_token	*tmp_token;
+	int			status;
+	t_token		*tmp_token;
 
 	status = 0;
 	tmp_token = token;
@@ -74,7 +74,7 @@ int	process_tokens_heredoc(t_token *token, t_data *data, int exit_status)
 		if (tmp_token->type == TOKEN_HEREDOC)
 			status = process_heredoc_token(&tmp_token, data, exit_status);
 		if (status == -2)
-			break;
+			break ;
 		tmp_token = tmp_token->next;
 	}
 	return (status);

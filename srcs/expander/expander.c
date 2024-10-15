@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/14 09:55:17 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 13:56:05 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ t_token	*expand_tokens(t_token *tokens, char **env, int exit_status)
 		else if (current->type == TOKEN_WORD)
 			params.expanded_tokens = process_word(current, &params);
 		else
-			params.expanded_tokens = process_heredoc(current, params.expanded_tokens,
-					params.last);
+			params.expanded_tokens = process_heredoc(current,
+					params.expanded_tokens, params.last);
 		current = current->next;
 	}
 	return (params.expanded_tokens);

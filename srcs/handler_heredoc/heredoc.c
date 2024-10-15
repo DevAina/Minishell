@@ -6,13 +6,13 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:09:13 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 08:58:44 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 09:17:04 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-volatile sig_atomic_t g_sigint_received = 0;
+volatile sig_atomic_t	g_sigint_received = 0;
 
 void	handler_sigint_heredoc(int sig)
 {
@@ -56,7 +56,7 @@ int	process_heredoc_redir(char *heredoc_delimiter, char **env, int exit_status,
 				return (130);
 			return (166);
 		}
-		result = get_result(line, is_expand, env, exit_status);	
+		result = get_result(line, is_expand, env, exit_status);
 		if (check_delimiter(heredoc_delimiter, result, line))
 			break ;
 		ft_putendl_fd(result, fd);
@@ -69,9 +69,9 @@ int	process_heredoc_redir(char *heredoc_delimiter, char **env, int exit_status,
 
 void	handle_child_process(t_data *data, int exit_status)
 {
-	struct sigaction sa;
-	t_token			*token;
-	int				status;
+	struct sigaction	sa;
+	t_token				*token;
+	int					status;
 
 	g_sigint_received = 0;
 	setup_signals_heredoc(&sa);
