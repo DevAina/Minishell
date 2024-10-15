@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/14 16:02:51 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 09:06:54 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,43 +91,6 @@ void	process_line(t_data *data)
 	handle_ast(data);
 }
 
-int	handle_state(int state)
-{
-	if (state == 130)
-	{
-		unlink(".tmp");
-		g_exit_status = 130;
-		return (1);
-	}
-	else if (state == 166)
-	{
-		unlink(".tmp");
-		return (1);
-	}
-	return (0);
-}
-
-int	process_input(t_data *data)
-{
-	int state;
-
-	state = heredoc(data, g_exit_status);
-	if (handle_state(state))
-		return (1);
-	if (check_eof(data->line) == 1)
-		return (1);
-	process_line(data);
-	return (0);
-}
-
-void	cleanup_data(t_data *data)
-{
-	free_ast(&data->ast);
-	unlink(".tmp");
-	free(data->line);
-	data->ast = NULL;
-}
-
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
@@ -144,8 +107,11 @@ int	main(int argc, char **argv, char **env)
 			ft_putendl_fd(CYAN"Exit"RESET, 1);
 			break ;
 		}
-		if (process_input(&data) == 1)
+		if (process_input(&data, g_exit_status) == 1)
+		{
+			g_exit_status = 130;
 			continue;
+		}
 		cleanup_data(&data);
 	}
 	rl_clear_history();

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/14 15:13:48 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 09:08:21 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "mns_expander.h"
 # include "mns_parser.h"
 # include "mns_check_tokens.h"
+# include "handler_heredoc.h"
 # include "../libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
 # include <readline/readline.h>
@@ -70,7 +71,10 @@ char		**list_to_tab(t_list *env_lst);
 int			ft_unset(char **cmd, char ***env);
 int			ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag);
 /********/
-int			heredoc(t_data *data, int exit_status);
+void		process_line(t_data *data);
+int			handle_state(int state);
+int			process_input(t_data *data, int exit_status);
+void		cleanup_data(t_data *data);
 char		*expand_line(char *line, char **env, int exit_status);
 void		handler_sigint(int sig);
 int			check_eof(char *str);
