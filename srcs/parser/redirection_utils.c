@@ -6,11 +6,24 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:38:09 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/28 10:22:47 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/15 14:48:32 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	handle_count_redirection_out(t_token **tokens, int *count)
+{
+	while (*tokens != NULL)
+	{
+		if ((*tokens)->type == TOKEN_WORD)
+		{
+			count[REDIR_COUNT] += 1;
+			break ;
+		}
+		*tokens = (*tokens)->next;
+	}
+}
 
 void	count_redirection(t_token **tokens, int *count)
 {
@@ -22,9 +35,8 @@ void	count_redirection(t_token **tokens, int *count)
 	}
 	if ((*tokens)->type == TOKEN_REDIR_OUT)
 	{
-		*tokens = (*tokens)->next;
-		if ((*tokens)->type == TOKEN_WORD)
-			count[REDIR_COUNT] += 1;
+		handle_count_redirection_out(tokens, count);
+		return ;
 	}
 	if ((*tokens)->type == TOKEN_REDIR_APPEND)
 	{
@@ -61,6 +73,21 @@ void	count_type_token(t_token *tokens, int *count)
 	}
 }
 
+void	handle_redirection_out(t_token **tokens, t_redirection *redirection,
+	int *file_count, int count)
+{
+	while (*tokens != NULL && count != 0)
+	{
+		if ((*tokens)->type == TOKEN_WORD)
+		{
+			redirection[*file_count].target = ft_strdup((*tokens)->value);
+			(*file_count)++;
+			break ;
+		}
+		*tokens = (*tokens)->next;
+	}
+}
+
 void	handle_redirection(t_token **tokens, t_redirection *redirection,
 	int *file_count, int count)
 {
@@ -68,7 +95,11 @@ void	handle_redirection(t_token **tokens, t_redirection *redirection,
 	if ((*tokens)->type == TOKEN_REDIR_IN)
 		redirection[*file_count].type_redirection = REDIRECTION_IN;
 	if ((*tokens)->type == TOKEN_REDIR_OUT)
+	{
 		redirection[*file_count].type_redirection = REDIRECTION_OUT;
+		handle_redirection_out(tokens, redirection, file_count, count);
+		return ;
+	}
 	if ((*tokens)->type == TOKEN_REDIR_APPEND)
 		redirection[*file_count].type_redirection = REDIRECTION_APPEND;
 	if ((*tokens)->type == TOKEN_HEREDOC)
