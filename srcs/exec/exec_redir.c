@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:13:33 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 10:34:57 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:24:54 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,22 @@ void	output_append(char *out_append, t_ast_node *node, char **envp)
 	close(fd);
 }
 
-void	here_doc(void)
+void	here_doc(int in_pipe)
 {
+	char	*nb;
+	char	*name;
 	int		fd;
 
-	fd = open(".tmp", O_RDONLY);
+	nb = ft_itoa(in_pipe);
+	name = ft_strjoin(".tmp", nb);
+	fd = open(name, O_RDONLY);
+	free(name);
+	free(nb);
 	dup2(fd, 0);
 	close(fd);
 }
 
-int	check_redirection_exec(t_ast_node *ast, char **envp)
+int	check_redirection_exec(t_ast_node *ast, char **envp, int in_pipe)
 {
 	int	i;
 
@@ -85,7 +91,7 @@ int	check_redirection_exec(t_ast_node *ast, char **envp)
 		else if (ast->redirection[i].type_redirection == REDIRECTION_APPEND)
 			output_append(ast->redirection[i].target, ast, envp);
 		if (ast->redirection[i].type_redirection == REDIRECTION_HEREDOC)
-			here_doc();
+			here_doc(in_pipe);
 		i++;
 	}
 	return (0);

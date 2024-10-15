@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 13:51:37 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:36:41 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	handle_built_in_cmd(t_ast_node *ast, char ***envp)
 	fd_in = dup(STDIN_FILENO);
 	fd_out = dup(STDOUT_FILENO);
 	if (ast->redirection)
-		check_redirection_exec(ast, *envp);
+		check_redirection_exec(ast, *envp, 0);
 	if (ft_strncmp(ast->args[0], "cd", 3) == 0)
 		g_exit_status = mns_cd(ast->args, envp);
 	else if (ft_strncmp(ast->args[0], "export", 7) == 0)
@@ -63,6 +63,29 @@ void	wait_child_process(t_data *data)
 	}
 }
 
+void	close_tmp()
+{
+	char	*name;
+	char	*nb;
+	int		i;
+
+	i = 0;
+	while (1)
+	{
+		nb = ft_itoa(i);
+		name = ft_strjoin(".tmp", nb);
+		if (unlink(name) == -1)
+		{
+			free(nb);
+			free(name);
+			break ;
+		}
+		free(nb);
+		free(name);
+		i++;
+	}
+}
+
 void	process_line(t_data *data)
 {
 	t_token		*expanded;
@@ -76,7 +99,7 @@ void	process_line(t_data *data)
 	}
 	if (analyze_tokens(data->token) == 0)
 	{
-		unlink(".tmp");
+		close_tmp();
 		free_token(data->token);
 		g_exit_status = 2;
 		return ;
