@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 09:05:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 13:55:27 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:02:46 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ int	handle_state(int state)
 {
 	if (state == 130)
 	{
-		unlink(".tmp");
+		close_tmp();
 		return (1);
 	}
 	else if (state == 166)
 	{
-		unlink(".tmp");
+		close_tmp();
 		return (1);
 	}
 	return (0);
@@ -43,7 +43,7 @@ int	process_input(t_data *data, int exit_status)
 void	cleanup_data(t_data *data)
 {
 	free_ast(&data->ast);
-	unlink(".tmp");
+	close_tmp();
 	free(data->line);
 	data->ast = NULL;
 }

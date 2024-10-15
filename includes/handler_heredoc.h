@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:41:52 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 09:23:16 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:46:43 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*expand_for_heredoc(char *heredoc_delimiter);
 char	*special_expand_char(char *str, char **env, int exit_status);
 int		process_tokens_heredoc(t_token *token, t_data *data, int exit_status);
 void	setup_signals_heredoc(struct sigaction *sa);
-int		process_heredoc_token(t_token **current, t_data *data, int exit_status);
+int		process_heredoc_token(t_token **current, t_data *data, int exit_status, int in_pipe);
 char	*get_result(char *line, int is_expand, char **env, int exit_status);
 int		check_delimiter(char *heredoc_delimiter, char *result, char *line);
 int		heredoc(t_data *data, int exit_status);

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:45:04 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 09:19:22 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:05:32 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,29 @@ void	setup_signals_heredoc(struct sigaction *sa)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int	process_heredoc_token(t_token **current, t_data *data, int exit_status)
+int	process_heredoc_token(t_token **current, t_data *data, int exit_status, int in_pipe)
 {
+	char		*nb;
+	char		*name;
+	int			fd;
 	char	*tmp_value;
 	int		status;
 	int		is_expand;
 
+	name = NULL;
 	tmp_value = NULL;
 	*current = (*current)->next;
 	if (is_invalid_redirection(*current))
 		return (-2);
 	tmp_value = expand_for_heredoc((*current)->value);
 	is_expand = determine_expansion(*current, tmp_value);
+	nb = ft_itoa(in_pipe);
+	name = ft_strjoin(".tmp", nb);
+	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	status = process_heredoc_redir(tmp_value, data->envp, exit_status,
-			is_expand);
+			is_expand, fd);
+	free(name);
+	free(nb);
 	free(tmp_value);
 	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:09:13 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 09:17:04 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:50:59 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,11 @@ int	init_heredoc(char **line, int fd)
 }
 
 int	process_heredoc_redir(char *heredoc_delimiter, char **env, int exit_status,
-	int is_expand)
+	int is_expand, int fd)
 {
 	char	*line;
 	char	*result;
-	int		fd;
 
-	fd = open(".tmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	line = NULL;
 	result = NULL;
 	while (1 && fd > 0)

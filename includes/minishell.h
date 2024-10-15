@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 09:08:21 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:29:22 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ t_list		*get_env_lst(char **envp);
 void		free_env_lst(t_list *env_lst);
 int			lst_srch_var(t_list *lst, char *var_name);
 //utils for exec
-int			check_redirection_exec(t_ast_node *ast, char **envp);
+int			check_redirection_exec(t_ast_node *ast, char **envp, int in_pipe);
 char		**find_path_list(char **env);
 char		*find_path(char **path_list, char *cmd);
 void		free_split(char **str);
-void		exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag);
-void		executor(char **envp, t_ast_node *ast, int *flag);
+void		exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag, int in_pipe);
+void		executor(char **envp, t_ast_node *ast, int *flag, int in_pipe);
 int			check_n_exec_built_in1(char **cmd, char **env, int *flag);
 int			check_n_exec_built_in(char **cmd, char **env,
 				t_ast_node *ast, int *flag);
@@ -71,6 +71,7 @@ char		**list_to_tab(t_list *env_lst);
 int			ft_unset(char **cmd, char ***env);
 int			ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag);
 /********/
+void		close_tmp(void);
 void		process_line(t_data *data);
 int			handle_state(int state);
 int			process_input(t_data *data, int exit_status);
