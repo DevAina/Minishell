@@ -14,9 +14,9 @@ EXPANDER = ./srcs/expander/expander.c ./srcs/expander/expand_helpers.c ./srcs/ex
 				./srcs/expander/expand_token_utils.c ./srcs/expander/expand_token.c \
 				./srcs/expander/process_word.c 
 
-HANDLE_HEREDOC = ./srcs/handle_heredoc/heredoc.c
+HANDLE_HEREDOC = ./srcs/handler_heredoc/heredoc.c ./srcs/handler_heredoc/heredoc_utils_1.c ./srcs/handler_heredoc/heredoc_utils.c
 
-HANDLE_INPUT = ./srcs/handle_input/process_line_utils.c
+HANDLE_INPUT = ./srcs/handle_input/process_line_utils.c ./srcs/handle_input/process_input.c
 
 INIT = ./srcs/init/init_data.c
 
