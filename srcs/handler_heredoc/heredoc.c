@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:09:13 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 16:50:59 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/16 08:38:42 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,30 @@ int	init_heredoc(char **line, int fd)
 	return (1);
 }
 
-int	process_heredoc_redir(char *heredoc_delimiter, char **env, int exit_status,
-	int is_expand, int fd)
+int	process_heredoc_redir(t_utils_heredoc utils_var, char **env,
+	int exit_status)
 {
 	char	*line;
 	char	*result;
 
 	line = NULL;
 	result = NULL;
-	while (1 && fd > 0)
+	while (1 && utils_var.fd > 0)
 	{
-		if (init_heredoc(&line, fd) < 0)
+		if (init_heredoc(&line, utils_var.fd) < 0)
 		{
 			if (g_sigint_received)
 				return (130);
 			return (166);
 		}
-		result = get_result(line, is_expand, env, exit_status);
-		if (check_delimiter(heredoc_delimiter, result, line))
+		result = get_result(line, utils_var.is_expand, env, exit_status);
+		if (check_delimiter(utils_var.tmp_value, result, line))
 			break ;
-		ft_putendl_fd(result, fd);
+		ft_putendl_fd(result, utils_var.fd);
 		free(line);
 		free(result);
 	}
-	close(fd);
+	close(utils_var.fd);
 	return (1);
 }
 

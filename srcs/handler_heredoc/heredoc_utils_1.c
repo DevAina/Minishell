@@ -6,11 +6,23 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:55:11 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 16:46:49 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/16 08:52:21 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*get_name_file(int in_pipe)
+{
+	char	*nb;
+	char	*name;
+
+	nb = NULL;
+	nb = ft_itoa(in_pipe);
+	name = ft_strjoin(".tmp", nb);
+	free(nb);
+	return (name);
+}
 
 char	*expand_for_heredoc(char *heredoc_delimiter)
 {
@@ -76,7 +88,8 @@ int	process_tokens_heredoc(t_token *token, t_data *data, int exit_status)
 		if (tmp_token->type == TOKEN_PIPE)
 			in_pipe += 1;
 		if (tmp_token->type == TOKEN_HEREDOC)
-			status = process_heredoc_token(&tmp_token, data, exit_status, in_pipe);
+			status = process_heredoc_token(&tmp_token, data, exit_status,
+					in_pipe);
 		if (status == -2)
 			break ;
 		tmp_token = tmp_token->next;
