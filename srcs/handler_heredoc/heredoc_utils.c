@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:45:04 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 17:05:32 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/16 08:52:08 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,26 @@ void	setup_signals_heredoc(struct sigaction *sa)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int	process_heredoc_token(t_token **current, t_data *data, int exit_status, int in_pipe)
+int	process_heredoc_token(t_token **current, t_data *data, int exit_status,
+	int in_pipe)
 {
-	char		*nb;
-	char		*name;
-	int			fd;
-	char	*tmp_value;
-	int		status;
-	int		is_expand;
+	char			*name;
+	int				status;
+	t_utils_heredoc	utils_heredoc;
 
 	name = NULL;
-	tmp_value = NULL;
+	utils_heredoc.tmp_value = NULL;
 	*current = (*current)->next;
 	if (is_invalid_redirection(*current))
 		return (-2);
-	tmp_value = expand_for_heredoc((*current)->value);
-	is_expand = determine_expansion(*current, tmp_value);
-	nb = ft_itoa(in_pipe);
-	name = ft_strjoin(".tmp", nb);
-	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	status = process_heredoc_redir(tmp_value, data->envp, exit_status,
-			is_expand, fd);
+	utils_heredoc.tmp_value = expand_for_heredoc((*current)->value);
+	utils_heredoc.is_expand = determine_expansion(*current,
+			utils_heredoc.tmp_value);
+	name = get_name_file(in_pipe);
+	utils_heredoc.fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	status = process_heredoc_redir(utils_heredoc, data->envp, exit_status);
 	free(name);
-	free(nb);
-	free(tmp_value);
+	free(utils_heredoc.tmp_value);
 	return (status);
 }
 
