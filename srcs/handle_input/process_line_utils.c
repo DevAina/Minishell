@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 09:52:51 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 17:30:17 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/16 09:11:02 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,20 @@ int	check_built_in(t_ast_node *ast)
 
 void	execute_fork_cmd(t_data *data, char **envp, t_ast_node *ast)
 {
-	pid_t	pid;
-	int		flag;
+	pid_t			pid;
+	t_exec_status	status;
 
-	flag = 0;
+	status.status = 0;
+	status.in_pipe = 0;
 	pid = fork();
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		executor(envp, ast, &flag, 0);
+		executor(envp, ast, &status);
 		free_ast(&ast);
 		free_split(envp);
-		exit(flag);
+		exit(status.status);
 	}
 	else
 		wait_child_process(data);

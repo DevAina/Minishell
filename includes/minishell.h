@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 17:29:22 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/16 09:03:53 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int			check_redirection_exec(t_ast_node *ast, char **envp, int in_pipe);
 char		**find_path_list(char **env);
 char		*find_path(char **path_list, char *cmd);
 void		free_split(char **str);
-void		exec_cmd(char **envp, char **cmd, t_ast_node *ast, int *flag, int in_pipe);
-void		executor(char **envp, t_ast_node *ast, int *flag, int in_pipe);
+void		exec_cmd(char **envp, t_ast_node *ast, t_exec_status *status);
+void		executor(char **envp, t_ast_node *ast, t_exec_status *status);
 int			check_n_exec_built_in1(char **cmd, char **env, int *flag);
 int			check_n_exec_built_in(char **cmd, char **env,
 				t_ast_node *ast, int *flag);
