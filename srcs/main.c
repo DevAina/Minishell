@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 17:36:41 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:01:17 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,29 +60,6 @@ void	wait_child_process(t_data *data)
 	{
 		write(1, "\n", 1);
 		g_exit_status = 128 + WTERMSIG(status);
-	}
-}
-
-void	close_tmp()
-{
-	char	*name;
-	char	*nb;
-	int		i;
-
-	i = 0;
-	while (1)
-	{
-		nb = ft_itoa(i);
-		name = ft_strjoin(".tmp", nb);
-		if (unlink(name) == -1)
-		{
-			free(nb);
-			free(name);
-			break ;
-		}
-		free(nb);
-		free(name);
-		i++;
 	}
 }
 
