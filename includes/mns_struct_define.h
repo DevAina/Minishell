@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:12:30 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/14 15:33:02 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/16 09:11:25 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ typedef enum e_ast_node_type	t_ast_node_type;
 typedef struct s_ast_node		t_ast_node;
 typedef enum e_type_redirection	t_type_redirection;
 typedef struct s_data			t_data;
+typedef struct s_exec_status	t_exec_status;
+
+struct	s_exec_status
+{
+	int			status;
+	int			in_pipe;
+};
 
 enum e_tokentype
 {
