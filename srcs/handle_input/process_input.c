@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 09:05:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 17:02:46 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 08:31:48 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	handle_state(int state)
 	else if (state == 166)
 	{
 		close_tmp();
-		return (1);
+		return (2);
 	}
 	return (0);
 }
@@ -31,9 +31,13 @@ int	process_input(t_data *data, int exit_status)
 {
 	int	state;
 
+	if (*data->line == '\0')
+		return (0);
 	state = heredoc(data, exit_status);
-	if (handle_state(state))
+	if (handle_state(state) == 1)
 		return (1);
+	else if (handle_state(state) == 2)
+		return (2);
 	if (check_eof(data->line) == 1)
 		return (1);
 	process_line(data);
