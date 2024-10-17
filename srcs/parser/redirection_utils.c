@@ -6,24 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:38:09 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 09:29:28 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 09:36:19 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	handle_count_redirection_out(t_token **tokens, int *count)
-{
-	while (*tokens != NULL)
-	{
-		if ((*tokens)->type == TOKEN_WORD)
-		{
-			count[REDIR_COUNT] += 1;
-			break ;
-		}
-		*tokens = (*tokens)->next;
-	}
-}
 
 void	count_redirection(t_token **tokens, int *count)
 {
@@ -35,8 +22,9 @@ void	count_redirection(t_token **tokens, int *count)
 	}
 	if ((*tokens)->type == TOKEN_REDIR_OUT)
 	{
-		handle_count_redirection_out(tokens, count);
-		return ;
+		*tokens = (*tokens)->next;
+		if ((*tokens)->type == TOKEN_WORD)
+			count[REDIR_COUNT] += 1;
 	}
 	if ((*tokens)->type == TOKEN_REDIR_APPEND)
 	{
