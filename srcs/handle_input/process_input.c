@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 09:05:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 08:31:48 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/17 09:18:13 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	process_input(t_data *data, int exit_status)
 	int	state;
 
 	if (*data->line == '\0')
+		return (0);
+	if (line_is_space(data->line))
 		return (0);
 	state = heredoc(data, exit_status);
 	if (handle_state(state) == 1)

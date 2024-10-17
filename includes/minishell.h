@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/16 09:03:53 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/17 09:18:05 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ char		**list_to_tab(t_list *env_lst);
 int			ft_unset(char **cmd, char ***env);
 int			ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag);
 /********/
+int			line_is_space(char *line);
+int			handle_exit(t_data *data);
 void		close_tmp(void);
 void		process_line(t_data *data);
 int			handle_state(int state);

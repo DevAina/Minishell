@@ -6,11 +6,31 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:26 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/16 10:00:53 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/17 09:20:36 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	line_is_space(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] == ' ')
+		i++;
+	if (line[i] == '\0')
+		return (1);
+	return (0);
+}
+
+int	handle_exit(t_data *data)
+{
+	ft_putendl_fd(CYAN"Exit"RESET, 1);
+	cleanup_data(data);
+	free_split(data->envp);
+	return (0);
+}
 
 int	mns_strcmp(char *s1, char *s2)
 {
