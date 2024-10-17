@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:35:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 10:38:46 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 13:40:19 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ int		check_n_exec_built_in(char **cmd, char **env,
 			t_ast_node *ast, int *flag);
 char	**check_void_cmd(char **cmd, char **envp, t_ast_node *ast);
 void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag);
-
+int		check_directory_error(char *path, char *cmd);
 #endif

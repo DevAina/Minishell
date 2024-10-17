@@ -6,14 +6,11 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/17 10:35:50 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:08:10 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 int	check_n_exec_built_in1(char **cmd, char **env, int *flag)
 {
@@ -91,7 +88,6 @@ void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 {
 	char			**path_list;
 	char			*path;
-	struct stat		stats;
 
 	(void)ast;
 	path_list = find_path_list(envp);
@@ -110,13 +106,7 @@ void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
-		stat(path, &stats);
-		if (S_ISDIR(stats.st_mode))
-		{
-			ft_putstr_fd(cmd[0], 2);
-			ft_putendl_fd(" : Is a directory", 2);
-		}
-		else
+		if (check_directory_error(path, cmd[0]) == 0)
 			perror(cmd[0]);
 		*flag = 126;
 		return ;
