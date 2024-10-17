@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 08:41:28 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/17 09:12:58 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		data.line = readline("minishell$ ");
 		if (data.line == NULL)
-		{
-			ft_putendl_fd(CYAN"Exit"RESET, 1);
-			break ;
-		}
+			return (handle_exit(&data));
 		tmp = process_input(&data, g_exit_status);
 		if (tmp == 1)
 		{
@@ -118,7 +115,5 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		cleanup_data(&data);
 	}
-	rl_clear_history();
-	free_split(data.envp);
 	return (0);
 }
