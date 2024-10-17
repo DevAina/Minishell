@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/16 10:01:17 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/17 08:41:28 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	process_line(t_data *data)
 
 int	main(int argc, char **argv, char **env)
 {
+	int		tmp;
 	t_data	data;
 
 	(void)argc;
@@ -107,11 +108,14 @@ int	main(int argc, char **argv, char **env)
 			ft_putendl_fd(CYAN"Exit"RESET, 1);
 			break ;
 		}
-		if (process_input(&data, g_exit_status) == 1)
+		tmp = process_input(&data, g_exit_status);
+		if (tmp == 1)
 		{
 			g_exit_status = 130;
 			continue ;
 		}
+		else if (tmp == 2)
+			continue ;
 		cleanup_data(&data);
 	}
 	rl_clear_history();

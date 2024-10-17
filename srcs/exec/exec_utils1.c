@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/14 12:37:26 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 08:35:11 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 	if (path == NULL)
 	{
 		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(" : command not found\n", 2);
+		if (ft_strchr(cmd[0], '/') == 0)
+			ft_putstr_fd(" : command not found\n", 2);
+		else
+			ft_putstr_fd(" : No such file or directory\n", 2);
 		*flag = 127;
 		return ;
 	}
