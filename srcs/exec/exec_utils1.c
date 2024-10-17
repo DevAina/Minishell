@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/17 13:40:22 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:08:10 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 {
 	char			**path_list;
 	char			*path;
-
 
 	(void)ast;
 	path_list = find_path_list(envp);
