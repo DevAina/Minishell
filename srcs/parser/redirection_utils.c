@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:38:09 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 14:48:32 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 09:29:28 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,6 @@ void	count_type_token(t_token *tokens, int *count)
 	}
 }
 
-void	handle_redirection_out(t_token **tokens, t_redirection *redirection,
-	int *file_count, int count)
-{
-	while (*tokens != NULL && count != 0)
-	{
-		if ((*tokens)->type == TOKEN_WORD)
-		{
-			redirection[*file_count].target = ft_strdup((*tokens)->value);
-			(*file_count)++;
-			break ;
-		}
-		*tokens = (*tokens)->next;
-	}
-}
-
 void	handle_redirection(t_token **tokens, t_redirection *redirection,
 	int *file_count, int count)
 {
@@ -95,11 +80,7 @@ void	handle_redirection(t_token **tokens, t_redirection *redirection,
 	if ((*tokens)->type == TOKEN_REDIR_IN)
 		redirection[*file_count].type_redirection = REDIRECTION_IN;
 	if ((*tokens)->type == TOKEN_REDIR_OUT)
-	{
 		redirection[*file_count].type_redirection = REDIRECTION_OUT;
-		handle_redirection_out(tokens, redirection, file_count, count);
-		return ;
-	}
 	if ((*tokens)->type == TOKEN_REDIR_APPEND)
 		redirection[*file_count].type_redirection = REDIRECTION_APPEND;
 	if ((*tokens)->type == TOKEN_HEREDOC)
