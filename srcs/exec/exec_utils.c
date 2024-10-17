@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:41:54 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/14 12:35:23 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 13:39:44 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,18 @@ void	free_split(char **str)
 		i++;
 	}
 	free(str);
+}
+
+int	check_directory_error(char *path, char *cmd)
+{
+	struct stat		stats;
+
+	stat(path, &stats);
+	if (S_ISDIR(stats.st_mode))
+	{
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(" : Is a directory", 2);
+		return (1);
+	}
+	return (0);
 }
