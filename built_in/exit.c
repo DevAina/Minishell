@@ -6,21 +6,21 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 10:17:50 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/08 12:40:14 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:52:14 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	get_exit_status(int *status, char **cmd)
+void	get_exit_status(unsigned int *status, char **cmd)
 {
 	int	i;
 
 	i = 0;
+	if (cmd[1][0] == '+' || cmd[1][0] == '-')
+		i += 1;
 	while (cmd[1][i])
 	{
-		if (cmd[1][0] == '+' || cmd[1][0] == '-')
-			i++;
 		if (cmd[1][i] < '0' || cmd[1][i] > '9')
 		{
 			ft_putstr_fd(" numeric argument required\n", 2);
@@ -54,7 +54,7 @@ static void	exit_n_free(char **envp, t_ast_node *ast, int status)
 
 int	ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag)
 {
-	int	status;
+	unsigned int	status;
 
 	status = 0;
 	if (cmd[1] && cmd[2])
