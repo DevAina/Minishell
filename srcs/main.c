@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 09:12:58 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:18:16 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	process_line(t_data *data)
 {
 	t_token		*expanded;
 
-	uptdate_history(data);
 	data->token = lexer(data->line);
 	if (data->token == NULL)
 	{

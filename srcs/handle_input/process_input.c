@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 09:05:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 09:18:13 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:44:46 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	process_input(t_data *data, int exit_status)
 {
 	int	state;
 
+	uptdate_history(data);
 	if (*data->line == '\0')
 		return (0);
 	if (line_is_space(data->line))
