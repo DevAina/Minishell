@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 14:29:02 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/17 09:28:50 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,8 @@ int	print_syntax_error(void)
 	return (0);
 }
 
-int	check_redir_out(t_token **current_token)
-{
-	while (*current_token != NULL)
-	{
-		if ((*current_token)->type == TOKEN_WORD)
-			return (1);
-		*current_token = (*current_token)->next;
-	}
-	print_syntax_error();
-	return (0);
-}
-
 static int	check_redirection(t_token **current_token)
 {
-	if ((*current_token)->type == TOKEN_REDIR_OUT)
-		return (check_redir_out(current_token));
 	*current_token = (*current_token)->next;
 	if (is_invalid_redirection(*current_token))
 		return (print_syntax_error());
