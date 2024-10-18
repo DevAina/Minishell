@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/16 09:14:25 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/18 10:16:39 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	pipe_cmd(char **envp, t_ast_node *ast, t_exec_status *status)
 	}
 	close(fd[1]);
 	close(fd[0]);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, NULL, 0);
 	waitpid(pid1, &(status->status), 0);
 	if (WIFEXITED(status->status))
