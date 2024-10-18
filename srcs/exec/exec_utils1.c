@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 07:17:56 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/17 16:08:10 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/18 13:11:44 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,16 @@ void	execute(t_ast_node *ast, char **envp, char **cmd, int *flag)
 		*flag = 126;
 		return ;
 	}
+}
+
+void	wait_pipe_cmd(int fd[2], t_exec_status *status, int pid, int pid1)
+{
+	close(fd[1]);
+	close(fd[0]);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	waitpid(pid, NULL, 0);
+	waitpid(pid1, &(status->status), 0);
+	if (WIFEXITED(status->status))
+		status->status = WEXITSTATUS(status->status);
 }
