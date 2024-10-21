@@ -1,6 +1,6 @@
 NAME = minishell
 
-FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline -g
+FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline
 
 BUILT_IN = ./built_in/cd.c ./built_in/export.c ./built_in/pwd.c ./built_in/echo.c \
 		./built_in/env.c ./built_in/unset.c ./built_in/exit.c ./built_in/export_utils.c
@@ -46,7 +46,7 @@ all : ${NAME}
 
 .c.o :
 	@echo "${YELLOW}Compiling $<...${RESET}"
-	@cc -c -Wall -Werror -Wextra  $< -o ${<:.c=.o} -g
+	@cc -c -Wall -Werror -Wextra  $< -o ${<:.c=.o}
 
 ${NAME} : ${OBJS}
 	@make --no-print-directory bonus -C ./libft
