@@ -6,22 +6,22 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 10:17:50 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/17 10:50:28 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/21 10:07:06 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	get_exit_status(unsigned int *status, char **cmd)
+void	get_exit_status(unsigned int *status, char **cmd, char *str)
 {
 	int	i;
 
 	i = 0;
-	if (cmd[1][0] == '+' || cmd[1][0] == '-')
+	if (str[0] == '+' || str[0] == '-')
 		i += 1;
-	while (cmd[1][i])
+	while (str[i])
 	{
-		if (cmd[1][i] < '0' || cmd[1][i] > '9')
+		if (str[i] < '0' || str[i] > '9')
 		{
 			ft_putstr_fd(cmd[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
@@ -56,6 +56,7 @@ static void	exit_n_free(char **envp, t_ast_node *ast, int status)
 int	ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag)
 {
 	unsigned int	status;
+	char			*str;
 
 	status = 0;
 	ft_putendl_fd("exit", STDOUT_FILENO);
@@ -69,8 +70,10 @@ int	ft_exit(char **cmd, t_ast_node *ast, char **envp, int flag)
 	}
 	else if (cmd[1])
 	{
-		status = ft_atoi(cmd[1]);
-		get_exit_status(&status, cmd);
+		str = ft_strtrim(cmd[1], " ");
+		status = ft_atoi(str);
+		get_exit_status(&status, cmd, str);
+		free(str);
 	}
 	if (flag == 1)
 		exit_n_free(envp, ast, status);

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:30:35 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 17:18:16 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/21 10:15:49 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	handle_built_in_cmd(t_ast_node *ast, char ***envp)
 
 	fd_in = dup(STDIN_FILENO);
 	fd_out = dup(STDOUT_FILENO);
+	close(fd_in);
+	close(fd_out);
 	if (ast->redirection)
 		check_redirection_exec(ast, *envp, 0);
 	if (ft_strncmp(ast->args[0], "cd", 3) == 0)
@@ -43,8 +45,6 @@ void	handle_built_in_cmd(t_ast_node *ast, char ***envp)
 		g_exit_status = ft_exit(ast->args, ast, *envp, 1);
 	dup2(fd_in, STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
-	close(fd_in);
-	close(fd_out);
 }
 
 void	wait_child_process(t_data *data)
