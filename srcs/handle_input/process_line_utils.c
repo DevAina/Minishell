@@ -6,11 +6,12 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 09:52:51 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/16 09:11:02 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/21 09:48:24 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <fcntl.h>
 
 int	check_eof(char *str)
 {
@@ -24,11 +25,20 @@ int	check_eof(char *str)
 
 void	uptdate_history(t_data *data)
 {
+	char	*path;
+	char	*tmp;
+
 	add_history(data->line);
-	data->hist_fd = open(".history_file", O_WRONLY | O_CREAT | O_APPEND, 0777);
-	ft_putendl_fd(data->line, data->hist_fd);
+	tmp = ft_strjoin(data->path, "/");
+	path = ft_strjoin(tmp, ".history_file");
+	data->hist_fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (data->hist_fd != -1)
+	{
+		ft_putendl_fd(data->line, data->hist_fd);
 		close(data->hist_fd);
+	}
+	free(path);
+	free(tmp);
 }
 
 int	check_built_in(t_ast_node *ast)

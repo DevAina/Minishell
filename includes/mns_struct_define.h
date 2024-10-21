@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:12:30 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 08:41:38 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/21 08:59:03 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ struct s_data
 	struct sigaction	sa_sigquit;
 	struct sigaction	sa_ignore;
 	int					fd_tmp;
+	char				path[4096];
 };
 
 #endif
