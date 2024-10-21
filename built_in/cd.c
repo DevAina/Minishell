@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 10:40:19 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/18 13:54:56 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/21 09:46:32 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,38 @@ char	*get_path(char **env, char *path_name)
 			break ;
 		i++;
 	}
-	if (path)
+	tmp = ft_split(env[i], '=');
+	if (tmp)
 	{
-		tmp = ft_split(env[i], '=');
 		path = ft_strdup(tmp[1]);
 		free_split(tmp);
 	}
 	return (path);
 }
 
-void	update_old_pwd(t_list *env_lst, char *old_pwd)
+void	update(t_list *env_lst, char *path, char *name)
 {
-	if (old_pwd)
+	t_list	*head;
+	char	*tmp;
+
+	tmp = ft_strjoin(name, "=");
+	head = env_lst;
+	if (path)
 	{
 		while (env_lst)
 		{
-			if (ft_strncmp("OLDPWD", (char *)env_lst->content, 3) == 0)
+			if (ft_strncmp(tmp, (char *)env_lst->content, ft_strlen(tmp)) == 0)
 			{
 				free(env_lst->content);
-				env_lst->content = ft_strjoin("OLDPWD=", old_pwd);
+				env_lst->content = ft_strjoin(tmp, path);
 				break ;
 			}
 			env_lst = env_lst->next;
 		}
+		if (env_lst == NULL)
+			ft_lstadd_back(&head, ft_lstnew(ft_strjoin(tmp, path)));
 	}
+	free(tmp);
 }
 
 void	update_pwd(char ***env, char *old_pwd)
@@ -61,21 +69,9 @@ void	update_pwd(char ***env, char *old_pwd)
 	env_lst = get_env_lst(*env);
 	pwd = getcwd(NULL, 0);
 	head = env_lst;
-	update_old_pwd(env_lst, old_pwd);
-	if (pwd)
-	{
-		while (env_lst)
-		{
-			if (ft_strncmp("PWD", (char *)env_lst->content, 3) == 0)
-			{
-				free(env_lst->content);
-				env_lst->content = ft_strjoin("PWD=", pwd);
-				free(pwd);
-				break ;
-			}
-			env_lst = env_lst->next;
-		}
-	}
+	update(env_lst, old_pwd, "OLDPWD");
+	update(env_lst, pwd, "PWD");
+	free(pwd);
 	free_split(*env);
 	*env = list_to_tab(head);
 	free_env_lst(head);
@@ -88,6 +84,14 @@ int	change_dir(char *path, char ***env)
 
 	cwd = getcwd(NULL, 0);
 	path_name = get_path(*env, path);
+	if (!path_name)
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(" not set\n", 2);
+		free(cwd);
+		return (1);
+	}
 	if (chdir(path_name) == -1)
 	{
 		perror("cd");
@@ -107,7 +111,7 @@ int	mns_cd(char **cmd, char ***env)
 
 	if (cmd[1] && cmd[2])
 	{
-		ft_putendl_fd(" too many arguments", 2);
+		ft_putendl_fd("cd: too many arguments", 2);
 		return (1);
 	}
 	if (!cmd[1] || ft_strncmp(cmd[1], "~", 2) == 0)
