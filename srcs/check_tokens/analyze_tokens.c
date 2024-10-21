@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:14:45 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 09:28:50 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/21 09:02:11 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	analyze_tokens(t_token *tokens)
 		{
 			if (check_redirection(&current) == 0)
 				return (0);
+			arg_count++;
 		}
 		if (current->type == TOKEN_PIPE)
 		{
