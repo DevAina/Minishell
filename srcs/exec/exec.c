@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:46:23 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/22 08:50:01 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/22 10:17:36 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,19 @@ void	pipe_cmd(char **envp, t_ast_node *ast, t_exec_status *status)
 	pid_t		pid;
 	pid_t		pid1;
 
-	pid1 = 1;
-	if (status->in_pipe != 0)
-		status->in_pipe += 1;
 	if (pipe(fd) == -1)
 		return ;
 	pid = fork();
 	if (pid == 0)
-		pipe_exec_left(fd, ast, envp, status);
-	else
 	{
-		status->in_pipe += 1;
-		pid1 = fork();
-		if (pid1 == 0)
-			pipe_exec_right(fd, ast, envp, status);
+		if (status->in_pipe != 0)
+			status->in_pipe += 1;
+		pipe_exec_left(fd, ast, envp, status);
 	}
+	status->in_pipe += 1;
+	pid1 = fork();
+	if (pid1 == 0)
+		pipe_exec_right(fd, ast, envp, status);
 	wait_pipe_cmd(fd, status, pid, pid1);
 }
 
