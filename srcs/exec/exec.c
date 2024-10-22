@@ -56,15 +56,13 @@ void	pipe_cmd(char **envp, t_ast_node *ast, t_exec_status *status)
 		return ;
 	pid = fork();
 	if (pid == 0)
-	{
-		if (status->in_pipe != 0)
-			status->in_pipe += 1;
 		pipe_exec_left(fd, ast, envp, status);
-	}
-	status->in_pipe += 1;
 	pid1 = fork();
 	if (pid1 == 0)
+	{
+		status->in_pipe += 1;
 		pipe_exec_right(fd, ast, envp, status);
+	}
 	wait_pipe_cmd(fd, status, pid, pid1);
 }
 
