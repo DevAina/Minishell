@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:35:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/18 13:12:32 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/22 09:11:31 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 # include "mns_struct_define.h"
 
-int		check_redirection_exec(t_ast_node *ast, char **envp, int in_pipe);
+int		check_redirection_exec(t_ast_node *ast, char **envp,
+			int in_pipe, int flag);
 char	**find_path_list(char **env);
 char	*find_path(char **path_list, char *cmd);
 void	free_split(char **str);

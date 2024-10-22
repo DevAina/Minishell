@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 07:57:31 by traveloa          #+#    #+#             */
-/*   Updated: 2024/09/26 10:36:11 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/22 09:06:59 by traveloa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,10 @@ char	**cpy_env(char **env)
 	}
 	env_cpy[i] = NULL;
 	return (env_cpy);
+}
+
+void	mns_close_fds(int fd1, int fd2)
+{
+	close (fd1);
+	close (fd2);
 }
