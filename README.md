@@ -72,15 +72,6 @@ message.
 - **`unset [var]`**: Removes an environment variable.
 - **`exit [status]`**: Exits the shell with the given exit code.
 
-## Project Structure
-.
-├── built_in            # Built-in commands
-├── includes
-├── libft/              # Utility functions from libft
-├── srcs/               # Folder containing source files
-├── Makefile
-└── README.md           # This file
-
 ## Author(s)
 - [Tolotriniavo RARIJAMIADANA](mailto:ainatolotriniavo7@gmail.com)
 - [Tanjona RAVELOARIMANANA](mailto:tanjonarav@gmail.com)
