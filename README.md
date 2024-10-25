@@ -79,7 +79,8 @@ message.
 ├── includes
 ├── libft/ # Utility functions from libft
 ├── srcs/ # Folder containing source files
-├── Makefile └── README.md # This file
+├── Makefile
+└── README.md # This file
 ```
 
 ## Author(s)
