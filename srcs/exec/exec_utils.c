@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 12:41:54 by traveloa          #+#    #+#             */
-/*   Updated: 2024/10/17 13:39:44 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/31 07:21:47 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ char	**find_path_list(char **env)
 {
 	int		i;
 	char	*tmp;
-	char	**path;
 
 	i = 0;
-	path = 0;
 	while (env[i])
 	{
 		tmp = ft_strnstr(env[i], "PATH", 4);

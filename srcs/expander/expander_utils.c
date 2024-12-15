@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:06:11 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:35:15 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/10/31 07:48:00 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	get_var_name_length(char *str)
 	int		i;
 
 	i = 0;
+	if (ft_isdigit(str[i]))
+		return (1);
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	return (i);

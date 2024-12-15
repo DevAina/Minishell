@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:32:05 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/15 13:56:05 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/10/31 07:20:55 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,12 @@ int	process_skip(t_token *current, t_expand_params *params, int flag)
 
 t_token	*expand_tokens(t_token *tokens, char **env, int exit_status)
 {
-	t_token			*expanded_tokens;
 	t_token			*current;
 	t_token			*last;
 	int				skip_next;
 	t_expand_params	params;
 
 	current = tokens;
-	expanded_tokens = NULL;
 	last = NULL;
 	skip_next = 0;
 	init_expand_params(&params, env, exit_status, &last);
