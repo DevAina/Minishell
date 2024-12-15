@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
+/*   By: trarijam <trarijam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 09:47:58 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/21 09:02:31 by traveloa         ###   ########.fr       */
+/*   Updated: 2024/12/15 12:07:06 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	init_data(t_data *data, char **env)
 	data->token = NULL;
 	data->ast = NULL;
 	data->fd_tmp = -1;
+	data->exit_status = 0;
 	getcwd(data->path, 4096);
 	data->hist_fd = open(".history_file", O_RDONLY, 0777);
 	if (data->hist_fd > 0)

@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:09:13 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/16 08:38:42 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/12/15 20:24:56 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ volatile sig_atomic_t	g_sigint_received = 0;
 void	handler_sigint_heredoc(int sig)
 {
 	(void)sig;
-	g_sigint_received = 1;
+	g_sigint_received = sig;
 	write(1, "\n", 1);
 	close(STDIN_FILENO);
 }
@@ -50,7 +50,7 @@ int	process_heredoc_redir(t_utils_heredoc utils_var, char **env,
 	{
 		if (init_heredoc(&line, utils_var.fd) < 0)
 		{
-			if (g_sigint_received)
+			if (g_sigint_received == SIGINT)
 				return (130);
 			return (166);
 		}

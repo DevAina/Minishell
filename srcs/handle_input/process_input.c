@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 09:05:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 16:44:46 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/12/15 20:24:35 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	handle_state(int state)
 	return (0);
 }
 
-int	process_input(t_data *data, int exit_status)
+int	process_input(t_data *data)
 {
 	int	state;
 
@@ -36,13 +36,15 @@ int	process_input(t_data *data, int exit_status)
 		return (0);
 	if (line_is_space(data->line))
 		return (0);
-	state = heredoc(data, exit_status);
+	state = heredoc(data, data->exit_status);
 	if (handle_state(state) == 1)
 		return (1);
 	else if (handle_state(state) == 2)
 		return (2);
 	if (check_eof(data->line) == 1)
 		return (1);
+	if (get_variable() == 130)
+			data->exit_status = 130;
 	process_line(data);
 	return (0);
 }

@@ -1,9 +1,11 @@
 NAME = minishell
 
-FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline
+FLAGS = -Wall -Werror -Wextra -L./libft -lft -lreadline -g
 
 BUILT_IN = ./built_in/cd.c ./built_in/export.c ./built_in/pwd.c ./built_in/echo.c \
 		./built_in/env.c ./built_in/unset.c ./built_in/exit.c ./built_in/export_utils.c
+
+HANDLE_SIGNAL = ./srcs/handle_signal/handle_signal.c
 
 LEXER = ./srcs/lexer/tokenizer.c ./srcs/lexer/token_creation.c ./srcs/lexer/token_utils.c \
 		./srcs/lexer/fd_handling.c
@@ -28,7 +30,7 @@ UTILS = ./srcs/utils/mns_utils.c ./srcs/utils/env_utils.c
 EXEC = ./srcs/exec/exec.c ./srcs/exec/exec_redir.c ./srcs/exec/exec_utils.c ./srcs/exec/exec_utils1.c
 
 SRCS =  ${LEXER} ${CHECK_TOKENS} ${EXPANDER} ${PARSER} ${UTILS} ${BUILT_IN}  ${EXEC}\
-		${HANDLE_INPUT} ${INIT}  ${HANDLE_HEREDOC} ./srcs/main.c
+		${HANDLE_INPUT} ${INIT}  ${HANDLE_HEREDOC} ${HANDLE_SIGNAL} ./srcs/main.c
 
 OBJS = ${SRCS:.c=.o}
 

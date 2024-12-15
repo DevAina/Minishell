@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:23:43 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/17 10:37:12 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/12/15 20:25:22 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "../libft/libft.h"
 
-void	handle_built_in_cmd(t_ast_node *ast, char ***envp);
+void	handle_built_in_cmd(t_ast_node *ast, char ***envp, t_data *data);
 void	handle_ast(t_data *data);
 char	**list_to_tab(t_list *env_lst);
 void	sort_env_lst(t_list	**env_lst);
