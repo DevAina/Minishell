@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 10:46:46 by trarijam          #+#    #+#             */
-/*   Updated: 2024/10/08 11:05:53 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/12/16 17:34:23 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ t_expand_result	expand_token(char *str, char **env, int exit_status)
 	{
 		if (handle_quotes_expander(str[i], &ctx.in_single_quotes,
 				&ctx.in_double_quotes) == 1)
-		{
-		}
+			handle_non_expand_char(&ctx, str, i);
 		else if (should_expand(str, i, ctx.in_single_quotes))
 			expand_char(&ctx);
 		else

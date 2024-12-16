@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 08:44:10 by trarijam          #+#    #+#             */
-/*   Updated: 2024/12/15 20:24:43 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/12/16 17:15:04 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ char	*get_var_value(char *var);
 int		handle_value(int value);
 void	set_variable(int value);
 int		get_variable(void);
+char	*remove_quotes(char *str);
 
 #endif

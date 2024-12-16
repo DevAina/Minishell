@@ -35,6 +35,7 @@ srcs = ft_strlen.c \
 		ft_putstr_fd.c \
 		ft_putendl_fd.c \
 		ft_putnbr_fd.c \
+		split_mns.c \
 		get_next_line/get_next_line.c \
 		get_next_line/get_next_line_utils.c
 

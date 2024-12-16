@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:12:59 by trarijam          #+#    #+#             */
-/*   Updated: 2024/09/26 10:35:13 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/12/16 17:34:06 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,33 @@ int	should_expand(char *str, int i, int in_single_quotes)
 {
 	return (str[i] == '$' && !in_single_quotes
 		&& (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'));
+}
+
+
+char	*remove_quotes(char *str)
+{
+	int		in_d_quotes;
+	int		in_s_quotes;
+	char	*result;
+	int		i;
+
+	result = NULL;
+	i = 0;
+	in_d_quotes = 0;
+	in_s_quotes = 0;
+	while (str[i] != '\0')
+	{
+		if (handle_quotes_expander(str[i], &in_s_quotes, &in_d_quotes))
+		{
+
+		}
+		else
+		{
+			if (is_ignored_dollar(str[i], str[i + 1], in_d_quotes,
+				in_s_quotes) == 1)
+				result = char_append(result, str[i]);
+		}
+		i++;
+	}
+	return (result);
 }
