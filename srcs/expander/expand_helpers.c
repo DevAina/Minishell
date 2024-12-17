@@ -6,7 +6,7 @@
 /*   By: trarijam <trarijam@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:12:59 by trarijam          #+#    #+#             */
-/*   Updated: 2024/12/16 17:34:06 by trarijam         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:31:59 by trarijam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,11 @@ char	*expand_special_char(char *str, char **env, int *i, int exit_status)
 	else
 	{
 		var_value = expand_env_var(str + *i + 1, env);
-		result = ft_strdup(var_value);
+		result = (char *)malloc(sizeof(char) * (ft_strlen(var_value) + 3));
+		result[0] = '"';
+		ft_strlcpy(result + 1, var_value, ft_strlen(var_value) + 1);
+		result[ft_strlen(var_value) + 1] = '"';
+		printf("result: %s\n", result);
 		*i += get_var_name_length(str + *i + 1);
 	}
 	return (result);
@@ -61,9 +65,9 @@ char	*remove_quotes(char *str)
 	in_s_quotes = 0;
 	while (str[i] != '\0')
 	{
-		if (handle_quotes_expander(str[i], &in_s_quotes, &in_d_quotes))
+		if ( handle_quotes_expander(str[i], &in_s_quotes, &in_d_quotes))
 		{
-
+			
 		}
 		else
 		{
